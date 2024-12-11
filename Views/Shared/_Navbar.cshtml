@@ -1,0 +1,36 @@
+﻿<nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+    <div class="container">
+        <a class="navbar-brand" href="@Url.Content("~/")">Martin Blaut</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="oi oi-menu"></span> Menü
+        </button>
+
+        <div class="collapse navbar-collapse" id="ftco-nav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Ana Sayfa</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="" asp-controller="Islem" asp-action="Index">İşlemler</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="" asp-controller="Calisan" asp-action="Index">Uzmanlarımız</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="" asp-controller="Randevu" asp-action="Index">Randevu Oluştur</a>
+                </li>
+
+                <!-- Kullanıcı Girişi Butonu -->
+                <li class="nav-item">
+                    <a class="btn btn-primary login-btn ml-3" asp-area="" asp-controller="Kullanici" asp-action="Index">Giriş Yap/Üye Ol</a>
+                </li>
+
+                <!-- Admin Girişi Butonu -->
+                <li class="nav-item">
+                    <a class="btn btn-primary login-btn ml-3" asp-area="" asp-controller="Admin" asp-action="Index">Admin Giriş</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<!-- END nav -->

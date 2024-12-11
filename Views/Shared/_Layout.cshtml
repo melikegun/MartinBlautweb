@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>@ViewData["Title"] - Pretty</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,600,700" rel="stylesheet">
+    <link rel="stylesheet" href="@Url.Content("~/content/css/open-iconic-bootstrap.min.css")">
+    <link rel="stylesheet" href="@Url.Content("~/content/css/animate.css")">
+    <link rel="stylesheet" href="@Url.Content("~/content/css/owl.carousel.min.css")">
+    <link rel="stylesheet" href="@Url.Content("~/content/css/owl.theme.default.min.css")">
+    <link rel="stylesheet" href="@Url.Content("~/content/css/style.css")">
+    <link rel="stylesheet" href="@Url.Content("~/content/css/aos.css")">
+    <link rel="stylesheet" href="@Url.Content("~/content/css/ionicons.min.css")">
+    <link rel="stylesheet" href="@Url.Content("~/content/css/bootstrap-datepicker.css")">
+    <link rel="stylesheet" href="@Url.Content("~/content/css/jquery.timepicker.css")">
+    <link rel="stylesheet" href="@Url.Content("~/content/css/flaticon.css")">
+    <link rel="stylesheet" href="@Url.Content("~/content/css/icomoon.css")">
+    <link rel="stylesheet" href="@Url.Content("~/content/css/style.css")">
+
+    <!-- Sayfalara özel eklenen stiller için RenderSection -->
+    @RenderSection("GirisImg", required: false)
+</head>
+<body>
+    @Html.Partial("_Navbar") <!-- Ortak Navbar -->
+
+    <main role="main">
+        @RenderBody() <!-- Sayfa içeriği burada yüklenecek -->
+    </main>
+
+    @Html.Partial("_Footer") <!-- Ortak Footer -->
+    <!-- loader -->
+    <div id="ftco-loader" class="show fullscreen">
+        <svg class="circular" width="48px" height="48px">
+            <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee" />
+            <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00" />
+        </svg>
+    </div>
+
+    <!-- Ortak JavaScript dosyaları -->
+    <script src="@Url.Content("~/content/js/jquery.min.js")"></script>
+    <script src="@Url.Content("~/content/js/jquery-migrate-3.0.1.min.js")"></script>
+    <script src="@Url.Content("~/content/js/popper.min.js")"></script>
+    <script src="@Url.Content("~/content/js/bootstrap.min.js")"></script>
+    <script src="@Url.Content("~/content/js/jquery.easing.1.3.js")"></script>
+    <script src="@Url.Content("~/content/js/jquery.waypoints.min.js")"></script>
+    <script src="@Url.Content("~/content/js/jquery.stellar.min.js")"></script>
+    <script src="@Url.Content("~/content/js/owl.carousel.min.js")"></script>
+    <script src="@Url.Content("~/content/js/jquery.magnific-popup.min.js")"></script>
+    <script src="@Url.Content("~/content/js/aos.js")"></script>
+    <script src="@Url.Content("~/content/js/jquery.animateNumber.min.js")"></script>
+    <script src="@Url.Content("~/content/js/bootstrap-datepicker.js")"></script>
+    <script src="@Url.Content("~/content/js/jquery.timepicker.min.js")"></script>
+    <script src="@Url.Content("~/content/js/scrollax.min.js")"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
+    <script src="@Url.Content("~/content/js/google-map.js")"></script>
+    <script src="@Url.Content("~/content/js/main.js")"></script>
+
+    <!-- Sayfalara özel eklenen scriptler için RenderSection -->
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,88 @@
+﻿@model MartinBlautweb.Models.Salon
+
+@{
+    ViewData["Title"] = "Salon Düzenle";
+}
+
+<h2>Salon Düzenle</h2>
+
+<!-- Başarı ve hata mesajları için TempData kullanımı -->
+@if (TempData["hata"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["hata"]
+    </div>
+}
+
+@if (TempData["msj"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["msj"]
+    </div>
+}
+
+<form asp-action="SalonDuzenle" method="post" class="form-horizontal">
+    <input type="hidden" asp-for="SalonID" />
+
+    <div class="form-group">
+        <label asp-for="SalonAdi" class="control-label col-sm-2"></label>
+        <div class="col-sm-10">
+            <input asp-for="SalonAdi" class="form-control" />
+            <span asp-validation-for="SalonAdi" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="SalonAdres" class="control-label col-sm-2"></label>
+        <div class="col-sm-10">
+            <input asp-for="SalonAdres" class="form-control" />
+            <span asp-validation-for="SalonAdres" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="SalonTelefon" class="control-label col-sm-2"></label>
+        <div class="col-sm-10">
+            <input asp-for="SalonTelefon" class="form-control" />
+            <span asp-validation-for="SalonTelefon" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="SalonAcilisSaati" class="control-label col-sm-2"></label>
+        <div class="col-sm-10">
+            <input asp-for="SalonAcilisSaati" class="form-control" type="time" />
+            <span asp-validation-for="SalonAcilisSaati" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="SalonKapanisSaati" class="control-label col-sm-2"></label>
+        <div class="col-sm-10">
+            <input asp-for="SalonKapanisSaati" class="form-control" type="time" />
+            <span asp-validation-for="SalonKapanisSaati" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="SalonAciklama" class="control-label col-sm-2"></label>
+        <div class="col-sm-10">
+            <textarea asp-for="SalonAciklama" class="form-control"></textarea>
+            <span asp-validation-for="SalonAciklama" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-primary">Güncelle</button>
+            <a href="@Url.Action("Index", "Salon")" class="btn btn-secondary">İptal</a>
+        </div>
+    </div>
+</form>
+
+<!-- Validasyon İçin jQuery ve Script Tagları -->
+@section Scripts {
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate-unobtrusive/3.0.0/jquery.validate.unobtrusive.min.js"></script>
+}

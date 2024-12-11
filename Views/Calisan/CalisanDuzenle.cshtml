@@ -1,0 +1,69 @@
+﻿@model MartinBlautweb.Models.Calisan
+
+@{
+    ViewData["Title"] = "Çalışan Düzenle";
+}
+
+<h1>Çalışan Düzenle</h1>
+
+@if (TempData["hata"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["hata"]
+    </div>
+}
+
+@if (TempData["msj"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["msj"]
+    </div>
+}
+
+<form asp-action="CalisanDuzenle" method="post">
+    <div class="form-group">
+        <label asp-for="CalisanAd" class="control-label"></label>
+        <input asp-for="CalisanAd" class="form-control" />
+        <span asp-validation-for="CalisanAd" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CalisanSoyad" class="control-label"></label>
+        <input asp-for="CalisanSoyad" class="form-control" />
+        <span asp-validation-for="CalisanSoyad" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="IslemID" class="control-label"></label>
+        <select asp-for="IslemID" class="form-control" asp-items="@(new SelectList(ViewData["IslemListesi"] as IEnumerable<MartinBlautweb.Models.Islem>, "IslemID", "IslemAdi"))">
+            <option value="">Uzmanlık alanı seçiniz</option>
+        </select>
+        <span asp-validation-for="IslemID" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CalisanTelefon" class="control-label"></label>
+        <input asp-for="CalisanTelefon" class="form-control" />
+        <span asp-validation-for="CalisanTelefon" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CalisanMesaiBaslangic" class="control-label"></label>
+        <input asp-for="CalisanMesaiBaslangic" class="form-control" type="time" />
+        <span asp-validation-for="CalisanMesaiBaslangic" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CalisanMesaiBitis" class="control-label"></label>
+        <input asp-for="CalisanMesaiBitis" class="form-control" type="time" />
+        <span asp-validation-for="CalisanMesaiBitis" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Kaydet</button>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

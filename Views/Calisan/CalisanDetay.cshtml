@@ -1,0 +1,44 @@
+﻿@model MartinBlautweb.Models.Calisan
+
+@{
+    ViewData["Title"] = "Çalışan Detayı";
+}
+
+<h1>@Model.CalisanAd @Model.CalisanSoyad - Detay</h1>
+
+@if (TempData["hata"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["hata"]
+    </div>
+}
+
+<div>
+    <h3>Çalışan Bilgileri</h3>
+    <ul class="list-group">
+        <li class="list-group-item">
+            <strong>@Html.DisplayNameFor(model => model.CalisanAd)</strong>: @Model.CalisanAd
+        </li>
+        <li class="list-group-item">
+            <strong>@Html.DisplayNameFor(model => model.CalisanSoyad)</strong>: @Model.CalisanSoyad
+        </li>
+        <li class="list-group-item">
+            <strong>Uzmanlık Alanı</strong>: @(Model.Islem != null ? Model.Islem.IslemAdi : "Belirtilmemiş")
+        </li>
+        <li class="list-group-item">
+            <strong>@Html.DisplayNameFor(model => model.CalisanTelefon)</strong>: @Model.CalisanTelefon
+        </li>
+        <li class="list-group-item">
+            <strong>@Html.DisplayNameFor(model => model.CalisanMesaiBaslangic)</strong>: @Model.CalisanMesaiBaslangic.ToString(@"hh\:mm")
+        </li>
+        <li class="list-group-item">
+            <strong>@Html.DisplayNameFor(model => model.CalisanMesaiBitis)</strong>: @Model.CalisanMesaiBitis.ToString(@"hh\:mm")
+        </li>
+    </ul>
+</div>
+
+<p>
+    <a asp-action="CalisanDuzenle" asp-route-id="@Model.CalisanID" class="btn btn-warning">Düzenle</a>
+    <a asp-action="CalisanSil" asp-route-id="@Model.CalisanID" class="btn btn-danger" onclick="return confirm('Bu çalışanı silmek istediğinizden emin misiniz?')">Sil</a>
+    <a asp-action="Calisanlar" class="btn btn-secondary">Geri</a>
+</p>

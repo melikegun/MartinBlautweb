@@ -1,0 +1,102 @@
+﻿@model MartinBlautweb.Models.Salon
+
+@{
+    ViewData["Title"] = "Salon Detay";
+}
+
+<h2>@Model.SalonAdi - Detay</h2>
+
+<!-- Başarı ve hata mesajları için TempData kullanımı -->
+@if (TempData["hata"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["hata"]
+    </div>
+}
+
+<!-- Salon Bilgileri -->
+<div class="card">
+    <div class="card-header">
+        <h5>Salon Bilgileri</h5>
+    </div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Salon Adı:</dt>
+            <dd class="col-sm-9">@Model.SalonAdi</dd>
+
+            <dt class="col-sm-3">Salon Adresi:</dt>
+            <dd class="col-sm-9">@Model.SalonAdres</dd>
+
+            <dt class="col-sm-3">Salon Telefon:</dt>
+            <dd class="col-sm-9">@Model.SalonTelefon</dd>
+
+            <dt class="col-sm-3">Açılış Saati:</dt>
+            <dd class="col-sm-9">@Model.SalonAcilisSaati.ToString(@"hh\:mm")</dd>
+
+            <dt class="col-sm-3">Kapanış Saati:</dt>
+            <dd class="col-sm-9">@Model.SalonKapanisSaati.ToString(@"hh\:mm")</dd>
+
+            <dt class="col-sm-3">Salon Açıklaması:</dt>
+            <dd class="col-sm-9">@Model.SalonAciklama</dd>
+        </dl>
+
+        <!-- Salon Düzenleme Butonu -->
+        <a asp-action="SalonDuzenle" asp-controller="Salon" asp-route-id="@Model.SalonID" class="btn btn-warning">Düzenle</a>
+    </div>
+</div>
+
+<!-- Çalışanlar -->
+<h3>Çalışanlar</h3>
+@if (Model.Calisanlar != null && Model.Calisanlar.Any())
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Çalışan Adı</th>
+                <th>Uzmanlık Alanı</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var calisan in Model.Calisanlar)
+            {
+                <tr>
+                    <td>@calisan.CalisanAd</td>
+                    <td>@(calisan.Islem != null ? calisan.Islem.IslemAdi : "Belirtilmemiş")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Bu salonda çalışan bulunmamaktadır.</p>
+}
+
+<!-- İşlemler -->
+<h3>İşlemler</h3>
+@if (Model.Islemler != null && Model.Islemler.Any())
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>İşlem Adı</th>
+                <th>Süre (Dakika)</th>
+                <th>Ücret</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var islem in Model.Islemler)
+            {
+                <tr>
+                    <td>@islem.IslemAdi</td>
+                    <td>@islem.Sure</td>
+                    <td>@islem.Ucret.ToString("C")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Bu salonda işlem bulunmamaktadır.</p>
+}

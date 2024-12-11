@@ -1,0 +1,56 @@
+﻿@model MartinBlautweb.Models.Islem
+
+@{
+    ViewData["Title"] = "Yeni İşlem Ekle";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+@if (TempData["hata"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["hata"]
+    </div>
+}
+
+@if (TempData["msj"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["msj"]
+    </div>
+}
+
+<form asp-action="IslemEkle" method="post">
+    <div class="form-group">
+        <label asp-for="IslemAdi" class="control-label"></label>
+        <input asp-for="IslemAdi" class="form-control" />
+        <span asp-validation-for="IslemAdi" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Ucret" class="control-label"></label>
+        <input asp-for="Ucret" class="form-control" />
+        <span asp-validation-for="Ucret" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Sure" class="control-label"></label>
+        <input asp-for="Sure" class="form-control" />
+        <span asp-validation-for="Sure" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Aciklama" class="control-label"></label>
+        <textarea asp-for="Aciklama" class="form-control"></textarea>
+        <span asp-validation-for="Aciklama" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Kaydet</button>
+    <a href="@Url.Action("Index", "Islem")" class="btn btn-secondary">İptal</a>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

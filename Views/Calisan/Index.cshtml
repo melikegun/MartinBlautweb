@@ -1,0 +1,69 @@
+﻿@model IEnumerable<MartinBlautweb.Models.Calisan>
+
+@{
+    ViewData["Title"] = "Çalışanlar";
+}
+
+<h1>Çalışanlar</h1>
+
+<!-- TempData Mesajları -->
+@if (TempData["msj"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["msj"]
+    </div>
+}
+
+@if (TempData["hata"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["hata"]
+    </div>
+}
+
+<!-- Yeni Çalışan Ekle Butonu -->
+<p>
+    <a asp-action="CalisanEkle" class="btn btn-primary">Yeni Çalışan Ekle</a>
+</p>
+
+<!-- Çalışanlar Tablosu -->
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>@Html.DisplayName("Ad")</th>
+            <th>@Html.DisplayName("Soyad")</th>
+            <th>@Html.DisplayName("Uzmanlık Alanı")</th>
+            <th>@Html.DisplayName("Telefon")</th>
+            <th>@Html.DisplayName("Mesai Başlangıç")</th>
+            <th>@Html.DisplayName("Mesai Bitiş")</th>
+            <th>İşlemler</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var calisan in Model)
+            {
+                <tr>
+                    <td>@calisan.CalisanAd</td>
+                    <td>@calisan.CalisanSoyad</td>
+                    <td>@(calisan.Islem != null ? calisan.Islem.IslemAdi : "Belirtilmemiş")</td>
+                    <td>@calisan.CalisanTelefon</td>
+                    <td>@calisan.CalisanMesaiBaslangic.ToString(@"hh\:mm")</td>
+                    <td>@calisan.CalisanMesaiBitis.ToString(@"hh\:mm")</td>
+                    <td>
+                        <a asp-action="CalisanDetay" asp-route-id="@calisan.CalisanID" class="btn btn-info">Detay</a>
+                        <a asp-action="CalisanDuzenle" asp-route-id="@calisan.CalisanID" class="btn btn-warning">Düzenle</a>
+                        <a asp-action="CalisanSil" asp-route-id="@calisan.CalisanID" class="btn btn-danger" onclick="return confirm('Bu çalışanı silmek istediğinizden emin misiniz?')">Sil</a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="7" class="text-center">Henüz çalışan kaydı yok.</td>
+            </tr>
+        }
+    </tbody>
+</table>

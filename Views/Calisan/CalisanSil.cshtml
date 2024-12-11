@@ -1,0 +1,38 @@
+﻿@model MartinBlautweb.Models.Calisan
+
+@{
+    ViewData["Title"] = "Çalışan Sil";
+}
+
+<h1>Çalışan Sil</h1>
+
+@if (TempData["hata"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["hata"]
+    </div>
+}
+
+@if (TempData["msj"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["msj"]
+    </div>
+}
+
+<div class="alert alert-warning">
+    <strong>Uyarı!</strong> @Model.CalisanAd @Model.CalisanSoyad adlı çalışanı silmek istediğinizden emin misiniz?
+</div>
+
+<form asp-action="CalisanSil" method="post">
+    <input type="hidden" asp-for="CalisanID" />
+
+    <button type="submit" class="btn btn-danger">Sil</button>
+    <a asp-action="Index" class="btn btn-secondary">Geri</a>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

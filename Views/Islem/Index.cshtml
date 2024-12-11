@@ -1,0 +1,53 @@
+﻿@model IEnumerable<MartinBlautweb.Models.Islem>
+
+@{
+    ViewData["Title"] = "İşlemler";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+@if (TempData["msj"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["msj"]
+    </div>
+}
+
+@if (TempData["hata"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["hata"]
+    </div>
+}
+
+<p>
+    <a asp-action="IslemEkle" class="btn btn-primary">Yeni İşlem Ekle</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>İşlem Adı</th>
+            <th>Ücret</th>
+            <th>Süre (Dakika)</th>
+            <th>Açıklama</th>
+            <th>İşlem</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var islem in Model)
+        {
+            <tr>
+                <td>@islem.IslemAdi</td>
+                <td>@islem.Ucret.ToString("C")</td>
+                <td>@islem.Sure</td>
+                <td>@islem.Aciklama</td>
+                <td>
+                    <a asp-action="IslemDetay" asp-route-id="@islem.IslemID" class="btn btn-info btn-sm">Detay</a>
+                    <a asp-action="IslemDuzenle" asp-route-id="@islem.IslemID" class="btn btn-warning btn-sm">Düzenle</a>
+                    <a asp-action="IslemSil" asp-route-id="@islem.IslemID" class="btn btn-danger btn-sm" onclick="return confirm('Bu işlemi silmek istediğinize emin misiniz?');">Sil</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

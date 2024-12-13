@@ -21,6 +21,7 @@
 }
 
 <form asp-action="CalisanDuzenle" method="post">
+    <input type="hidden" asp-for="CalisanID" />
     <div class="form-group">
         <label asp-for="CalisanAd" class="control-label"></label>
         <input asp-for="CalisanAd" class="form-control" />
@@ -32,14 +33,12 @@
         <input asp-for="CalisanSoyad" class="form-control" />
         <span asp-validation-for="CalisanSoyad" class="text-danger"></span>
     </div>
-
     <div class="form-group">
         <label asp-for="IslemID" class="control-label"></label>
-        <select asp-for="IslemID" class="form-control" asp-items="@(new SelectList(ViewData["IslemListesi"] as IEnumerable<MartinBlautweb.Models.Islem>, "IslemID", "IslemAdi"))">
-            <option value="">Uzmanlık alanı seçiniz</option>
-        </select>
+        <select asp-for="IslemID" class="form-control" asp-items="ViewBag.IslemListesi"></select>
         <span asp-validation-for="IslemID" class="text-danger"></span>
     </div>
+
 
     <div class="form-group">
         <label asp-for="CalisanTelefon" class="control-label"></label>

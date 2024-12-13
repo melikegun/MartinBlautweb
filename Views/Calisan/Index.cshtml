@@ -1,5 +1,6 @@
 ﻿@model IEnumerable<MartinBlautweb.Models.Calisan>
 
+
 @{
     ViewData["Title"] = "Çalışanlar";
 }
@@ -30,6 +31,7 @@
 <table class="table table-bordered">
     <thead>
         <tr>
+            <th>@Html.DisplayName("ID")</th>
             <th>@Html.DisplayName("Ad")</th>
             <th>@Html.DisplayName("Soyad")</th>
             <th>@Html.DisplayName("Uzmanlık Alanı")</th>
@@ -42,9 +44,10 @@
     <tbody>
         @if (Model != null && Model.Any())
         {
-            foreach (var calisan in Model)
+            foreach (var calisan in Model) 
             {
                 <tr>
+                    <th>@calisan.CalisanID</th>
                     <td>@calisan.CalisanAd</td>
                     <td>@calisan.CalisanSoyad</td>
                     <td>@(calisan.Islem != null ? calisan.Islem.IslemAdi : "Belirtilmemiş")</td>

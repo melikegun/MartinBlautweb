@@ -75,7 +75,7 @@ namespace MartinBlautweb.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CalisanAd = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     CalisanSoyad = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    IslemID = table.Column<int>(type: "int", nullable: true),
+                    IslemID = table.Column<int>(type: "int", nullable: false),
                     CalisanTelefon = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: false),
                     CalisanMesaiBaslangic = table.Column<TimeSpan>(type: "time", nullable: false),
                     CalisanMesaiBitis = table.Column<TimeSpan>(type: "time", nullable: false),
@@ -88,7 +88,8 @@ namespace MartinBlautweb.Migrations
                         name: "FK_Calisanlar_Islemler_IslemID",
                         column: x => x.IslemID,
                         principalTable: "Islemler",
-                        principalColumn: "IslemID");
+                        principalColumn: "IslemID",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Calisanlar_Salonlar_SalonID",
                         column: x => x.SalonID,
@@ -104,9 +105,9 @@ namespace MartinBlautweb.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     RandevuTarihi = table.Column<DateTime>(type: "datetime2", nullable: false),
                     RandevuSaati = table.Column<TimeSpan>(type: "time", nullable: false),
-                    CalisanID = table.Column<int>(type: "int", nullable: false),
-                    KullaniciID = table.Column<int>(type: "int", nullable: false),
-                    IslemID = table.Column<int>(type: "int", nullable: false)
+                    CalisanID = table.Column<int>(type: "int", nullable: true),
+                    KullaniciID = table.Column<int>(type: "int", nullable: true),
+                    IslemID = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -115,20 +116,17 @@ namespace MartinBlautweb.Migrations
                         name: "FK_Randevular_Calisanlar_CalisanID",
                         column: x => x.CalisanID,
                         principalTable: "Calisanlar",
-                        principalColumn: "CalisanID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "CalisanID");
                     table.ForeignKey(
                         name: "FK_Randevular_Islemler_IslemID",
                         column: x => x.IslemID,
                         principalTable: "Islemler",
-                        principalColumn: "IslemID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "IslemID");
                     table.ForeignKey(
                         name: "FK_Randevular_Kulllanicilar_KullaniciID",
                         column: x => x.KullaniciID,
                         principalTable: "Kulllanicilar",
-                        principalColumn: "KullaniciID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "KullaniciID");
                 });
 
             migrationBuilder.InsertData(

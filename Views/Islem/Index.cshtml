@@ -27,6 +27,7 @@
 <table class="table table-striped">
     <thead>
         <tr>
+            <th>Salon ID</th>
             <th>İşlem Adı</th>
             <th>Ücret</th>
             <th>Süre (Dakika)</th>
@@ -38,6 +39,7 @@
         @foreach (var islem in Model)
         {
             <tr>
+                <td>@islem.IslemID</td>
                 <td>@islem.IslemAdi</td>
                 <td>@islem.Ucret.ToString("C")</td>
                 <td>@islem.Sure</td>

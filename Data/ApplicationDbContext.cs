@@ -20,6 +20,12 @@ namespace MartinBlautweb.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            // Veritabanı ilişkileri ve başlangıç verileri tanımları
+            modelBuilder.Entity<Calisan>()
+                .HasOne(c => c.Islem)
+                .WithMany(i => i.Calisanlar)
+                .HasForeignKey(c => c.IslemID);
+
             // Veritabanına başlangıç verisini ekleyelim
             modelBuilder.Entity<Salon>().HasData(
                 new Salon
@@ -34,5 +40,8 @@ namespace MartinBlautweb.Data
                 }
             );
         }
+
+
+
     }
 }

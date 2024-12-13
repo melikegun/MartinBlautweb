@@ -151,6 +151,7 @@ C:\Users\melik\source\repos\MartinBlautweb\MartinBlautweb\obj\Debug\net8.0\Marti
 C:\Users\melik\source\repos\MartinBlautweb\MartinBlautweb\obj\Debug\net8.0\MartinBlautweb.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\melik\source\repos\MartinBlautweb\MartinBlautweb\obj\Debug\net8.0\MartinBlautweb.RazorAssemblyInfo.cache
 C:\Users\melik\source\repos\MartinBlautweb\MartinBlautweb\obj\Debug\net8.0\MartinBlautweb.RazorAssemblyInfo.cs
+C:\Users\melik\source\repos\MartinBlautweb\MartinBlautweb\obj\Debug\net8.0\MartinBlautweb.sourcelink.json
 C:\Users\melik\source\repos\MartinBlautweb\MartinBlautweb\obj\Debug\net8.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
 C:\Users\melik\source\repos\MartinBlautweb\MartinBlautweb\obj\Debug\net8.0\scopedcss\bundle\MartinBlautweb.styles.css
 C:\Users\melik\source\repos\MartinBlautweb\MartinBlautweb\obj\Debug\net8.0\scopedcss\projectbundle\MartinBlautweb.bundle.scp.css

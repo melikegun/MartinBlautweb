@@ -21,9 +21,10 @@ namespace MartinBlautweb.Models
 
         // İşlemle ilişkilendirilmiş uzmanlık alanı
         [Display(Name = "Uzmanlık Alanı")]
-        public int? IslemID { get; set; }
+        [Required(ErrorMessage = "Uzmanlık Alanı seçilmelidir.")]
+        public int IslemID { get; set; }  // Nullable olmayacak şekilde düzenlendi.
 
-        public Islem Islem { get; set; }  // Çalışana ait işlem
+        public Islem Islem { get; set; }  // Navigation Property
 
         [Display(Name = "Telefon Numarası")]
         [StringLength(11, ErrorMessage = "Telefon numarası 11 karakter olmalıdır.")]

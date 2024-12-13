@@ -4,7 +4,21 @@
     ViewData["Title"] = "Çalışan Ekle";
 }
 
-<h1>Çalışan Ekle</h1>
+<h1>@ViewData["Title"]</h1>
+
+@if (TempData["msj"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["msj"]
+    </div>
+}
+
+@if (TempData["hata"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["hata"]
+    </div>
+}
 
 <form asp-action="CalisanEkle" method="post">
     <div class="form-group">
@@ -22,12 +36,9 @@
     <div class="form-group">
         <label asp-for="IslemID">Uzmanlık Alanı</label>
         <select asp-for="IslemID" class="form-control"
-                asp-items="@(ViewData["IslemListesi"] != null
-            ? new SelectList(ViewData["IslemListesi"] as IEnumerable<MartinBlautweb.Models.Islem>, "IslemID", "IslemAdi")
-            : new SelectList(Enumerable.Empty<string>()))">
+                asp-items="@(new SelectList(ViewData["IslemListesi"] as IEnumerable<MartinBlautweb.Models.Islem>, "IslemID", "IslemAdi"))">
             <option value="">Uzmanlık alanı seçiniz</option>
         </select>
-
         <span asp-validation-for="IslemID" class="text-danger"></span>
     </div>
 
@@ -51,6 +62,7 @@
 
     <button type="submit" class="btn btn-primary">Ekle</button>
 </form>
+
 
 @section Scripts {
     @{

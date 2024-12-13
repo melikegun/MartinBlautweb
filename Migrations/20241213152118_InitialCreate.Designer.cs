@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MartinBlautweb.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241211044824_InitialCreate")]
+    [Migration("20241213152118_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -54,7 +54,7 @@ namespace MartinBlautweb.Migrations
                         .HasMaxLength(11)
                         .HasColumnType("nvarchar(11)");
 
-                    b.Property<int?>("IslemID")
+                    b.Property<int>("IslemID")
                         .HasColumnType("int");
 
                     b.Property<int?>("SalonID")
@@ -144,13 +144,13 @@ namespace MartinBlautweb.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RandevuID"));
 
-                    b.Property<int>("CalisanID")
+                    b.Property<int?>("CalisanID")
                         .HasColumnType("int");
 
-                    b.Property<int>("IslemID")
+                    b.Property<int?>("IslemID")
                         .HasColumnType("int");
 
-                    b.Property<int>("KullaniciID")
+                    b.Property<int?>("KullaniciID")
                         .HasColumnType("int");
 
                     b.Property<TimeSpan>("RandevuSaati")
@@ -224,8 +224,10 @@ namespace MartinBlautweb.Migrations
             modelBuilder.Entity("MartinBlautweb.Models.Calisan", b =>
                 {
                     b.HasOne("MartinBlautweb.Models.Islem", "Islem")
-                        .WithMany()
-                        .HasForeignKey("IslemID");
+                        .WithMany("Calisanlar")
+                        .HasForeignKey("IslemID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("MartinBlautweb.Models.Salon", null)
                         .WithMany("Calisanlar")
@@ -245,21 +247,15 @@ namespace MartinBlautweb.Migrations
                 {
                     b.HasOne("MartinBlautweb.Models.Calisan", "Calisan")
                         .WithMany("Randevular")
-                        .HasForeignKey("CalisanID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CalisanID");
 
                     b.HasOne("MartinBlautweb.Models.Islem", "Islem")
                         .WithMany("Randevular")
-                        .HasForeignKey("IslemID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("IslemID");
 
                     b.HasOne("MartinBlautweb.Models.Kullanici", "Kullanici")
                         .WithMany("Randevular")
-                        .HasForeignKey("KullaniciID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("KullaniciID");
 
                     b.Navigation("Calisan");
 
@@ -275,6 +271,8 @@ namespace MartinBlautweb.Migrations
 
             modelBuilder.Entity("MartinBlautweb.Models.Islem", b =>
                 {
+                    b.Navigation("Calisanlar");
+
                     b.Navigation("Randevular");
                 });
 

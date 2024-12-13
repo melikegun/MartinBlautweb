@@ -30,10 +30,12 @@ namespace MartinBlautweb.Models
 
         // İşleme ait randevuları tutmak için ilişki
         public ICollection<Randevu> Randevular { get; set; }
+        public ICollection<Calisan> Calisanlar { get; set; }
 
         public Islem()
         {
             Randevular = new List<Randevu>();
+            Calisanlar = new List<Calisan>();
         }
     }
 }

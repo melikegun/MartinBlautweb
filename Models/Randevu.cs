@@ -18,13 +18,13 @@ namespace MartinBlautweb.Models
         public TimeSpan RandevuSaati { get; set; }  // Randevunun saati (TimeSpan)
 
         // İlişkili Propertyler
-        public int CalisanID { get; set; }  // İlgili çalışanın ID'si
+        public int? CalisanID { get; set; }  // İlgili çalışanın ID'si
         public Calisan Calisan { get; set; }  // Çalışanla olan ilişki
 
-        public int KullaniciID { get; set; }  // İlgili kullanıcının ID'si
+        public int? KullaniciID { get; set; }  // İlgili kullanıcının ID'si
         public Kullanici Kullanici { get; set; }  // Kullanıcıyla olan ilişki
 
-        public int IslemID { get; set; }  // Yapılacak işlemin ID'si
+        public int? IslemID { get; set; }  // Yapılacak işlemin ID'si
         public Islem Islem { get; set; }  // İşlemle olan ilişki
 
         // Constructor

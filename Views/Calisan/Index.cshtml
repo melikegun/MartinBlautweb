@@ -1,6 +1,5 @@
 ﻿@model IEnumerable<MartinBlautweb.Models.Calisan>
 
-
 @{
     ViewData["Title"] = "Çalışanlar";
 }
@@ -44,13 +43,13 @@
     <tbody>
         @if (Model != null && Model.Any())
         {
-            foreach (var calisan in Model) 
+            foreach (var calisan in Model)
             {
                 <tr>
                     <th>@calisan.CalisanID</th>
                     <td>@calisan.CalisanAd</td>
                     <td>@calisan.CalisanSoyad</td>
-                    <td>@(calisan.Islem != null ? calisan.Islem.IslemAdi : "Belirtilmemiş")</td>
+                    <td>@(calisan.UzmanlikAlan != null ? calisan.UzmanlikAlan.IslemAdi : "Belirtilmemiş")</td>
                     <td>@calisan.CalisanTelefon</td>
                     <td>@calisan.CalisanMesaiBaslangic.ToString(@"hh\:mm")</td>
                     <td>@calisan.CalisanMesaiBitis.ToString(@"hh\:mm")</td>
@@ -65,7 +64,7 @@
         else
         {
             <tr>
-                <td colspan="7" class="text-center">Henüz çalışan kaydı yok.</td>
+                <td colspan="8" class="text-center">Henüz çalışan kaydı yok.</td>
             </tr>
         }
     </tbody>

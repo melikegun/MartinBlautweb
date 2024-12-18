@@ -14,6 +14,13 @@
     </div>
 }
 
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
 <!-- Salon Bilgileri -->
 <div class="card">
     <div class="card-header">
@@ -31,10 +38,10 @@
             <dd class="col-sm-9">@Model.SalonTelefon</dd>
 
             <dt class="col-sm-3">Açılış Saati:</dt>
-            <dd class="col-sm-9">@Model.SalonAcilisSaati.ToString(@"hh\:mm")</dd>
+            <dd class="col-sm-9">@Model.SalonAcilisSaati.ToString(@"HH\:mm")</dd> <!-- 24 Saat formatı -->
 
             <dt class="col-sm-3">Kapanış Saati:</dt>
-            <dd class="col-sm-9">@Model.SalonKapanisSaati.ToString(@"hh\:mm")</dd>
+            <dd class="col-sm-9">@Model.SalonKapanisSaati.ToString(@"HH\:mm")</dd>
 
             <dt class="col-sm-3">Salon Açıklaması:</dt>
             <dd class="col-sm-9">@Model.SalonAciklama</dd>
@@ -49,7 +56,7 @@
 <h3>Çalışanlar</h3>
 @if (Model.Calisanlar != null && Model.Calisanlar.Any())
 {
-    <table class="table table-bordered">
+    <table class="table table-bordered table-responsive">
         <thead>
             <tr>
                 <th>Çalışan Adı</th>
@@ -61,7 +68,7 @@
             {
                 <tr>
                     <td>@calisan.CalisanAd</td>
-                    <td>@(calisan.Islem != null ? calisan.Islem.IslemAdi : "Belirtilmemiş")</td>
+                    <td>@(calisan.UzmanlikAlan != null ? calisan.UzmanlikAlan.IslemAdi : "Belirtilmemiş")</td>
                 </tr>
             }
         </tbody>
@@ -69,14 +76,14 @@
 }
 else
 {
-    <p>Bu salonda çalışan bulunmamaktadır.</p>
+    <p>Henüz bu salonda çalışan bulunmamaktadır.</p>
 }
 
 <!-- İşlemler -->
 <h3>İşlemler</h3>
 @if (Model.Islemler != null && Model.Islemler.Any())
 {
-    <table class="table table-bordered">
+    <table class="table table-bordered table-responsive">
         <thead>
             <tr>
                 <th>İşlem Adı</th>
@@ -98,5 +105,5 @@ else
 }
 else
 {
-    <p>Bu salonda işlem bulunmamaktadır.</p>
+    <p>Henüz bu salonda işlem bulunmamaktadır.</p>
 }

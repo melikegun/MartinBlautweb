@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MartinBlautweb.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241213152118_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20241217214457_InıtıalCreate")]
+    partial class InıtıalCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,21 @@ namespace MartinBlautweb.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("CalisanIslem", b =>
+                {
+                    b.Property<int>("CalisanID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IslemID")
+                        .HasColumnType("int");
+
+                    b.HasKey("CalisanID", "IslemID");
+
+                    b.HasIndex("IslemID");
+
+                    b.ToTable("CalisanIslem");
+                });
 
             modelBuilder.Entity("MartinBlautweb.Models.Calisan", b =>
                 {
@@ -54,17 +69,17 @@ namespace MartinBlautweb.Migrations
                         .HasMaxLength(11)
                         .HasColumnType("nvarchar(11)");
 
-                    b.Property<int>("IslemID")
+                    b.Property<int?>("SalonID")
                         .HasColumnType("int");
 
-                    b.Property<int?>("SalonID")
+                    b.Property<int>("UzmanlikAlanID")
                         .HasColumnType("int");
 
                     b.HasKey("CalisanID");
 
-                    b.HasIndex("IslemID");
-
                     b.HasIndex("SalonID");
+
+                    b.HasIndex("UzmanlikAlanID");
 
                     b.ToTable("Calisanlar");
                 });
@@ -153,6 +168,9 @@ namespace MartinBlautweb.Migrations
                     b.Property<int?>("KullaniciID")
                         .HasColumnType("int");
 
+                    b.Property<bool>("OnayDurumu")
+                        .HasColumnType("bit");
+
                     b.Property<TimeSpan>("RandevuSaati")
                         .HasColumnType("time");
 
@@ -201,8 +219,7 @@ namespace MartinBlautweb.Migrations
 
                     b.Property<string>("SalonTelefon")
                         .IsRequired()
-                        .HasMaxLength(11)
-                        .HasColumnType("nvarchar(11)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("SalonID");
 
@@ -221,19 +238,34 @@ namespace MartinBlautweb.Migrations
                         });
                 });
 
-            modelBuilder.Entity("MartinBlautweb.Models.Calisan", b =>
+            modelBuilder.Entity("CalisanIslem", b =>
                 {
-                    b.HasOne("MartinBlautweb.Models.Islem", "Islem")
-                        .WithMany("Calisanlar")
-                        .HasForeignKey("IslemID")
+                    b.HasOne("MartinBlautweb.Models.Calisan", null)
+                        .WithMany()
+                        .HasForeignKey("CalisanID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("MartinBlautweb.Models.Islem", null)
+                        .WithMany()
+                        .HasForeignKey("IslemID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("MartinBlautweb.Models.Calisan", b =>
+                {
                     b.HasOne("MartinBlautweb.Models.Salon", null)
                         .WithMany("Calisanlar")
                         .HasForeignKey("SalonID");
 
-                    b.Navigation("Islem");
+                    b.HasOne("MartinBlautweb.Models.Islem", "UzmanlikAlan")
+                        .WithMany()
+                        .HasForeignKey("UzmanlikAlanID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("UzmanlikAlan");
                 });
 
             modelBuilder.Entity("MartinBlautweb.Models.Islem", b =>
@@ -271,8 +303,6 @@ namespace MartinBlautweb.Migrations
 
             modelBuilder.Entity("MartinBlautweb.Models.Islem", b =>
                 {
-                    b.Navigation("Calisanlar");
-
                     b.Navigation("Randevular");
                 });
 

@@ -20,37 +20,39 @@
     </div>
 }
 
-<form asp-action="IslemEkle" method="post">
+<form asp-action="IslemEkle" method="post" novalidate>
     <div class="form-group">
-        <label asp-for="IslemAdi" class="control-label"></label>
+        <label asp-for="IslemAdi" class="control-label">İşlem Adı</label>
         <input asp-for="IslemAdi" class="form-control" />
         <span asp-validation-for="IslemAdi" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label asp-for="Ucret" class="control-label"></label>
-        <input asp-for="Ucret" class="form-control" />
+        <label asp-for="Ucret" class="control-label">Ücret</label>
+        <input asp-for="Ucret" class="form-control" type="number" step="0.01" />
         <span asp-validation-for="Ucret" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label asp-for="Sure" class="control-label"></label>
-        <input asp-for="Sure" class="form-control" />
+        <label asp-for="Sure" class="control-label">Süre (Dakika)</label>
+        <input asp-for="Sure" class="form-control" type="number" min="1" />
         <span asp-validation-for="Sure" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label asp-for="Aciklama" class="control-label"></label>
+        <label asp-for="Aciklama" class="control-label">Açıklama</label>
         <textarea asp-for="Aciklama" class="form-control"></textarea>
         <span asp-validation-for="Aciklama" class="text-danger"></span>
     </div>
 
-    <button type="submit" class="btn btn-primary">Kaydet</button>
-    <a href="@Url.Action("Index", "Islem")" class="btn btn-secondary">İptal</a>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Kaydet</button>
+        <a href="@Url.Action("Index", "Islem")" class="btn btn-secondary">İptal</a>
+    </div>
 </form>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate-unobtrusive/3.0.0/jquery.validate.unobtrusive.min.js"></script>
 }

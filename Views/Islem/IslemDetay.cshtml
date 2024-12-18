@@ -43,5 +43,19 @@
 <div class="form-group">
     <a asp-action="Index" class="btn btn-primary">Geri Dön</a>
     <a asp-action="IslemDuzenle" asp-route-id="@Model.IslemID" class="btn btn-warning">Düzenle</a>
-    <a asp-action="IslemSil" asp-route-id="@Model.IslemID" class="btn btn-danger" onclick="return confirm('Bu işlemi silmek istediğinizden emin misiniz?')">Sil</a>
+    <a asp-action="IslemSil" asp-route-id="@Model.IslemID" class="btn btn-danger"
+       data-confirm="Bu işlemi silmek istediğinize emin misiniz?">Sil</a>
 </div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Silme işlemi için onay mekanizması
+        $('a[data-confirm]').click(function (e) {
+            var message = $(this).attr('data-confirm');
+            if (!confirm(message)) {
+                e.preventDefault();
+            }
+        });
+    </script>
+}

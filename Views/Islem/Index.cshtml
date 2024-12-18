@@ -27,7 +27,7 @@
 <table class="table table-striped">
     <thead>
         <tr>
-            <th>Salon ID</th>
+            <th>İşlem ID</th>
             <th>İşlem Adı</th>
             <th>Ücret</th>
             <th>Süre (Dakika)</th>
@@ -47,9 +47,23 @@
                 <td>
                     <a asp-action="IslemDetay" asp-route-id="@islem.IslemID" class="btn btn-info btn-sm">Detay</a>
                     <a asp-action="IslemDuzenle" asp-route-id="@islem.IslemID" class="btn btn-warning btn-sm">Düzenle</a>
-                    <a asp-action="IslemSil" asp-route-id="@islem.IslemID" class="btn btn-danger btn-sm" onclick="return confirm('Bu işlemi silmek istediğinize emin misiniz?');">Sil</a>
+                    <a asp-action="IslemSil" asp-route-id="@islem.IslemID" class="btn btn-danger btn-sm"
+                       data-confirm="Bu işlemi silmek istediğinize emin misiniz?">Sil</a>
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Silme işlemi için onay mekanizması
+        $('a[data-confirm]').click(function (e) {
+            var message = $(this).attr('data-confirm');
+            if (!confirm(message)) {
+                e.preventDefault();
+            }
+        });
+    </script>
+}

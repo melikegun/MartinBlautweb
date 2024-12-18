@@ -4,7 +4,7 @@
     ViewData["Title"] = "Çalışan Düzenle";
 }
 
-<h1>Çalışan Düzenle</h1>
+<h1>@ViewData["Title"]</h1>
 
 @if (TempData["hata"] != null)
 {
@@ -22,6 +22,7 @@
 
 <form asp-action="CalisanDuzenle" method="post">
     <input type="hidden" asp-for="CalisanID" />
+
     <div class="form-group">
         <label asp-for="CalisanAd" class="control-label"></label>
         <input asp-for="CalisanAd" class="form-control" />
@@ -33,12 +34,19 @@
         <input asp-for="CalisanSoyad" class="form-control" />
         <span asp-validation-for="CalisanSoyad" class="text-danger"></span>
     </div>
-    <div class="form-group">
-        <label asp-for="IslemID" class="control-label"></label>
-        <select asp-for="IslemID" class="form-control" asp-items="ViewBag.IslemListesi"></select>
-        <span asp-validation-for="IslemID" class="text-danger"></span>
-    </div>
 
+    <div class="form-group">
+        <label for="Yetenekler">Yetenekler (İşlemler)</label>
+        <select asp-for="Yetenekler" class="form-control" multiple>
+            @foreach (var islem in ViewData["IslemListesi"] as IEnumerable<MartinBlautweb.Models.Islem>)
+            {
+                <option value="@islem.IslemID" selected=@(Model.Yetenekler.Any(y => y.IslemID == islem.IslemID) ? "selected" : "")>
+                    @islem.IslemAdi
+                </option>
+            }
+        </select>
+        <span asp-validation-for="Yetenekler" class="text-danger"></span>
+    </div>
 
     <div class="form-group">
         <label asp-for="CalisanTelefon" class="control-label"></label>

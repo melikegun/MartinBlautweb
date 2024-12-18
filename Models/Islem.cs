@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MartinBlautweb.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -28,14 +29,17 @@ namespace MartinBlautweb.Models
         [Range(1, int.MaxValue, ErrorMessage = "Süre 1 dakikadan küçük olamaz.")]
         public int Sure { get; set; }
 
+        // Bir işlem birden fazla çalışan tarafından yapılabilir
+        public ICollection<Calisan> Calisanlar { get; set; }
+
         // İşleme ait randevuları tutmak için ilişki
         public ICollection<Randevu> Randevular { get; set; }
-        public ICollection<Calisan> Calisanlar { get; set; }
 
         public Islem()
         {
-            Randevular = new List<Randevu>();
             Calisanlar = new List<Calisan>();
+            Randevular = new List<Randevu>();
         }
     }
 }
+

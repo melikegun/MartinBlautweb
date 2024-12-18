@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MartinBlautweb.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InıtıalCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -35,7 +35,7 @@ namespace MartinBlautweb.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     SalonAdi = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     SalonAdres = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    SalonTelefon = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: false),
+                    SalonTelefon = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SalonAcilisSaati = table.Column<TimeSpan>(type: "time", nullable: false),
                     SalonKapanisSaati = table.Column<TimeSpan>(type: "time", nullable: false),
                     SalonAciklama = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false)
@@ -75,7 +75,7 @@ namespace MartinBlautweb.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CalisanAd = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     CalisanSoyad = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    IslemID = table.Column<int>(type: "int", nullable: false),
+                    UzmanlikAlanID = table.Column<int>(type: "int", nullable: false),
                     CalisanTelefon = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: false),
                     CalisanMesaiBaslangic = table.Column<TimeSpan>(type: "time", nullable: false),
                     CalisanMesaiBitis = table.Column<TimeSpan>(type: "time", nullable: false),
@@ -85,16 +85,40 @@ namespace MartinBlautweb.Migrations
                 {
                     table.PrimaryKey("PK_Calisanlar", x => x.CalisanID);
                     table.ForeignKey(
-                        name: "FK_Calisanlar_Islemler_IslemID",
-                        column: x => x.IslemID,
+                        name: "FK_Calisanlar_Islemler_UzmanlikAlanID",
+                        column: x => x.UzmanlikAlanID,
                         principalTable: "Islemler",
                         principalColumn: "IslemID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Calisanlar_Salonlar_SalonID",
                         column: x => x.SalonID,
                         principalTable: "Salonlar",
                         principalColumn: "SalonID");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CalisanIslem",
+                columns: table => new
+                {
+                    CalisanID = table.Column<int>(type: "int", nullable: false),
+                    IslemID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CalisanIslem", x => new { x.CalisanID, x.IslemID });
+                    table.ForeignKey(
+                        name: "FK_CalisanIslem_Calisanlar_CalisanID",
+                        column: x => x.CalisanID,
+                        principalTable: "Calisanlar",
+                        principalColumn: "CalisanID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CalisanIslem_Islemler_IslemID",
+                        column: x => x.IslemID,
+                        principalTable: "Islemler",
+                        principalColumn: "IslemID",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -105,6 +129,7 @@ namespace MartinBlautweb.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     RandevuTarihi = table.Column<DateTime>(type: "datetime2", nullable: false),
                     RandevuSaati = table.Column<TimeSpan>(type: "time", nullable: false),
+                    OnayDurumu = table.Column<bool>(type: "bit", nullable: false),
                     CalisanID = table.Column<int>(type: "int", nullable: true),
                     KullaniciID = table.Column<int>(type: "int", nullable: true),
                     IslemID = table.Column<int>(type: "int", nullable: true)
@@ -135,14 +160,19 @@ namespace MartinBlautweb.Migrations
                 values: new object[] { 1, "En kaliteli hizmeti sunuyoruz!", new TimeSpan(0, 9, 0, 0, 0), "Martin's Salon", "123 Salon Caddesi, İstanbul", new TimeSpan(0, 19, 0, 0, 0), "5551234567" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Calisanlar_IslemID",
-                table: "Calisanlar",
+                name: "IX_CalisanIslem_IslemID",
+                table: "CalisanIslem",
                 column: "IslemID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Calisanlar_SalonID",
                 table: "Calisanlar",
                 column: "SalonID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Calisanlar_UzmanlikAlanID",
+                table: "Calisanlar",
+                column: "UzmanlikAlanID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Islemler_SalonID",
@@ -168,6 +198,9 @@ namespace MartinBlautweb.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "CalisanIslem");
+
             migrationBuilder.DropTable(
                 name: "Randevular");
 

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace MartinBlautweb.Models
@@ -7,33 +6,35 @@ namespace MartinBlautweb.Models
     public class Salon
     {
         [Key]
-        public int SalonID { get; set; }
+        public int SalonID { get; set; }  // Salonun benzersiz kimliği
 
         [Display(Name = "Salon Adı")]
-        [Required(ErrorMessage = "Salon adı boş bırakmayın.")]
-        [StringLength(100, ErrorMessage = "Salon adı 100 karakteri geçemez.")]
-        public string SalonAdi { get; set; }
+        [Required(ErrorMessage = "Salon adı boş bırakılmamalıdır.")]
+        [StringLength(100, ErrorMessage = "Salon adı 100 karakterden fazla olamaz.")]
+        public string SalonAdi { get; set; }  // Salonun adı
 
-        [Display(Name = "Salon Adresi")]
-        [StringLength(200, ErrorMessage = "Adres 200 karakteri geçemez.")]
-        public string SalonAdres { get; set; }
+        [Display(Name = "Adres")]
+        [Required(ErrorMessage = "Salon adresi boş bırakılmamalıdır.")]
+        [StringLength(200, ErrorMessage = "Adres 200 karakterden fazla olamaz.")]
+        public string SalonAdres { get; set; }  // Salonun adresi
 
-        [Display(Name = "Salon Telefon")]
-        [StringLength(11, ErrorMessage = "Telefon numarası 11 karakter olmalıdır.")]
-        [RegularExpression(@"^\d{10,11}$", ErrorMessage = "Telefon numarası geçerli olmalıdır (örneğin: 5551234567).")]
-        public string SalonTelefon { get; set; }
+        [Display(Name = "Telefon Numarası")]
+        [Required(ErrorMessage = "Telefon numarası boş bırakılmamalıdır.")]
+        [Phone(ErrorMessage = "Geçerli bir telefon numarası giriniz.")]
+        public string SalonTelefon { get; set; }  // Telefon numarası
 
         [Display(Name = "Açılış Saati")]
-        [Required(ErrorMessage = "Açılış saati boş bırakmayın.")]
-        public TimeSpan SalonAcilisSaati { get; set; }
+        [Required(ErrorMessage = "Açılış saati boş bırakılmamalıdır.")]
+        public TimeSpan SalonAcilisSaati { get; set; }  // Açılış saati
 
         [Display(Name = "Kapanış Saati")]
-        [Required(ErrorMessage = "Kapanış saati boş bırakmayın.")]
-        public TimeSpan SalonKapanisSaati { get; set; }
+        [Required(ErrorMessage = "Kapanış saati boş bırakılmamalıdır.")]
+        public TimeSpan SalonKapanisSaati { get; set; }  // Kapanış saati
 
-        [Display(Name = "Salon Açıklaması")]
-        [StringLength(500, ErrorMessage = "Açıklama 500 karakteri geçemez.")]
-        public string SalonAciklama { get; set; }
+        [Display(Name = "Açıklama")]
+        [StringLength(500, ErrorMessage = "Açıklama 500 karakterden fazla olamaz.")]
+        public string SalonAciklama { get; set; }  // Ek açıklamalar
+
 
         // İlişkili Propertyler
         public ICollection<Calisan> Calisanlar { get; set; }

@@ -17,6 +17,9 @@ namespace MartinBlautweb.Models
         [DataType(DataType.Time, ErrorMessage = "Geçerli bir saat giriniz.")]
         public TimeSpan RandevuSaati { get; set; }  // Randevunun saati (TimeSpan)
 
+        [Display(Name = "Onay Durumu")]
+        public bool OnayDurumu { get; set; }  // Randevu onay durumu
+
         // İlişkili Propertyler
         public int? CalisanID { get; set; }  // İlgili çalışanın ID'si
         public Calisan Calisan { get; set; }  // Çalışanla olan ilişki
@@ -26,6 +29,10 @@ namespace MartinBlautweb.Models
 
         public int? IslemID { get; set; }  // Yapılacak işlemin ID'si
         public Islem Islem { get; set; }  // İşlemle olan ilişki
+
+        // Randevunun ücretini işlemin ücretinden alıyoruz
+        [Display(Name = "Randevu Ücreti")]
+        public double RandevuUcreti => Islem?.Ucret ?? 0;  // İşlemden alınan ücret
 
         // Constructor
         public Randevu()

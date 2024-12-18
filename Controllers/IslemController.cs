@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MartinBlautweb.Models;
-using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using MartinBlautweb.Data;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace MartinBlautweb.Controllers
 {
@@ -16,14 +17,14 @@ namespace MartinBlautweb.Controllers
         }
 
         // Listeleme
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var islemler = _context.Islemler.ToList();
+            var islemler = await _context.Islemler.ToListAsync();
             return View(islemler);
         }
 
         // İşlem Detayı
-        public IActionResult IslemDetay(int? id)
+        public async Task<IActionResult> IslemDetay(int? id)
         {
             if (id is null)
             {
@@ -31,7 +32,9 @@ namespace MartinBlautweb.Controllers
                 return View("IslemHata");
             }
 
-            var islem = _context.Islemler.FirstOrDefault(m => m.IslemID == id);
+            var islem = await _context.Islemler
+                .FirstOrDefaultAsync(m => m.IslemID == id);
+
             if (islem == null)
             {
                 TempData["hata"] = "Geçerli bir işlem ID giriniz.";
@@ -41,19 +44,19 @@ namespace MartinBlautweb.Controllers
             return View(islem);
         }
 
-        // Yeni İşlem Ekleme
+        // Yeni İşlem Ekleme (GET)
         public IActionResult IslemEkle()
         {
             return View();
         }
 
         [HttpPost]
-        public IActionResult IslemEkle([Bind("IslemID,IslemAdi,Ucret,Aciklama,Sure")] Islem islem)
+        public async Task<IActionResult> IslemEkle([Bind("IslemID,IslemAdi,Ucret,Aciklama,Sure")] Islem islem)
         {
             if (ModelState.IsValid)
             {
                 _context.Islemler.Add(islem);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
 
                 TempData["msj"] = islem.IslemAdi + " adlı işlem başarıyla eklenmiştir.";
                 return RedirectToAction("Index");
@@ -64,7 +67,7 @@ namespace MartinBlautweb.Controllers
         }
 
         // İşlem Düzenleme (GET)
-        public IActionResult IslemDuzenle(int? id)
+        public async Task<IActionResult> IslemDuzenle(int? id)
         {
             if (id is null)
             {
@@ -72,7 +75,7 @@ namespace MartinBlautweb.Controllers
                 return View("IslemHata");
             }
 
-            var islem = _context.Islemler.Find(id);
+            var islem = await _context.Islemler.FindAsync(id);
             if (islem == null)
             {
                 TempData["hata"] = "Geçerli bir işlem ID gerekli.";
@@ -84,7 +87,7 @@ namespace MartinBlautweb.Controllers
 
         // İşlem Düzenleme (POST)
         [HttpPost]
-        public IActionResult IslemDuzenle(int id, [Bind("IslemID,IslemAdi,Ucret,Aciklama,Sure")] Islem islem)
+        public async Task<IActionResult> IslemDuzenle(int id, [Bind("IslemID,IslemAdi,Ucret,Aciklama,Sure")] Islem islem)
         {
             if (id != islem.IslemID)
             {
@@ -97,7 +100,7 @@ namespace MartinBlautweb.Controllers
                 try
                 {
                     _context.Islemler.Update(islem);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
 
                     TempData["msj"] = islem.IslemAdi + " adlı işlem başarıyla güncellenmiştir.";
                     return RedirectToAction("Index");
@@ -121,7 +124,7 @@ namespace MartinBlautweb.Controllers
         }
 
         // İşlem Silme
-        public IActionResult IslemSil(int? id)
+        public async Task<IActionResult> IslemSil(int? id)
         {
             if (id is null)
             {
@@ -129,7 +132,7 @@ namespace MartinBlautweb.Controllers
                 return View("IslemHata");
             }
 
-            var islem = _context.Islemler.Find(id);
+            var islem = await _context.Islemler.FindAsync(id);
             if (islem == null)
             {
                 TempData["hata"] = "Geçerli bir işlem bulunamadı.";
@@ -143,7 +146,7 @@ namespace MartinBlautweb.Controllers
             }
 
             _context.Islemler.Remove(islem);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             TempData["msj"] = islem.IslemAdi + " adlı işlem başarıyla silindi.";
             return RedirectToAction("Index");

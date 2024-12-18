@@ -3,14 +3,12 @@ using MartinBlautweb.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-
 namespace MartinBlautweb.Controllers
 {
-    //CALISAN EKLEYEMİYORUUUMM
     public class CalisanController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -24,7 +22,7 @@ namespace MartinBlautweb.Controllers
         public async Task<IActionResult> Index()
         {
             var calisanlar = await _context.Calisanlar
-                .Include(c => c.Islem) // İlişkili Islem (Uzmanlık Alanı) bilgisini yükle
+                .Include(c => c.Yetenekler) // Yetenekleri (Islem) dahil et
                 .ToListAsync();
             return View(calisanlar);
         }
@@ -32,11 +30,11 @@ namespace MartinBlautweb.Controllers
         // Çalışan ekleme sayfası (GET)
         public IActionResult CalisanEkle()
         {
-            // Islemler tablosundan tüm verileri al
-            var islemler = _context.Islemler.ToList();            // _context: DbContext nesnesi
-            if (islemler == null)
+            var islemler = _context.Islemler.ToList() ?? new List<Islem>();
+            if (islemler == null || !islemler.Any())
             {
-                throw new Exception("IslemListesi boş! Islemler tablosunda veri yok.");
+                TempData["hata"] = "IslemListesi boş! Islemler tablosunda veri yok.";
+                return View("CalisanHata");
             }
 
             // IslemListesi'ni ViewData'ya gönder
@@ -45,65 +43,41 @@ namespace MartinBlautweb.Controllers
             return View();
         }
 
+
         // Çalışan ekleme sayfası (POST)
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult CalisanEkle(Calisan calisan)
+        public IActionResult CalisanEkle(Calisan calisan, int[] selectedIslemler)
         {
-            Console.WriteLine($"CalisanID: {calisan.CalisanID}");
-            Console.WriteLine($"IslemID: {calisan.IslemID}");
-
-            var islem = _context.Islemler.FirstOrDefault(i => i.IslemID == calisan.IslemID);
-            // Model doğrulama
-            if (calisan != null)
+            if(calisan != null)
             {
-                // IslemID'yi kullanarak doğru işlemi bul
-
-
-                // Eğer geçerli bir IslemID yoksa hata mesajı ekle
-                if (islem == null)
-                {
-                    ModelState.AddModelError("IslemID", "Seçilen Uzmanlık Alanı bulunamadı!");
-                    // Islem listesi tekrar yüklenip ViewData'ya atanacak
-                    ViewData["IslemListesi"] = _context.Islemler.ToList();
-                    return View(calisan);
-                }
-
-                // Çalışanı ekle
-                calisan.Islem = islem; // İlgili uzmanlık alanını ilişkilendir
                 _context.Calisanlar.Add(calisan);
                 _context.SaveChanges();
-
-                // Başarılı işlem sonrası yönlendirme
+                TempData["msj"] = "Çalışan başarıyla eklendi.";
                 return RedirectToAction("Index");
             }
 
-
-            // Hata durumunda IslemListesi'ni yeniden gönder
-            ViewData["IslemListesi"] = _context.Islemler.ToList();
+            ViewData["IslemListesi"] = _context.Islemler?.ToList() ?? new List<Islem>();
             return View(calisan);
         }
 
-
-
-        // Çalışan düzenleme sayfası
+        // Çalışan düzenleme sayfası (GET)
         [HttpGet]
         public async Task<IActionResult> CalisanDuzenle(int? id)
         {
             if (id is null)
             {
-                TempData["hata"] = "Düzenleme için salon ID gerekli.";
+                TempData["hata"] = "Düzenleme için çalışan ID gerekli.";
                 return View("CalisanHata");
             }
 
-            // Çalışanı ID'ye göre ve ilişkili Islem verisiyle birlikte asenkron olarak buluyoruz
+            // Çalışanı ID'ye göre ve ilişkili Islem verisiyle birlikte buluyoruz
             var calisan = await _context.Calisanlar
-                                        .Include(c => c.Islem)  // İlişkili Islem verisini dahil et
+                                        .Include(c => c.Yetenekler) // Yetenekleri (Islem) dahil et
                                         .FirstOrDefaultAsync(c => c.CalisanID == id);
 
             if (calisan == null)
             {
-                TempData["hata"] = "Geçerli bir calisan ID gerekli. Lütfen kontrol ediniz.";
+                TempData["hata"] = "Geçerli bir çalışan bulunamadı.";
                 return View("CalisanHata");
             }
 
@@ -113,60 +87,82 @@ namespace MartinBlautweb.Controllers
             // IslemListesi'ni ViewData'ya gönderiyoruz
             ViewData["IslemListesi"] = islemler;
 
-            // SelectList'i ViewBag ile gönderiyoruz, seçili olan IslemID ile ilişkilendiriyoruz
-            ViewBag.IslemListesi = new SelectList(islemler, "IslemID", "IslemAdi", calisan.IslemID);
+            // Seçilen Uzmanlık Alanı (IslemID) ile SelectList'i ViewBag ile gönderiyoruz
+            ViewBag.IslemListesi = new SelectList(islemler, "IslemID", "IslemAdi", calisan.UzmanlikAlanID);
 
             // Çalışan verisi ve Islem listesi ile View'ı döndürüyoruz
             return View(calisan);
         }
 
-
-
-
+        // Çalışan düzenleme sayfası (POST)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult CalisanDuzenle(int id, Calisan calisan)
+        public async Task<IActionResult> CalisanDuzenle(int id, Calisan calisan)
         {
             if (id != calisan.CalisanID)
             {
-                TempData["hata"] = "Calışan ID hatalı.";
+                TempData["hata"] = "Çalışan ID hatalı.";
                 return View("CalisanHata");
             }
 
             if (calisan != null)
             {
-                _context.Update(calisan);
-                _context.SaveChangesAsync();
-                TempData["msj"] = "Çalışan başarıyla güncellendi.";
+                try
+                {
+                    // Seçilen Uzmanlık Alanını (IslemID) tekrar kontrol et
+                    var islem = _context.Islemler.FirstOrDefault(i => i.IslemID == calisan.UzmanlikAlanID);
+                    if (islem == null)
+                    {
+                        TempData["hata"] = "Geçerli bir Uzmanlık Alanı bulunamadı.";
+                        ViewData["IslemListesi"] = _context.Islemler.ToList();
+                        return View(calisan);
+                    }
 
+                    calisan.Yetenekler.Clear();  // Eski yetenekleri temizle
+                    calisan.Yetenekler.Add(islem); // Yeni yetenekleri ekle
+
+                    // Çalışanı güncelle
+                    _context.Update(calisan);
+                    await _context.SaveChangesAsync();
+                    TempData["msj"] = "Çalışan başarıyla güncellendi.";
+                }
+                catch (Exception ex)
+                {
+                    TempData["hata"] = $"Hata oluştu: {ex.Message}";
+                }
 
                 return RedirectToAction("Index");
             }
 
-            ViewBag.IslemListesi = new SelectList(_context.Islemler, "IslemID", "IslemAdi", calisan.IslemID);
-            return View("CalisanHata");
+            // Hata durumunda IslemListesi'ni yeniden gönder
+            ViewData["IslemListesi"] = _context.Islemler.ToList();
+            return View(calisan);
         }
 
-        public IActionResult CalisanDetay(int? id)
+        // Çalışan detay sayfası
+        public async Task<IActionResult> CalisanDetay(int? id)
         {
-            if(id is null)
-            {
-                ViewBag["hata"] = "Lütfen geçerli bir çalışan ID giriniz.";
-                    return View("CalisanHata");
-            }
-
-            var calisan = _context.Calisanlar
-                                        .Include(c => c.Islem)  // İlişkili Islem verisini dahil et
-                                        .FirstOrDefault(c => c.CalisanID == id);
-            if(calisan == null)
+            if (id is null)
             {
                 TempData["hata"] = "Geçerli bir çalışan ID giriniz.";
                 return View("CalisanHata");
             }
+
+            var calisan = await _context.Calisanlar
+                                        .Include(c => c.Yetenekler)  // İlişkili Islem verisini dahil et
+                                        .FirstOrDefaultAsync(c => c.CalisanID == id);
+
+            if (calisan == null)
+            {
+                TempData["hata"] = "Geçerli bir çalışan bulunamadı.";
+                return View("CalisanHata");
+            }
+
             return View(calisan);
         }
 
-        public IActionResult CalisanSil(int? id)
+        // Çalışan silme sayfası
+        public async Task<IActionResult> CalisanSil(int? id)
         {
             if (id is null)
             {
@@ -174,23 +170,18 @@ namespace MartinBlautweb.Controllers
                 return View("CalisanHata");
             }
 
-            var calisan = _context.Calisanlar.Find(id);
+            var calisan = await _context.Calisanlar.FindAsync(id);
             if (calisan == null)
             {
                 TempData["hata"] = "Geçerli bir çalışan bulunamadı.";
                 return View("CalisanHata");
             }
 
-            if (calisan.Randevular.Count > 0)
-            {
-                TempData["hata"] = "Bu işlemle ilişkilendirilmiş randevular bulunmaktadır. Silme işlemi gerçekleştirilemez.";
-                return View("CalisanHata");
-            }
-
+            // Çalışanı sil
             _context.Calisanlar.Remove(calisan);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
+            TempData["msj"] = $"{calisan.CalisanAd} {calisan.CalisanSoyad} adlı çalışan başarıyla silindi.";
 
-            TempData["msj"] = calisan.CalisanAd + " adlı çalışan başarıyla silindi.";
             return RedirectToAction("Index");
         }
 

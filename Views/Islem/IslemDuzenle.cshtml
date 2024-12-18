@@ -20,7 +20,7 @@
     </div>
 }
 
-<form asp-action="IslemDuzenle" method="post">
+<form asp-action="IslemDuzenle" method="post" novalidate>
     <!-- Gizli alan ile işlem ID'sini gönderiyoruz -->
     <input asp-for="IslemID" type="hidden" />
 
@@ -53,3 +53,9 @@
         <a href="@Url.Action("Index", "Islem")" class="btn btn-secondary">İptal</a>
     </div>
 </form>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate-unobtrusive/3.0.0/jquery.validate.unobtrusive.min.js"></script>
+}

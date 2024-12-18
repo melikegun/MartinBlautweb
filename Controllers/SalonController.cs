@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using MartinBlautweb.Data;
-using MartinBlautweb.Models;  // Salon modelinin bulunduğu namespace
+using MartinBlautweb.Models;
 
 namespace MartinBlautweb.Controllers
 {
@@ -15,10 +15,9 @@ namespace MartinBlautweb.Controllers
             _context = context;
         }
 
-        // Salon listeleme
         public IActionResult Index()
         {
-            var salon = _context.Salonlar.FirstOrDefault();  // Sadece bir salon var
+            var salon = _context.Salonlar.FirstOrDefault(); // Tek bir salon al
             return View(salon);
         }
 
@@ -74,11 +73,18 @@ namespace MartinBlautweb.Controllers
 
             if (ModelState.IsValid)
             {
-                _context.Salonlar.Update(salon);
-                _context.SaveChanges();
-
-                TempData["msj"] = "Salon bilgileri başarıyla güncellendi.";
-                return RedirectToAction("Index");
+                try
+                {
+                    _context.Salonlar.Update(salon);
+                    _context.SaveChanges();
+                    TempData["msj"] = "Salon bilgileri başarıyla güncellendi.";
+                    return RedirectToAction("Index");
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    TempData["hata"] = "Bir hata oluştu. Lütfen tekrar deneyiniz.";
+                    return View("SalonHata");
+                }
             }
 
             TempData["hata"] = "Lütfen tüm alanları doldurun.";

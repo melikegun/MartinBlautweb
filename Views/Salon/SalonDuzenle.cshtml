@@ -24,7 +24,7 @@
 <form asp-action="SalonDuzenle" method="post" class="form-horizontal">
     <input type="hidden" asp-for="SalonID" />
 
-    <div class="form-group">
+    <div class="form-group row">
         <label asp-for="SalonAdi" class="control-label col-sm-2"></label>
         <div class="col-sm-10">
             <input asp-for="SalonAdi" class="form-control" />
@@ -32,7 +32,7 @@
         </div>
     </div>
 
-    <div class="form-group">
+    <div class="form-group row">
         <label asp-for="SalonAdres" class="control-label col-sm-2"></label>
         <div class="col-sm-10">
             <input asp-for="SalonAdres" class="form-control" />
@@ -40,7 +40,7 @@
         </div>
     </div>
 
-    <div class="form-group">
+    <div class="form-group row">
         <label asp-for="SalonTelefon" class="control-label col-sm-2"></label>
         <div class="col-sm-10">
             <input asp-for="SalonTelefon" class="form-control" />
@@ -48,7 +48,7 @@
         </div>
     </div>
 
-    <div class="form-group">
+    <div class="form-group row">
         <label asp-for="SalonAcilisSaati" class="control-label col-sm-2"></label>
         <div class="col-sm-10">
             <input asp-for="SalonAcilisSaati" class="form-control" type="time" />
@@ -56,7 +56,7 @@
         </div>
     </div>
 
-    <div class="form-group">
+    <div class="form-group row">
         <label asp-for="SalonKapanisSaati" class="control-label col-sm-2"></label>
         <div class="col-sm-10">
             <input asp-for="SalonKapanisSaati" class="form-control" type="time" />
@@ -64,7 +64,7 @@
         </div>
     </div>
 
-    <div class="form-group">
+    <div class="form-group row">
         <label asp-for="SalonAciklama" class="control-label col-sm-2"></label>
         <div class="col-sm-10">
             <textarea asp-for="SalonAciklama" class="form-control"></textarea>
@@ -72,7 +72,7 @@
         </div>
     </div>
 
-    <div class="form-group">
+    <div class="form-group row">
         <div class="col-sm-offset-2 col-sm-10">
             <button type="submit" class="btn btn-primary">Güncelle</button>
             <a href="@Url.Action("Index", "Salon")" class="btn btn-secondary">İptal</a>

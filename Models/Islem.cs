@@ -29,6 +29,10 @@ namespace MartinBlautweb.Models
         [Range(1, int.MaxValue, ErrorMessage = "Süre 1 dakikadan küçük olamaz.")]
         public int Sure { get; set; }
 
+        // İlgili salon ile ilişki
+        public int? SalonID { get; set; } // Varsayılan olarak 1 olacak
+        public Salon Salon { get; set; } // Navigation Property
+
         // Bir işlem birden fazla çalışan tarafından yapılabilir
         public ICollection<Calisan> Calisanlar { get; set; }
 

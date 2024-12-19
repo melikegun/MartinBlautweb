@@ -132,7 +132,8 @@ namespace MartinBlautweb.Migrations
                     OnayDurumu = table.Column<bool>(type: "bit", nullable: false),
                     CalisanID = table.Column<int>(type: "int", nullable: true),
                     KullaniciID = table.Column<int>(type: "int", nullable: true),
-                    IslemID = table.Column<int>(type: "int", nullable: true)
+                    IslemID = table.Column<int>(type: "int", nullable: true),
+                    SalonID = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -152,12 +153,17 @@ namespace MartinBlautweb.Migrations
                         column: x => x.KullaniciID,
                         principalTable: "Kulllanicilar",
                         principalColumn: "KullaniciID");
+                    table.ForeignKey(
+                        name: "FK_Randevular_Salonlar_SalonID",
+                        column: x => x.SalonID,
+                        principalTable: "Salonlar",
+                        principalColumn: "SalonID");
                 });
 
             migrationBuilder.InsertData(
                 table: "Salonlar",
                 columns: new[] { "SalonID", "SalonAciklama", "SalonAcilisSaati", "SalonAdi", "SalonAdres", "SalonKapanisSaati", "SalonTelefon" },
-                values: new object[] { 1, "En kaliteli hizmeti sunuyoruz!", new TimeSpan(0, 9, 0, 0, 0), "Martin's Salon", "123 Salon Caddesi, İstanbul", new TimeSpan(0, 19, 0, 0, 0), "5551234567" });
+                values: new object[] { 1, "En kaliteli hizmeti sunuyoruz!", new TimeSpan(0, 8, 0, 0, 0), "Martin Blaut", "İstanbul/Ataşehir", new TimeSpan(0, 21, 0, 0, 0), "05452745680" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_CalisanIslem_IslemID",
@@ -193,6 +199,11 @@ namespace MartinBlautweb.Migrations
                 name: "IX_Randevular_KullaniciID",
                 table: "Randevular",
                 column: "KullaniciID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Randevular_SalonID",
+                table: "Randevular",
+                column: "SalonID");
         }
 
         /// <inheritdoc />

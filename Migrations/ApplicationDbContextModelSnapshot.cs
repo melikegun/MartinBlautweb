@@ -174,6 +174,9 @@ namespace MartinBlautweb.Migrations
                     b.Property<DateTime>("RandevuTarihi")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("SalonID")
+                        .HasColumnType("int");
+
                     b.HasKey("RandevuID");
 
                     b.HasIndex("CalisanID");
@@ -181,6 +184,8 @@ namespace MartinBlautweb.Migrations
                     b.HasIndex("IslemID");
 
                     b.HasIndex("KullaniciID");
+
+                    b.HasIndex("SalonID");
 
                     b.ToTable("Randevular");
                 });
@@ -227,11 +232,11 @@ namespace MartinBlautweb.Migrations
                         {
                             SalonID = 1,
                             SalonAciklama = "En kaliteli hizmeti sunuyoruz!",
-                            SalonAcilisSaati = new TimeSpan(0, 9, 0, 0, 0),
-                            SalonAdi = "Martin's Salon",
-                            SalonAdres = "123 Salon Caddesi, İstanbul",
-                            SalonKapanisSaati = new TimeSpan(0, 19, 0, 0, 0),
-                            SalonTelefon = "5551234567"
+                            SalonAcilisSaati = new TimeSpan(0, 8, 0, 0, 0),
+                            SalonAdi = "Martin Blaut",
+                            SalonAdres = "İstanbul/Ataşehir",
+                            SalonKapanisSaati = new TimeSpan(0, 21, 0, 0, 0),
+                            SalonTelefon = "05452745680"
                         });
                 });
 
@@ -252,7 +257,7 @@ namespace MartinBlautweb.Migrations
 
             modelBuilder.Entity("MartinBlautweb.Models.Calisan", b =>
                 {
-                    b.HasOne("MartinBlautweb.Models.Salon", null)
+                    b.HasOne("MartinBlautweb.Models.Salon", "Salon")
                         .WithMany("Calisanlar")
                         .HasForeignKey("SalonID");
 
@@ -262,14 +267,18 @@ namespace MartinBlautweb.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.Navigation("Salon");
+
                     b.Navigation("UzmanlikAlan");
                 });
 
             modelBuilder.Entity("MartinBlautweb.Models.Islem", b =>
                 {
-                    b.HasOne("MartinBlautweb.Models.Salon", null)
+                    b.HasOne("MartinBlautweb.Models.Salon", "Salon")
                         .WithMany("Islemler")
                         .HasForeignKey("SalonID");
+
+                    b.Navigation("Salon");
                 });
 
             modelBuilder.Entity("MartinBlautweb.Models.Randevu", b =>
@@ -285,6 +294,10 @@ namespace MartinBlautweb.Migrations
                     b.HasOne("MartinBlautweb.Models.Kullanici", "Kullanici")
                         .WithMany("Randevular")
                         .HasForeignKey("KullaniciID");
+
+                    b.HasOne("MartinBlautweb.Models.Salon", null)
+                        .WithMany("Randevular")
+                        .HasForeignKey("SalonID");
 
                     b.Navigation("Calisan");
 
@@ -313,6 +326,8 @@ namespace MartinBlautweb.Migrations
                     b.Navigation("Calisanlar");
 
                     b.Navigation("Islemler");
+
+                    b.Navigation("Randevular");
                 });
 #pragma warning restore 612, 618
         }

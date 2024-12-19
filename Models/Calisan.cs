@@ -39,10 +39,14 @@ namespace MartinBlautweb.Models
         [Required(ErrorMessage = "Mesai bitiş saati boş bırakılmamalıdır.")]
         public TimeSpan CalisanMesaiBitis { get; set; }
 
+        // İlgili salon ile ilişki
+        public int? SalonID { get; set; } // Varsayılan olarak 1 olacak
+        public Salon Salon { get; set; } // Navigation Property
+
         // Bir çalışanın birden fazla yeteneği olabilir
         public ICollection<Islem>? Yetenekler { get; set; }
 
-        public ICollection<Randevu> Randevular { get; set; }
+        public ICollection<Randevu>? Randevular { get; set; }
 
         public Calisan()
         {

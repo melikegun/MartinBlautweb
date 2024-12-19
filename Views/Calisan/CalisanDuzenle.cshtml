@@ -36,17 +36,41 @@
     </div>
 
     <div class="form-group">
-        <label for="Yetenekler">Yetenekler (İşlemler)</label>
-        <select asp-for="Yetenekler" class="form-control" multiple>
-            @foreach (var islem in ViewData["IslemListesi"] as IEnumerable<MartinBlautweb.Models.Islem>)
+        <label asp-for="UzmanlikAlanID" class="control-label">Uzmanlık Alanı</label>
+        <select asp-for="UzmanlikAlanID" class="form-control"
+                asp-items="@(ViewData["IslemListesi"] != null
+            ? new SelectList(ViewData["IslemListesi"] as IEnumerable<MartinBlautweb.Models.Islem>, "IslemID", "IslemAdi")
+            : new SelectList(Enumerable.Empty<string>()))">
+            <option value="">Uzmanlık alanı seçiniz</option>
+        </select>
+        <span asp-validation-for="UzmanlikAlanID" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Yetenekler</label>
+        <select name="selectedIslemler[]" class="form-control" multiple>
+            @if (ViewData["IslemListesi"] != null && ViewData["IslemListesi"] is IEnumerable<MartinBlautweb.Models.Islem> islemlerYetenek && islemlerYetenek.Any())
             {
-                <option value="@islem.IslemID" selected=@(Model.Yetenekler.Any(y => y.IslemID == islem.IslemID) ? "selected" : "")>
-                    @islem.IslemAdi
-                </option>
+                @foreach (var islem in islemlerYetenek)
+                {
+                    <option value="@islem.IslemID">
+                        @islem.IslemAdi
+                    </option>
+                }
+            }
+            else
+            {
+                <option disabled>Henüz bir işlem tanımlanmamış. Lütfen önce işlem ekleyin.</option>
             }
         </select>
-        <span asp-validation-for="Yetenekler" class="text-danger"></span>
+        <small class="form-text text-muted">CTRL veya SHIFT tuşu ile birden fazla yetenek seçebilirsiniz.</small>
     </div>
+
+    <style>
+        select[multiple] {
+            height: 150px !important;
+        }
+    </style>
 
     <div class="form-group">
         <label asp-for="CalisanTelefon" class="control-label"></label>
@@ -68,6 +92,7 @@
 
     <button type="submit" class="btn btn-primary">Kaydet</button>
 </form>
+
 
 @section Scripts {
     @{

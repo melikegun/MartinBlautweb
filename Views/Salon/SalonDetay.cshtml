@@ -4,7 +4,7 @@
     ViewData["Title"] = "Salon Detay";
 }
 
-<h2>@Model.SalonAdi - Detay</h2>
+<h2>@Model.SalonAdi - @ViewData["Title"]</h2>
 
 <!-- Başarı ve hata mesajları için TempData kullanımı -->
 @if (TempData["hata"] != null)
@@ -24,51 +24,57 @@
 <!-- Salon Bilgileri -->
 <div class="card">
     <div class="card-header">
-        <h5>Salon Bilgileri</h5>
+        <h5>@Html.DisplayNameFor(model => model.SalonAdi) Bilgileri</h5>
     </div>
     <div class="card-body">
         <dl class="row">
-            <dt class="col-sm-3">Salon Adı:</dt>
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.SalonAdi):</dt>
             <dd class="col-sm-9">@Model.SalonAdi</dd>
 
-            <dt class="col-sm-3">Salon Adresi:</dt>
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.SalonAdres):</dt>
             <dd class="col-sm-9">@Model.SalonAdres</dd>
 
-            <dt class="col-sm-3">Salon Telefon:</dt>
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.SalonTelefon):</dt>
             <dd class="col-sm-9">@Model.SalonTelefon</dd>
 
-            <dt class="col-sm-3">Açılış Saati:</dt>
-            <dd class="col-sm-9">@Model.SalonAcilisSaati.ToString(@"HH\:mm")</dd> <!-- 24 Saat formatı -->
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.SalonAcilisSaati):</dt>
+            <dd class="col-sm-9">@Model.SalonAcilisSaati.ToString(@"hh\:mm")</dd>
 
-            <dt class="col-sm-3">Kapanış Saati:</dt>
-            <dd class="col-sm-9">@Model.SalonKapanisSaati.ToString(@"HH\:mm")</dd>
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.SalonKapanisSaati):</dt>
+            <dd class="col-sm-9">@Model.SalonKapanisSaati.ToString(@"hh\:mm")</dd>
 
-            <dt class="col-sm-3">Salon Açıklaması:</dt>
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.SalonAciklama):</dt>
             <dd class="col-sm-9">@Model.SalonAciklama</dd>
         </dl>
 
         <!-- Salon Düzenleme Butonu -->
-        <a asp-action="SalonDuzenle" asp-controller="Salon" asp-route-id="@Model.SalonID" class="btn btn-warning">Düzenle</a>
+        <a asp-action="SalonDuzenle" asp-controller="Salon" asp-route-id="@Model.SalonID" class="btn btn-warning">@Html.DisplayName("Düzenle")</a>
     </div>
 </div>
 
 <!-- Çalışanlar -->
-<h3>Çalışanlar</h3>
+<h3>@Html.DisplayName("Çalışanlar")</h3>
 @if (Model.Calisanlar != null && Model.Calisanlar.Any())
 {
     <table class="table table-bordered table-responsive">
         <thead>
             <tr>
-                <th>Çalışan Adı</th>
-                <th>Uzmanlık Alanı</th>
+                <th>@Html.DisplayName("Çalışan Adı")</th>
+                <th>@Html.DisplayName("Uzmanlık Alanı")</th>
+                <th>@Html.DisplayName("Telefon")</th>
+                <th>@Html.DisplayName("Mesai Başlangıç")</th>
+                <th>@Html.DisplayName("Mesai Bitiş")</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var calisan in Model.Calisanlar)
+            @foreach (var calisan in Model.Calisanlar.Where(c => c.SalonID == 1))
             {
                 <tr>
                     <td>@calisan.CalisanAd</td>
                     <td>@(calisan.UzmanlikAlan != null ? calisan.UzmanlikAlan.IslemAdi : "Belirtilmemiş")</td>
+                    <td>@calisan.CalisanTelefon</td>
+                    <td>@calisan.CalisanMesaiBaslangic.ToString(@"hh\:mm")</td>
+                    <td>@calisan.CalisanMesaiBitis.ToString(@"hh\:mm")</td>
                 </tr>
             }
         </tbody>
@@ -80,19 +86,19 @@ else
 }
 
 <!-- İşlemler -->
-<h3>İşlemler</h3>
+<h3>@Html.DisplayName("İşlemler")</h3>
 @if (Model.Islemler != null && Model.Islemler.Any())
 {
     <table class="table table-bordered table-responsive">
         <thead>
             <tr>
-                <th>İşlem Adı</th>
-                <th>Süre (Dakika)</th>
-                <th>Ücret</th>
+                <th>@Html.DisplayName("İşlem Adı")</th>
+                <th>@Html.DisplayName("Süre (Dakika)")</th>
+                <th>@Html.DisplayName("Ücret")</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var islem in Model.Islemler)
+            @foreach (var islem in Model.Islemler.Where(i => i.SalonID == 1))
             {
                 <tr>
                     <td>@islem.IslemAdi</td>

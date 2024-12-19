@@ -30,13 +30,20 @@ namespace MartinBlautweb.Controllers
                 return View("SalonHata");
             }
 
-            var salon = _context.Salonlar.FirstOrDefault(x => x.SalonID == id);
+            var salon = _context.Salonlar
+                .Include(s => s.Calisanlar)  // Çalışanları dahil et
+                .Include(s => s.Islemler)    // İşlemleri dahil et
+                .FirstOrDefault(x => x.SalonID == id);
 
             if (salon == null)
             {
                 TempData["hata"] = "Geçerli bir salon ID giriniz.";
                 return View("SalonHata");
             }
+
+            // SalonID == 1 olan çalışanları ve işlemleri filtreleyerek salonu döndürme
+            salon.Calisanlar = salon.Calisanlar.Where(c => c.SalonID == 1).ToList();
+            salon.Islemler = salon.Islemler.Where(i => i.SalonID == 1).ToList();
 
             return View(salon);
         }

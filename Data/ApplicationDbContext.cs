@@ -24,11 +24,11 @@ namespace MartinBlautweb.Data
                 new Salon
                 {
                     SalonID = 1,
-                    SalonAdi = "Martin's Salon",
-                    SalonAdres = "123 Salon Caddesi, İstanbul",
-                    SalonTelefon = "5551234567",
-                    SalonAcilisSaati = new TimeSpan(9, 0, 0),
-                    SalonKapanisSaati = new TimeSpan(19, 0, 0),
+                    SalonAdi = "Martin Blaut",
+                    SalonAdres = "İstanbul/Ataşehir",
+                    SalonTelefon = "05452745680",
+                    SalonAcilisSaati = new TimeSpan(8, 0, 0),
+                    SalonKapanisSaati = new TimeSpan(21, 0, 0),
                     SalonAciklama = "En kaliteli hizmeti sunuyoruz!"
                 }
             );

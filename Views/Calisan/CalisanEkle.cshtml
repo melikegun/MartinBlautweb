@@ -32,7 +32,7 @@
         <input asp-for="CalisanSoyad" class="form-control" required />
         <span asp-validation-for="CalisanSoyad" class="text-danger"></span>
     </div>
-
+    
     <div class="form-group">
         <label asp-for="UzmanlikAlanID">Uzmanlık Alanı</label>
         <select asp-for="UzmanlikAlanID" class="form-control"
@@ -43,10 +43,10 @@
         </select>
         <span asp-validation-for="UzmanlikAlanID" class="text-danger"></span>
     </div>
-
+    
     <div class="form-group">
         <label>Yetenekler</label>
-        <select name="selectedIslemler" class="form-control" multiple>
+        <select name="selectedIslemler[]" class="form-control" multiple>
             @if (ViewData["IslemListesi"] != null && ViewData["IslemListesi"] is IEnumerable<MartinBlautweb.Models.Islem> islemlerYetenek && islemlerYetenek.Any())
             {
                 @foreach (var islem in islemlerYetenek)
@@ -61,6 +61,13 @@
         </select>
         <small class="form-text text-muted">CTRL veya SHIFT tuşu ile birden fazla yetenek seçebilirsiniz.</small>
     </div>
+
+    <style>
+        select[multiple] {
+            height: 150px !important;
+        }
+    </style>
+
 
     <div class="form-group">
         <label asp-for="CalisanTelefon">Telefon</label>

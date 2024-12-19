@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MartinBlautweb.Controllers
 {
-    //Calisanlar için yapabildiði iþlemler, müsaitlik durumlarýný, verimliliðini ve günlük kazançlarýný 
+    //Calisanlar için müsaitlik durumlarýný, verimliliðini ve günlük kazançlarýný 
 
     //Randevu Sistemi
     // o Kullanýcýlar, uygun çalýþanlara ve iþlemlere göre sistem üzerinden randevu alabilecek.

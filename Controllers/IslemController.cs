@@ -53,8 +53,10 @@ namespace MartinBlautweb.Controllers
         [HttpPost]
         public async Task<IActionResult> IslemEkle([Bind("IslemID,IslemAdi,Ucret,Aciklama,Sure")] Islem islem)
         {
-            if (ModelState.IsValid)
-            {
+            islem.SalonID = 1;
+
+            if (islem != null)
+            {          
                 _context.Islemler.Add(islem);
                 await _context.SaveChangesAsync();
 
@@ -99,6 +101,7 @@ namespace MartinBlautweb.Controllers
             {
                 try
                 {
+                    islem.SalonID = 1;
                     _context.Islemler.Update(islem);
                     await _context.SaveChangesAsync();
 

@@ -23,9 +23,6 @@
             <strong>@Html.DisplayNameFor(model => model.CalisanSoyad)</strong>: @Model.CalisanSoyad
         </li>
         <li class="list-group-item">
-            <strong>Uzmanlık Alanı</strong>: @(Model.UzmanlikAlan != null ? Model.UzmanlikAlan.IslemAdi : "Belirtilmemiş")
-        </li>
-        <li class="list-group-item">
             <strong>@Html.DisplayNameFor(model => model.CalisanTelefon)</strong>: @Model.CalisanTelefon
         </li>
         <li class="list-group-item">
@@ -33,6 +30,21 @@
         </li>
         <li class="list-group-item">
             <strong>@Html.DisplayNameFor(model => model.CalisanMesaiBitis)</strong>: @Model.CalisanMesaiBitis.ToString(@"hh\:mm")
+        </li>
+        <li class="list-group-item">
+            <strong>Uzmanlık Alanı</strong>: @(Model.UzmanlikAlan != null ? Model.UzmanlikAlan.IslemAdi : "Belirtilmemiş")
+        </li>
+        <li class="list-group-item">
+            <strong>Yetenekler</strong>:
+            @if(Model.Yetenekler != null && Model.Yetenekler.Any())
+            {
+                <ul>
+                    @foreach(var yetenek in Model.Yetenekler)
+                    {
+                        <li>@yetenek.IslemAdi</li>
+                    }
+                </ul>
+            }
         </li>
     </ul>
 </div>

@@ -37,8 +37,9 @@ namespace MartinBlautweb.Models
 
 
         // İlişkili Propertyler
-        public ICollection<Calisan> Calisanlar { get; set; }
-        public ICollection<Islem> Islemler { get; set; }
+        public ICollection<Calisan>? Calisanlar { get; set; }
+        public ICollection<Islem>? Islemler { get; set; }
+        public ICollection<Randevu>? Randevular { get; set; }
 
         // Constructor
         public Salon()

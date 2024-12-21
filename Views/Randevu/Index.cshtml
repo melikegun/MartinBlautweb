@@ -1,0 +1,85 @@
+﻿@model IEnumerable<MartinBlautweb.Models.Randevu>
+
+@{
+    ViewData["Title"] = "Randevular";
+}
+
+<h1>Randevular</h1>
+
+<!-- TempData Mesajları -->
+@if (TempData["msj"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["msj"]
+    </div>
+}
+
+@if (TempData["hata"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["hata"]
+    </div>
+}
+
+<!-- Yeni Randevu Ekle Butonu -->
+<p>
+    <a asp-action="RandevuEkle" class="btn btn-primary">Yeni Randevu Ekle</a>
+</p>
+
+<!-- Randevular Tablosu -->
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>@Html.DisplayName("Randevu Tarihi")</th>
+            <th>@Html.DisplayName("Randevu Saati")</th>
+            <th>@Html.DisplayName("Çalışan")</th>
+            <th>@Html.DisplayName("İşlem")</th>
+            <th>@Html.DisplayName("Kullanıcı")</th>
+            <th>@Html.DisplayName("Ücret")</th>
+            <th>@Html.DisplayName("Onay Durumu")</th>
+            <th>İşlemler</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            int counter = 1;
+            foreach (var randevu in Model)
+            {
+                <tr>
+                    <th>@counter</th>
+                    <td>@randevu.RandevuTarihi.ToShortDateString()</td>
+                    <td>@randevu.RandevuSaati.ToString(@"hh\:mm")</td>
+                    <td>@(randevu.Calisan != null ? randevu.Calisan.CalisanAd : "Belirtilmedi")</td>
+                    <td>@(randevu.Islem != null ? randevu.Islem.IslemAdi : "Belirtilmedi")</td>
+                    <td>@(randevu.Kullanici != null ? randevu.Kullanici.KullaniciAd : "Anonim")</td>
+                    <td>@(randevu.Kullanici != null ? randevu.Kullanici.KullaniciSoyad : "Anonim")</td>
+                    <td>@randevu.RandevuUcreti.ToString("C")</td>
+                    <td>
+                        @if (randevu.OnayDurumu)
+                        {
+                            <span class="badge bg-success">Onaylı</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-warning">Onaysız</span>
+                        }
+                    </td>
+                    <td>
+                        <a asp-action="RandevuDetay" asp-route-id="@randevu.RandevuID" class="btn btn-info">Detay</a>
+                        <a asp-action="RandevuDuzenle" asp-route-id="@randevu.RandevuID" class="btn btn-warning">Düzenle</a>
+                        <a asp-action="RandevuSil" asp-route-id="@randevu.RandevuID" class="btn btn-danger" onclick="return confirm('Bu randevuyu silmek istediğinizden emin misiniz?')">Sil</a>
+                    </td>
+                </tr>
+                counter++;
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="9" class="text-center">Henüz bir randevu kaydı yok.</td>
+            </tr>
+        }
+    </tbody>
+</table>

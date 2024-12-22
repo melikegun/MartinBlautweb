@@ -1,0 +1,47 @@
+﻿@model MartinBlautweb.Models.Randevu
+
+@{
+    ViewData["Title"] = "Randevu Detayı";
+}
+
+<h1>Randevu Detayı</h1>
+
+@if (TempData["hata"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["hata"]
+    </div>
+}
+
+<div>
+    <h3>Randevu Bilgileri</h3>
+    <ul class="list-group">
+        <li class="list-group-item">
+            <strong>@Html.DisplayNameFor(model => model.RandevuTarihi)</strong>: @Model.RandevuTarihi.ToString("dd/MM/yyyy")
+        </li>
+        <li class="list-group-item">
+            <strong>@Html.DisplayNameFor(model => model.RandevuSaati)</strong>: @Model.RandevuSaati.ToString(@"hh\:mm")
+        </li>
+        <li class="list-group-item">
+            <strong>@Html.DisplayNameFor(model => model.OnayDurumu)</strong>: @(Model.OnayDurumu ? "Onaylı" : "Onaysız")
+        </li>
+        <li class="list-group-item">
+            <strong>İşlem</strong>: @((Model.Islem != null && !string.IsNullOrEmpty(Model.Islem.IslemAdi)) ? Model.Islem.IslemAdi : "Bilgi Yok")
+        </li>
+        <li class="list-group-item">
+            <strong>Çalışan</strong>: @((Model.Calisan != null) ? Model.Calisan.CalisanAd + " " + Model.Calisan.CalisanSoyad : "Bilgi Yok")
+        </li>
+        <li class="list-group-item">
+            <strong>Kullanıcı</strong>: @((Model.Kullanici != null && !string.IsNullOrEmpty(Model.Kullanici.KullaniciAd)) ? Model.Kullanici.KullaniciAd : "Bilgi Yok")
+        </li>
+        <li class="list-group-item">
+            <strong>Randevu Ücreti</strong>: @Model.RandevuUcreti.ToString("C2")
+        </li>
+    </ul>
+</div>
+
+<p>
+    <a asp-action="RandevuDuzenle" asp-route-id="@Model.RandevuID" class="btn btn-warning">Randevuyu Düzenle</a>
+    <a asp-action="RandevuSil" asp-route-id="@Model.RandevuID" class="btn btn-danger" onclick="return confirm('Bu randevuyu silmek istediğinizden emin misiniz?')">Randevuyu Sil</a>
+    <a asp-action="Index" class="btn btn-secondary">Geri</a>
+</p>

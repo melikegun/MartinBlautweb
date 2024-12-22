@@ -295,7 +295,7 @@ namespace MartinBlautweb.Migrations
                         .WithMany("Randevular")
                         .HasForeignKey("KullaniciID");
 
-                    b.HasOne("MartinBlautweb.Models.Salon", null)
+                    b.HasOne("MartinBlautweb.Models.Salon", "Salon")
                         .WithMany("Randevular")
                         .HasForeignKey("SalonID");
 
@@ -304,6 +304,8 @@ namespace MartinBlautweb.Migrations
                     b.Navigation("Islem");
 
                     b.Navigation("Kullanici");
+
+                    b.Navigation("Salon");
                 });
 
             modelBuilder.Entity("MartinBlautweb.Models.Calisan", b =>

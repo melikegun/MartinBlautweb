@@ -30,6 +30,10 @@ namespace MartinBlautweb.Models
         public int? IslemID { get; set; }  // Yapılacak işlemin ID'si
         public Islem Islem { get; set; }  // İşlemle olan ilişki
 
+        // İlgili salon ile ilişki
+        public int? SalonID { get; set; } // Varsayılan olarak 1 olacak
+        public Salon Salon { get; set; } // Navigation Property
+
         // Randevunun ücretini işlemin ücretinden alıyoruz
         [Display(Name = "Randevu Ücreti")]
         public double RandevuUcreti => Islem?.Ucret ?? 0;  // İşlemden alınan ücret

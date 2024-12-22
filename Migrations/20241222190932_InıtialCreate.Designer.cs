@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MartinBlautweb.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241219133804_InıtıalCreate")]
-    partial class InıtıalCreate
+    [Migration("20241222190932_InıtialCreate")]
+    partial class InıtialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -298,7 +298,7 @@ namespace MartinBlautweb.Migrations
                         .WithMany("Randevular")
                         .HasForeignKey("KullaniciID");
 
-                    b.HasOne("MartinBlautweb.Models.Salon", null)
+                    b.HasOne("MartinBlautweb.Models.Salon", "Salon")
                         .WithMany("Randevular")
                         .HasForeignKey("SalonID");
 
@@ -307,6 +307,8 @@ namespace MartinBlautweb.Migrations
                     b.Navigation("Islem");
 
                     b.Navigation("Kullanici");
+
+                    b.Navigation("Salon");
                 });
 
             modelBuilder.Entity("MartinBlautweb.Models.Calisan", b =>

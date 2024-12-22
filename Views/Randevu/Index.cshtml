@@ -30,12 +30,13 @@
 <table class="table table-bordered">
     <thead>
         <tr>
-            <th>#</th>
+            <th>@Html.DisplayName("Randevu ID")</th>
             <th>@Html.DisplayName("Randevu Tarihi")</th>
             <th>@Html.DisplayName("Randevu Saati")</th>
             <th>@Html.DisplayName("Çalışan")</th>
             <th>@Html.DisplayName("İşlem")</th>
-            <th>@Html.DisplayName("Kullanıcı")</th>
+            <th>@Html.DisplayName("Kullanıcı Adı")</th>
+            <th>@Html.DisplayName("Kullanıcı Soyadı")</th>
             <th>@Html.DisplayName("Ücret")</th>
             <th>@Html.DisplayName("Onay Durumu")</th>
             <th>İşlemler</th>
@@ -48,7 +49,7 @@
             foreach (var randevu in Model)
             {
                 <tr>
-                    <th>@counter</th>
+                    <th>@randevu.RandevuID</th>
                     <td>@randevu.RandevuTarihi.ToShortDateString()</td>
                     <td>@randevu.RandevuSaati.ToString(@"hh\:mm")</td>
                     <td>@(randevu.Calisan != null ? randevu.Calisan.CalisanAd : "Belirtilmedi")</td>

@@ -88,8 +88,20 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmFuZGV2dVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/melik/source/repos/MartinBlautweb/MartinBlautweb/Views/Randevu/RandevuDetay.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmFuZGV2dVxSYW5kZXZ1RGV0YXkuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/melik/source/repos/MartinBlautweb/MartinBlautweb/Views/Randevu/RandevuDuzenle.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmFuZGV2dVxSYW5kZXZ1RHV6ZW5sZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/melik/source/repos/MartinBlautweb/MartinBlautweb/Views/Randevu/RandevuEkle.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmFuZGV2dVxSYW5kZXZ1RWtsZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/melik/source/repos/MartinBlautweb/MartinBlautweb/Views/Randevu/RandevuSil.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmFuZGV2dVxSYW5kZXZ1U2lsLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/melik/source/repos/MartinBlautweb/MartinBlautweb/Views/Salon/Index.cshtml]

@@ -1,0 +1,50 @@
+﻿@model MartinBlautweb.Models.Randevu
+
+@{
+    ViewData["Title"] = "Randevu Sil";
+}
+
+<h1>Randevu Sil</h1>
+
+@if (TempData["hata"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["hata"]
+    </div>
+}
+
+@if (TempData["msj"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["msj"]
+    </div>
+}
+
+<div>
+    <h3>Silmek istediğiniz randevuya ait bilgiler:</h3>
+    <ul class="list-group">
+        <li class="list-group-item">
+            <strong>Randevu Tarihi:</strong> @Model.RandevuTarihi.ToString("dd/MM/yyyy")
+        </li>
+        <li class="list-group-item">
+            <strong>Randevu Saati:</strong> @Model.RandevuSaati.ToString(@"hh\:mm")
+        </li>
+        <li class="list-group-item">
+            <strong>Çalışan:</strong> @(Model.Calisan != null ? Model.Calisan.CalisanAd + " " + Model.Calisan.CalisanSoyad : "Bilgi Yok")
+        </li>
+        <li class="list-group-item">
+            <strong>İşlem:</strong> @(Model.Islem != null ? Model.Islem.IslemAdi : "Bilgi Yok")
+        </li>
+        <li class="list-group-item">
+            <strong>Kullanıcı:</strong> @(Model.Kullanici != null ? Model.Kullanici.KullaniciAd + " " + Model.Kullanici.KullaniciSoyad : "Bilgi Yok")
+        </li>
+    </ul>
+
+    <h4>Bu randevuyu silmek istediğinizden emin misiniz?</h4>
+
+    <form asp-action="RandevuSil" method="post">
+        <input type="hidden" name="id" value="@Model.RandevuID" />
+        <button type="submit" class="btn btn-danger">Evet, Sil</button>
+        <a asp-action="Index" class="btn btn-secondary">Hayır, Geri Dön</a>
+    </form>
+</div>

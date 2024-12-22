@@ -1,30 +1,27 @@
 ﻿@model MartinBlautweb.Models.Randevu
 
 @{
-    ViewData["Title"] = "Randevu Ekle";
+    ViewData["Title"] = "Randevu Düzenle";
 }
 
 <h2>@ViewData["Title"]</h2>
 
-@* <!-- Filtreleme Formu -->
-<form asp-action="RandevuEkle" method="get">
-    <label for="IslemID">İşlem Seçerek Çalışanları Filtrele:</label>
-    <select id="IslemID" name="IslemID" class="form-control">
-        <option value="">-- İşlem Seçiniz --</option>
-        @foreach (var islem in ViewData["IslemListesi"] as IEnumerable<MartinBlautweb.Models.Islem>)
-        {
-            var isSelected = islem.IslemID == (ViewData["SelectedIslemID"] as int? ?? 0) ? "selected" : "";
-            <option value="@islem.IslemID" selected="@isSelected">@islem.IslemAdi</option>
-        }
-    </select>
+@if (TempData["hata"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["hata"]
+    </div>
+}
 
-    <button type="submit" class="btn btn-secondary mt-2">Çalışanları Filtrele</button>
-</form>
- *@
-
+@if (TempData["msj"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["msj"]
+    </div>
+}
 
 <!-- Filtreleme Formu -->
-<form asp-action="RandevuEkle" method="get">
+<form asp-action="RandevuDuzenle" method="get">
     <label for="IslemID">İşlem Seçerek Çalışanları Filtrele:</label>
     <select id="IslemID" name="IslemID" class="form-control"
             asp-items="@(ViewData["IslemListesi"] != null
@@ -32,13 +29,15 @@
                         : new SelectList(Enumerable.Empty<string>()))">
         <option value="">-- İşlem Seçiniz --</option>
     </select>
+    <span asp-validation-for="IslemID" class="text-danger"></span>
 
     <button type="submit" class="btn btn-secondary mt-2">Çalışanları Filtrele</button>
 </form>
 
-<!-- Randevu Ekleme Formu -->
-<form asp-action="RandevuEkle" method="post">
+<!-- Randevu Düzenleme Formu -->
+<form asp-action="RandevuDuzenle" method="post">
     <input type="hidden" name="IslemID" value="@ViewData["SelectedIslemID"]" />
+    <input type="hidden" asp-for="RandevuID" />
     <div class="form-group">
         <label asp-for="RandevuTarihi">Randevu Tarihi</label>
         <input asp-for="RandevuTarihi" class="form-control" type="date" required />
@@ -53,7 +52,7 @@
 
     <div class="form-group">
         <label for="CalisanID">Çalışan Seçiniz</label>
-        <select id="CalisanID" name="calisanID" class="form-control">
+        <select asp-for="CalisanID" class="form-control">
             <option value="">-- Çalışan Seçiniz --</option>
             @if (ViewData["CalisanListesi"] != null && ViewData["CalisanListesi"] is IEnumerable<MartinBlautweb.Models.Calisan> calisanlar && calisanlar.Any())
             {

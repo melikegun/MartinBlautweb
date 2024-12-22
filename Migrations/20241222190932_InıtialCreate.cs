@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MartinBlautweb.Migrations
 {
     /// <inheritdoc />
-    public partial class InıtıalCreate : Migration
+    public partial class InıtialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

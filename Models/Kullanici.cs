@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace MartinBlautweb.Models
-{
-   
+{   
     public class Kullanici
     {
         [Key]
@@ -30,6 +29,11 @@ namespace MartinBlautweb.Models
         [Required(ErrorMessage = "Soyad boş bırakılmamalıdır.")]
         [StringLength(50, ErrorMessage = "Soyad 50 karakteri geçemez.")]
         public string KullaniciSoyad { get; set; }
+
+        [Display(Name = "Telefon Numarası")]
+        [StringLength(11, ErrorMessage = "Telefon numarası 11 karakter olmalıdır.")]
+        [RegularExpression(@"^\d{10,11}$", ErrorMessage = "Telefon numarası geçerli bir değer olmalıdır.")]
+        public string KullaniciTelefon { get; set; }
 
         // Kullanıcıya ait randevuları tutmak için ilişki
         public ICollection<Randevu> Randevular { get; set; }

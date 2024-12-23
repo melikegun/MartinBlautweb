@@ -6,13 +6,29 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MartinBlautweb.Migrations
 {
     /// <inheritdoc />
-    public partial class InıtialCreate : Migration
+    public partial class InıtıalCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Kulllanicilar",
+                name: "Adminler",
+                columns: table => new
+                {
+                    AdminID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AdminMail = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AdminSifre = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    AdminAd = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    AdminSoyad = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Adminler", x => x.AdminID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Kullanicilar",
                 columns: table => new
                 {
                     KullaniciID = table.Column<int>(type: "int", nullable: false)
@@ -20,11 +36,12 @@ namespace MartinBlautweb.Migrations
                     KullaniciMail = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     KullaniciSifre = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     KullaniciAd = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    KullaniciSoyad = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                    KullaniciSoyad = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    KullaniciTelefon = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Kulllanicilar", x => x.KullaniciID);
+                    table.PrimaryKey("PK_Kullanicilar", x => x.KullaniciID);
                 });
 
             migrationBuilder.CreateTable(
@@ -149,9 +166,9 @@ namespace MartinBlautweb.Migrations
                         principalTable: "Islemler",
                         principalColumn: "IslemID");
                     table.ForeignKey(
-                        name: "FK_Randevular_Kulllanicilar_KullaniciID",
+                        name: "FK_Randevular_Kullanicilar_KullaniciID",
                         column: x => x.KullaniciID,
-                        principalTable: "Kulllanicilar",
+                        principalTable: "Kullanicilar",
                         principalColumn: "KullaniciID");
                     table.ForeignKey(
                         name: "FK_Randevular_Salonlar_SalonID",
@@ -159,6 +176,11 @@ namespace MartinBlautweb.Migrations
                         principalTable: "Salonlar",
                         principalColumn: "SalonID");
                 });
+
+            migrationBuilder.InsertData(
+                table: "Adminler",
+                columns: new[] { "AdminID", "AdminAd", "AdminMail", "AdminSifre", "AdminSoyad" },
+                values: new object[] { 1, "Melike", "b221210089@sakarya.edu.tr", "sau", "Gün" });
 
             migrationBuilder.InsertData(
                 table: "Salonlar",
@@ -210,6 +232,9 @@ namespace MartinBlautweb.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "Adminler");
+
+            migrationBuilder.DropTable(
                 name: "CalisanIslem");
 
             migrationBuilder.DropTable(
@@ -219,7 +244,7 @@ namespace MartinBlautweb.Migrations
                 name: "Calisanlar");
 
             migrationBuilder.DropTable(
-                name: "Kulllanicilar");
+                name: "Kullanicilar");
 
             migrationBuilder.DropTable(
                 name: "Islemler");

@@ -37,6 +37,48 @@ namespace MartinBlautweb.Migrations
                     b.ToTable("CalisanIslem");
                 });
 
+            modelBuilder.Entity("MartinBlautweb.Models.Admin", b =>
+                {
+                    b.Property<int>("AdminID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AdminID"));
+
+                    b.Property<string>("AdminAd")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("AdminMail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AdminSifre")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("AdminSoyad")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("AdminID");
+
+                    b.ToTable("Adminler");
+
+                    b.HasData(
+                        new
+                        {
+                            AdminID = 1,
+                            AdminAd = "Melike",
+                            AdminMail = "b221210089@sakarya.edu.tr",
+                            AdminSifre = "sau",
+                            AdminSoyad = "Gün"
+                        });
+                });
+
             modelBuilder.Entity("MartinBlautweb.Models.Calisan", b =>
                 {
                     b.Property<int>("CalisanID")
@@ -143,9 +185,14 @@ namespace MartinBlautweb.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<string>("KullaniciTelefon")
+                        .IsRequired()
+                        .HasMaxLength(11)
+                        .HasColumnType("nvarchar(11)");
+
                     b.HasKey("KullaniciID");
 
-                    b.ToTable("Kulllanicilar");
+                    b.ToTable("Kullanicilar");
                 });
 
             modelBuilder.Entity("MartinBlautweb.Models.Randevu", b =>

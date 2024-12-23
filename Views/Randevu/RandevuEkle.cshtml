@@ -6,23 +6,6 @@
 
 <h2>@ViewData["Title"]</h2>
 
-@* <!-- Filtreleme Formu -->
-<form asp-action="RandevuEkle" method="get">
-    <label for="IslemID">İşlem Seçerek Çalışanları Filtrele:</label>
-    <select id="IslemID" name="IslemID" class="form-control">
-        <option value="">-- İşlem Seçiniz --</option>
-        @foreach (var islem in ViewData["IslemListesi"] as IEnumerable<MartinBlautweb.Models.Islem>)
-        {
-            var isSelected = islem.IslemID == (ViewData["SelectedIslemID"] as int? ?? 0) ? "selected" : "";
-            <option value="@islem.IslemID" selected="@isSelected">@islem.IslemAdi</option>
-        }
-    </select>
-
-    <button type="submit" class="btn btn-secondary mt-2">Çalışanları Filtrele</button>
-</form>
- *@
-
-
 <!-- Filtreleme Formu -->
 <form asp-action="RandevuEkle" method="get">
     <label for="IslemID">İşlem Seçerek Çalışanları Filtrele:</label>

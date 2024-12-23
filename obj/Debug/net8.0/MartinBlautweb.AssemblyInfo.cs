@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MartinBlautweb")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6bcb659c650f85f87c654a78831548b5028150e0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ed2955da2461a1913e8d4b87613e22a1513e49a9")]
 [assembly: System.Reflection.AssemblyProductAttribute("MartinBlautweb")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MartinBlautweb")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

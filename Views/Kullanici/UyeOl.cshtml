@@ -1,0 +1,29 @@
+﻿@{
+    ViewData["Title"] = "Kullanıcı Üyelik";
+}
+
+<h2>Yeni Kullanıcı Kaydı</h2>
+
+<form asp-action="UyeOl" method="post">
+    <div>
+        <label for="KullaniciMail">E-posta:</label>
+        <input type="email" id="KullaniciMail" name="KullaniciMail" required />
+    </div>
+    <div>
+        <label for="KullaniciSifre">Şifre:</label>
+        <input type="password" id="KullaniciSifre" name="KullaniciSifre" required />
+    </div>
+    <div>
+        <label for="KullaniciAd">Ad:</label>
+        <input type="text" id="KullaniciAd" name="KullaniciAd" required />
+    </div>
+    <div>
+        <label for="KullaniciSoyad">Soyad:</label>
+        <input type="text" id="KullaniciSoyad" name="KullaniciSoyad" required />
+    </div>
+    <div>
+        <label for="KullaniciTelefon">Telefon:</label>
+        <input type="text" id="KullaniciTelefon" name="KullaniciTelefon" required />
+    </div>
+    <button type="submit">Kaydol</button>
+</form>

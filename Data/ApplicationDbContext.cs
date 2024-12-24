@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MartinBlautweb.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace MartinBlautweb.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<Kullanici>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         { }
@@ -13,22 +15,10 @@ namespace MartinBlautweb.Data
         public DbSet<Calisan> Calisanlar { get; set; }
         public DbSet<Islem> Islemler { get; set; }
         public DbSet<Randevu> Randevular { get; set; }
-        public DbSet<Kullanici> Kullanicilar { get; set; }
-        public DbSet<Admin> Adminler { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
-            modelBuilder.Entity<Admin>().HasData(
-                new Admin
-                {
-                    AdminID = 1,
-                    AdminMail = "b221210089@sakarya.edu.tr",
-                    AdminSifre = "sau",
-                    AdminAd = "Melike",
-                    AdminSoyad = "Gün"
-                });
 
             // Salon başlangıç verisi
             modelBuilder.Entity<Salon>().HasData(

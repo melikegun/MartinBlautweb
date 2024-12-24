@@ -54,7 +54,7 @@
                     <td>@randevu.RandevuSaati.ToString(@"hh\:mm")</td>
                     <td>@(randevu.Calisan != null ? randevu.Calisan.CalisanAd : "Belirtilmedi")</td>
                     <td>@(randevu.Islem != null ? randevu.Islem.IslemAdi : "Belirtilmedi")</td>
-                    <td>@(randevu.Kullanici != null ? randevu.Kullanici.KullaniciAd : "Anonim")</td>
+                    <td>@(randevu.Kullanici != null ? randevu.Kullanici.UserName : "Anonim")</td>
                     <td>@(randevu.Kullanici != null ? randevu.Kullanici.KullaniciSoyad : "Anonim")</td>
                     <td>@randevu.RandevuUcreti.ToString("C")</td>
                     <td>
@@ -79,7 +79,7 @@
         else
         {
             <tr>
-                <td colspan="9" class="text-center">Henüz bir randevu kaydı yok.</td>
+                <td colspan="10" class="text-center">Henüz bir randevu kaydı yok.</td>
             </tr>
         }
     </tbody>

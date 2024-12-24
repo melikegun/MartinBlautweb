@@ -171,3 +171,8 @@ C:\Users\melik\source\repos\MartinBlautweb\MartinBlautweb\obj\Debug\net8.0\refin
 C:\Users\melik\source\repos\MartinBlautweb\MartinBlautweb\obj\Debug\net8.0\MartinBlautweb.pdb
 C:\Users\melik\source\repos\MartinBlautweb\MartinBlautweb\obj\Debug\net8.0\MartinBlautweb.genruntimeconfig.cache
 C:\Users\melik\source\repos\MartinBlautweb\MartinBlautweb\obj\Debug\net8.0\ref\MartinBlautweb.dll
+C:\Users\melik\source\repos\MartinBlautweb\MartinBlautweb\bin\Debug\net8.0\Microsoft.AspNetCore.Cryptography.Internal.dll
+C:\Users\melik\source\repos\MartinBlautweb\MartinBlautweb\bin\Debug\net8.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+C:\Users\melik\source\repos\MartinBlautweb\MartinBlautweb\bin\Debug\net8.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+C:\Users\melik\source\repos\MartinBlautweb\MartinBlautweb\bin\Debug\net8.0\Microsoft.Extensions.Identity.Core.dll
+C:\Users\melik\source\repos\MartinBlautweb\MartinBlautweb\bin\Debug\net8.0\Microsoft.Extensions.Identity.Stores.dll

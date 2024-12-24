@@ -6,41 +6,39 @@ namespace MartinBlautweb.Models
     public class Randevu
     {
         [Key]
-        public int RandevuID { get; set; }  // Randevunun benzersiz kimliği
+        public int RandevuID { get; set; }
 
         [Display(Name = "Randevu Tarihi")]
         [Required(ErrorMessage = "Randevu tarihi boş bırakılmamalıdır.")]
-        public DateTime RandevuTarihi { get; set; }  // Randevunun tarihi (Date)
+        public DateTime RandevuTarihi { get; set; }
 
         [Display(Name = "Randevu Saati")]
         [Required(ErrorMessage = "Randevu saati boş bırakılmamalıdır.")]
         [DataType(DataType.Time, ErrorMessage = "Geçerli bir saat giriniz.")]
-        public TimeSpan RandevuSaati { get; set; }  // Randevunun saati (TimeSpan)
+        public TimeSpan RandevuSaati { get; set; }
 
         [Display(Name = "Onay Durumu")]
-        public bool OnayDurumu { get; set; }  // Randevu onay durumu
+        public bool OnayDurumu { get; set; }
 
         // İlişkili Propertyler
-        public int? CalisanID { get; set; }  // İlgili çalışanın ID'si
-        public Calisan Calisan { get; set; }  // Çalışanla olan ilişki
+        public int? CalisanID { get; set; }
+        public Calisan Calisan { get; set; }
 
-        public int? KullaniciID { get; set; }  // İlgili kullanıcının ID'si
-        public Kullanici Kullanici { get; set; }  // Kullanıcıyla olan ilişki
+        public string KullaniciId { get; set; }  // IdentityUser sınıfındaki Id ile ilişkilendirilir
+        public Kullanici Kullanici { get; set; }  // Kullanıcı ile olan ilişki
 
-        public int? IslemID { get; set; }  // Yapılacak işlemin ID'si
-        public Islem Islem { get; set; }  // İşlemle olan ilişki
+        public int? IslemID { get; set; }
+        public Islem Islem { get; set; }
 
-        // İlgili salon ile ilişki
-        public int? SalonID { get; set; } // Varsayılan olarak 1 olacak
-        public Salon Salon { get; set; } // Navigation Property
+        public int? SalonID { get; set; }
+        public Salon Salon { get; set; }
 
-        // Randevunun ücretini işlemin ücretinden alıyoruz
         [Display(Name = "Randevu Ücreti")]
-        public double RandevuUcreti => Islem?.Ucret ?? 0;  // İşlemden alınan ücret
+        public double RandevuUcreti => Islem?.Ucret ?? 0;
 
-        // Constructor
         public Randevu()
         {
         }
     }
+
 }

@@ -28,12 +28,8 @@ build_property._RazorSourceGeneratorDebug =
 build_property.EffectiveAnalysisLevelStyle = 8.0
 build_property.EnableCodeStyleSeverity = 
 
-[C:/Users/melik/source/repos/MartinBlautweb/MartinBlautweb/Views/Admin/Giris.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cR2lyaXMuY3NodG1s
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/melik/source/repos/MartinBlautweb/MartinBlautweb/Views/Admin/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cSW5kZXguY3NodG1s
+[C:/Users/melik/source/repos/MartinBlautweb/MartinBlautweb/Views/Admin/Login.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cTG9naW4uY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/melik/source/repos/MartinBlautweb/MartinBlautweb/Views/Calisan/CalisanDetay.cshtml]
@@ -96,12 +92,8 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS3VsbGFuaWNpXEdpcmlzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/melik/source/repos/MartinBlautweb/MartinBlautweb/Views/Kullanici/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS3VsbGFuaWNpXEluZGV4LmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/melik/source/repos/MartinBlautweb/MartinBlautweb/Views/Kullanici/UyeOl.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS3VsbGFuaWNpXFV5ZU9sLmNzaHRtbA==
+[C:/Users/melik/source/repos/MartinBlautweb/MartinBlautweb/Views/Kullanici/Kayit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS3VsbGFuaWNpXEtheWl0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/melik/source/repos/MartinBlautweb/MartinBlautweb/Views/Randevu/Index.cshtml]

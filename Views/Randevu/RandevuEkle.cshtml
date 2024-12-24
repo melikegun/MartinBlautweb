@@ -22,14 +22,15 @@
 <!-- Randevu Ekleme Formu -->
 <form asp-action="RandevuEkle" method="post">
     <input type="hidden" name="IslemID" value="@ViewData["SelectedIslemID"]" />
+
     <div class="form-group">
-        <label asp-for="RandevuTarihi">Randevu Tarihi</label>
+        <label for="RandevuTarihi">Randevu Tarihi</label>
         <input asp-for="RandevuTarihi" class="form-control" type="date" required />
         <span asp-validation-for="RandevuTarihi" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label asp-for="RandevuSaati">Randevu Saati</label>
+        <label for="RandevuSaati">Randevu Saati</label>
         <input asp-for="RandevuSaati" class="form-control" type="time" required />
         <span asp-validation-for="RandevuSaati" class="text-danger"></span>
     </div>

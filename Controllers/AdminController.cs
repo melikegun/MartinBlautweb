@@ -1,88 +1,90 @@
-﻿using MartinBlautweb.Data;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using MartinBlautweb.Models;
+using System.Threading.Tasks;
 
 namespace MartinBlautweb.Controllers
 {
     public class AdminController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly SignInManager<Kullanici> _signInManager;
+        private readonly UserManager<Kullanici> _userManager;
 
-        public AdminController(ApplicationDbContext context)
+        // AdminController'ın constructor'ı
+        public AdminController(SignInManager<Kullanici> signInManager, UserManager<Kullanici> userManager)
         {
-            _context = context;
+            _signInManager = signInManager;
+            _userManager = userManager;
         }
 
-        //Admin Giriş Sayfası
+        // Admin Login - GET
         [HttpGet]
-        public IActionResult Giris()
+        public IActionResult Login()
         {
             return View();
         }
 
-        // Admin Giriş İşlemi
+        // Admin Login - POST
         [HttpPost]
-        public async Task<IActionResult> Giris(string email, string password)
+        public async Task<IActionResult> Login(string email, string password)
         {
-            var admin = await _context.Adminler
-                .FirstOrDefaultAsync(a => a.AdminMail == email && a.AdminSifre == password);
+            // Boşlukları temizleme (Trim)
+            email = email?.Trim();
+            password = password?.Trim();
 
-            if (admin != null)
+            // Admin bilgileriniz
+            const string AdminEmail = "b221210089@sakarya.edu.tr";
+            const string AdminPassword = "sau";
+
+            // E-posta ve şifreyi kontrol ediyoruz
+            if (email == AdminEmail)
             {
-                // Burada adminin rolünü kontrol ediyoruz
-                // Eğer admin rolüne sahipse, giriş yapılabilir
-                // (Gelişmiş bir doğrulama için roller ve yetkiler kullanılabilir)
-                if (admin.AdminMail == email && admin.AdminSifre == password)
+                // Eğer giriş bilgileri doğruysa, sistemdeki kullanıcıyı buluyoruz
+                var user = await _userManager.FindByEmailAsync(email);
+
+                if (user != null)
                 {
-                    TempData["msj"] = $"Hoş geldiniz, {admin.AdminAd}!";
-                    // Admin sayfasına yönlendir
-                    return RedirectToAction("Index", "Admin");
+                    // Şifreyi doğru şekilde kontrol etmek için CheckPasswordAsync kullanıyoruz
+                    var passwordCheck = await _userManager.CheckPasswordAsync(user, password);
+                    if (!passwordCheck)
+                    {
+                        ViewBag.ErrorMessage = "Geçersiz şifre!";
+                        return View();
+                    }
+
+                    // Şifre doğruysa, giriş yapmayı deniyoruz
+                    var result = await _signInManager.PasswordSignInAsync(user, password, false, false);
+
+                    if (result.Succeeded)
+                    {
+                        return RedirectToAction("AdminDashboard");  // Başarılı girişten sonra Admin Dashboard'a yönlendirme
+                    }
+                    else if (result.IsLockedOut)
+                    {
+                        ViewBag.ErrorMessage = "Hesabınız kilitlenmiş. Lütfen daha sonra tekrar deneyin.";
+                    }
+                    else if (result.IsNotAllowed)
+                    {
+                        ViewBag.ErrorMessage = "Hesabınız girişe kapalı.";
+                    }
+                    else
+                    {
+                        ViewBag.ErrorMessage = "Bilinmeyen bir hata oluştu.";
+                    }
                 }
             }
+            else
+            {
+                ViewBag.ErrorMessage = "Geçersiz e-posta veya şifre!";
+            }
 
-            // Giriş başarısız
-            ViewBag.ErrorMessage = "E-posta veya şifre hatalı!";
-            return View();
+            return View();  // Hatalı girişte tekrar login sayfasına dön
         }
 
-
-        // Admin Index Sayfası
-        public IActionResult Index()
+        // Admin Paneli
+        public IActionResult AdminDashboard()
         {
-            // Admin giriş yaptıktan sonra buraya yönlendirilir
-            return View();
+            return View();  // Admin paneline yönlendirme
         }
-
-        // Salon Yönetimi (SalonController yönlendirmesi)
-        public IActionResult SalonYonetimi()
-        {
-            return RedirectToAction("Index", "Salon");
-        }
-
-        // İşlem Yönetimi (IslemController yönlendirmesi)
-        public IActionResult IslemYonetimi()
-        {
-            return RedirectToAction("Index", "Islem");
-        }
-
-        // Çalışan Yönetimi (CalisanController yönlendirmesi)
-        public IActionResult CalisanYonetimi()
-        {
-            return RedirectToAction("Index", "Calisan");
-        }      
-
-        // Randevu Yönetimi (RandevuController yönlendirmesi)
-        public IActionResult RandevuYonetimi()
-        {
-            return RedirectToAction("Index", "Randevu");
-        }
-
-        // Kullanıcı Yönetimi (KullaniciController yönlendirmesi)
-        public IActionResult KullaniciYonetimi()
-        {
-            return RedirectToAction("Index", "Kullanici");
-        }
-
     }
 }

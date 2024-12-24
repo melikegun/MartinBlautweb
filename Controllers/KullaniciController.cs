@@ -1,67 +1,79 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using MartinBlautweb.Models;
 using System.Threading.Tasks;
-using MartinBlautweb.Data;
 
 namespace MartinBlautweb.Controllers
 {
     public class KullaniciController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly UserManager<Kullanici> _userManager;
+        private readonly SignInManager<Kullanici> _signInManager;
 
-        public KullaniciController(ApplicationDbContext context)
+        public KullaniciController(UserManager<Kullanici> userManager, SignInManager<Kullanici> signInManager)
         {
-            _context = context;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
 
-        // Kullanıcı Giriş Sayfası (GET)
+        // Kullanıcı Giriş
+        [HttpGet]
         public IActionResult Giris()
         {
             return View();
         }
 
-        // Kullanıcı Giriş İşlemi (POST)
         [HttpPost]
-        public async Task<IActionResult> Giris(string email, string password)
+        public async Task<IActionResult> Giris(string email, string sifre)
         {
-            var kullanici = await _context.Kullanicilar.FirstOrDefaultAsync(k => k.KullaniciMail == email && k.KullaniciSifre == password);
-
+            var kullanici = await _userManager.FindByEmailAsync(email);
             if (kullanici != null)
             {
-                TempData["msj"] = $"Hoş geldiniz, {kullanici.KullaniciAd}!";
-                return RedirectToAction("Index", "Kullanici");
+                var result = await _signInManager.PasswordSignInAsync(kullanici, sifre, false, false);
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
             }
-            // Giriş başarısız
-            ViewBag.ErrorMessage = "E-posta veya şifre hatalı!";
+            ViewBag.Hata = "Geçersiz kullanıcı adı veya şifre.";
             return View();
         }
 
-        // Kullanıcı Üyelik Sayfası (GET)
-        public IActionResult UyeOl()
+        // Kullanıcı Kayıt
+        [HttpGet]
+        public IActionResult Kayit()
         {
             return View();
         }
 
-        // Kullanıcı Üyelik İşlemi (POST)
         [HttpPost]
-        public async Task<IActionResult> UyeOl(Kullanici kullanici)
+        public async Task<IActionResult> Kayit(Kullanici model, string sifre)
         {
             if (ModelState.IsValid)
             {
-                _context.Kullanicilar.Add(kullanici);
-                await _context.SaveChangesAsync();
-                TempData["msj"] = "Kayıt başarılı, giriş yapabilirsiniz!";
-                return RedirectToAction("Giris");
-            }
-            ViewBag.ErrorMessage = "Bilgiler istenlen şekilde değil, hatalı!";
-            return View(kullanici);
-        }
+                var kullanici = new Kullanici
+                {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    KullaniciAd = model.KullaniciAd,
+                    KullaniciSoyad = model.KullaniciSoyad,
+                    KullaniciTelefon = model.KullaniciTelefon
+                };
 
-        // Kullanıcı Paneli (Giriş yaptıktan sonra ulaşacağı sayfa)
-        public IActionResult Index()
-        {
-            return View();
+                var result = await _userManager.CreateAsync(kullanici, sifre);
+                if (result.Succeeded)
+                {
+                    await _signInManager.SignInAsync(kullanici, isPersistent: false);
+                    await _userManager.AddToRoleAsync(kullanici, "User");  // Kullanıcıyı "User" rolüne ata
+                    return RedirectToAction("Index", "Home");
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+            }
+            return View(model);
         }
     }
 }

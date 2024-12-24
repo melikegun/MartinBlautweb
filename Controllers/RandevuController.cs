@@ -2,18 +2,12 @@
 using MartinBlautweb.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace MartinBlautweb.Controllers
 {
     public class RandevuController : Controller
     {
-        /*
-         * Randevu Sistemi
-            o Kullanıcılar, uygun çalışanlara ve işlemlere göre sistem üzerinden randevu alabilecek.
-            o Randevu saati seçiminde önceki randevuların saati dikkate alınmalı. Eğer seçilen saat doluysa randevu vermemeli
-            o Randevu detayları (işlem, süre, ücret, randevunun sahibinin bilgileri) sistemde saklanacak.
-            o Randevu onay mekanizması olacak.
-        */
         private readonly ApplicationDbContext _context;
 
         public RandevuController(ApplicationDbContext context)
@@ -21,7 +15,7 @@ namespace MartinBlautweb.Controllers
             _context = context;
         }
 
-        //randevular listeleme
+        // Randevular Listeleme
         public async Task<IActionResult> Index()
         {
             var randevular = await _context.Randevular
@@ -32,6 +26,7 @@ namespace MartinBlautweb.Controllers
 
             return View(randevular);
         }
+
         public IActionResult RandevuEkle(int IslemID)
         {
             var islemler = _context.Islemler.ToList() ?? new List<Islem>();
@@ -49,12 +44,11 @@ namespace MartinBlautweb.Controllers
 
             if (IslemID > 0)
             {
-
-                // Eğer islemID gönderildiyse, o işleme uygun çalışanları filtrele
+                // Eğer IslemID gönderildiyse, o işleme uygun çalışanları filtrele
                 var calisanlar = _context.Calisanlar
-                                     .Include(c => c.Yetenekler)
-                                     .Where(c => c.Yetenekler.Any(y => y.IslemID == IslemID))
-                                     .ToList();
+                                         .Include(c => c.Yetenekler)
+                                         .Where(c => c.Yetenekler.Any(y => y.IslemID == IslemID))
+                                         .ToList();
 
                 if (calisanlar == null || !calisanlar.Any())
                 {
@@ -66,51 +60,51 @@ namespace MartinBlautweb.Controllers
                 {
                     ViewData["CalisanListesi"] = calisanlar;
                 }
-
             }
 
             return View();
         }
 
-
-
         [HttpPost]
         public IActionResult RandevuEkle(Randevu randevu, int IslemID, int calisanID)
         {
-            randevu.SalonID = 1;
-
-            if (randevu != null)
+            if (randevu == null)
             {
-                // Randevu oluştur ve kaydet
-                randevu.IslemID = IslemID;
-                randevu.CalisanID = calisanID;
-                _context.Randevular.Add(randevu);
-                _context.SaveChanges();
-
-                TempData["msj"] = "Randevu başarıyla eklendi!";
-                return RedirectToAction("Index");
+                TempData["hata"] = "Randevu bilgileri eksik ya da hatalı!";
+                return View(randevu);
             }
 
-            TempData["hata"] = "Randevu bilgileri eksik ya da hatalı!";
+            // Kullanıcı kimliğini al
+            var kullaniciId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            // İşlem ve çalışan listelerini doldur tekrar göster
-            ViewData["IslemListesi"] = _context.Islemler.ToList();
+            if (string.IsNullOrEmpty(kullaniciId))
+            {
+                TempData["hata"] = "Kullanıcı kimliği alınamadı. Lütfen giriş yapın.";
+                return View(randevu);
+            }
 
-            ViewData["CalisanListesi"] = _context.Calisanlar
-                                                .Include(c => c.Yetenekler)
-                                                .Where(c => c.Yetenekler.Any(y => y.IslemID == IslemID))
-                                                .ToList();
-            return View(randevu);
+            randevu.SalonID = 1;
+            randevu.KullaniciId = kullaniciId;  // Kullanıcı kimliğini atama
+
+            randevu.IslemID = IslemID;
+            randevu.CalisanID = calisanID;
+
+            // Randevu ekle
+            _context.Randevular.Add(randevu);
+            _context.SaveChanges();
+
+            TempData["msj"] = "Randevu başarıyla eklendi!";
+            return RedirectToAction("Index");
         }
+
 
         public IActionResult RandevuDetay(int? id)
         {
-            // Randevuyu, ilişkili olduğu Islem, Calisan ve Kullanici bilgileriyle birlikte getir
             var randevu = _context.Randevular
-                                  .Include(r => r.Islem)       // İşlem bilgisi
-                                  .Include(r => r.Calisan)     // Çalışan bilgisi
-                                  .Include(r => r.Kullanici)   // Kullanıcı bilgisi
-                                  .FirstOrDefault(r => r.RandevuID == id);  // ID'ye göre arama
+                                  .Include(r => r.Islem)
+                                  .Include(r => r.Calisan)
+                                  .Include(r => r.Kullanici)
+                                  .FirstOrDefault(r => r.RandevuID == id);
 
             if (randevu == null)
             {
@@ -118,27 +112,24 @@ namespace MartinBlautweb.Controllers
                 return RedirectToAction("Index");
             }
 
-            return View(randevu);  // Bulunan randevuyu RandevuDetay view'ına gönder
+            return View(randevu);
         }
 
-
-        // GET: RandevuDuzenle
+        // Randevu Düzenle
         public IActionResult RandevuDuzenle(int? id, int? IslemID)
         {
-            if (id is null)
+            if (id == null)
             {
                 TempData["hata"] = "Düzenleme işlemi için işlem ID gerekli.";
                 return View("CalisanHata");
             }
-           
-            // Randevuyu ID'ye göre bul
+
             var randevu = _context.Randevular
                                   .Include(r => r.Islem)
                                   .Include(r => r.Calisan)
                                   .Include(r => r.Kullanici)
                                   .FirstOrDefault(r => r.RandevuID == id);
 
-            // Eğer randevu bulunamazsa hata mesajı döndür
             if (randevu == null)
             {
                 TempData["hata"] = "Randevu bulunamadı!";
@@ -147,23 +138,17 @@ namespace MartinBlautweb.Controllers
 
             IslemID ??= randevu.IslemID;
 
-            // Seçili işlem ID'sini ViewData'ya ekle
             ViewData["SelectedIslemID"] = IslemID;
-
-            // İşlem Listesi'ni ViewData'ya ekle
             ViewData["IslemListesi"] = _context.Islemler.ToList();
-
 
             // Çalışanlar için, seçili işlem ile uyumlu çalışanları filtreleyelim
             ViewData["CalisanListesi"] = _context.Calisanlar
                 .Where(c => c.Yetenekler.Any(y => y.IslemID == IslemID))
                 .ToList();
 
-            // Randevu modelini View'a gönder
             return View(randevu);
         }
 
-        // POST: RandevuDuzenle
         [HttpPost]
         public IActionResult RandevuDuzenle(int id, Randevu randevu, int IslemID, int calisanID)
         {
@@ -174,13 +159,12 @@ namespace MartinBlautweb.Controllers
             }
 
             randevu.SalonID = 1;
+            randevu.KullaniciId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            // Eğer randevu geçerliyse düzenleme işlemi yapalım
             if (randevu != null)
             {
                 randevu.IslemID = IslemID;
                 randevu.CalisanID = calisanID;
-                // Randevuyu güncelle
                 _context.Randevular.Update(randevu);
                 _context.SaveChanges();
 
@@ -188,42 +172,33 @@ namespace MartinBlautweb.Controllers
                 return RedirectToAction("Index");
             }
 
-            // Model geçerli değilse tekrar sayfayı göster
+            // Hata durumunda tekrar formu göster
             ViewData["IslemListesi"] = _context.Islemler.ToList();
-            ViewData["SelectedIslemID"] = randevu.IslemID;  // Seçili işlem ID'sini ekle
             ViewData["CalisanListesi"] = _context.Calisanlar
                 .Where(c => c.Yetenekler.Any(y => y.IslemID == randevu.IslemID))
                 .ToList();
             return View(randevu);
         }
 
-
-
-
-
         public IActionResult RandevuSil(int? id)
         {
-            // Verilen ID'ye göre randevuyu bul
             var randevu = _context.Randevular
-                                .Include(r => r.Calisan)
-                                .Include(r => r.Islem)
-                                .Include(r => r.Kullanici)
-                                .FirstOrDefault(r => r.RandevuID == id);
+                                  .Include(r => r.Calisan)
+                                  .Include(r => r.Islem)
+                                  .Include(r => r.Kullanici)
+                                  .FirstOrDefault(r => r.RandevuID == id);
 
             if (randevu == null)
             {
                 TempData["hata"] = "Randevu bulunamadı!";
-                return RedirectToAction("Index"); // Randevu bulunamazsa liste sayfasına dön
+                return RedirectToAction("Index");
             }
 
-            // Randevuyu veritabanından sil
             _context.Randevular.Remove(randevu);
             _context.SaveChanges();
 
             TempData["msj"] = "Randevu başarıyla silindi!";
-            return RedirectToAction("Index"); // Silme işlemi başarılıysa liste sayfasına dön
+            return RedirectToAction("Index");
         }
-
-
     }
 }

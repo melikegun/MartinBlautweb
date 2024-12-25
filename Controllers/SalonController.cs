@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using MartinBlautweb.Data;
 using MartinBlautweb.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MartinBlautweb.Controllers
 {
@@ -15,12 +16,26 @@ namespace MartinBlautweb.Controllers
             _context = context;
         }
 
+        [Authorize(Roles = "User")]
+        public IActionResult SalonBilgiler()
+        {
+            var salon = _context.Salonlar
+                    .Include(s => s.Calisanlar)  // Çalışanları dahil et
+                    .Include(s => s.Islemler)    // İşlemleri dahil et
+                    .FirstOrDefault();
+            return View(salon);
+        }
+
+
+
+        [Authorize(Roles = "Admin")]
         public IActionResult Index()
         {
             var salon = _context.Salonlar.FirstOrDefault(); // Tek bir salon al
             return View(salon);
         }
 
+        [Authorize(Roles = "Admin")]
         // Salon detayını görüntüleme
         public IActionResult SalonDetay(int? id)
         {

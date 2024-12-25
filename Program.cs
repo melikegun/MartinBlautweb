@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MartinBlautweb.Data;
 using MartinBlautweb.Models;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,20 +11,40 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Identity yapýlandýrmasý: Kullanýcý ve rol yapýlandýrmasý
-builder.Services.AddIdentity<Kullanici, IdentityRole>()
-    .AddEntityFrameworkStores<ApplicationDbContext>()
-    .AddDefaultTokenProviders();
-
-// Þifre politikalarýný özelleþtirme
-builder.Services.Configure<IdentityOptions>(options =>
+builder.Services.AddIdentity<Kullanici, IdentityRole>(options =>
 {
     // Þifre politikasý
     options.Password.RequireDigit = false;
     options.Password.RequireLowercase = false;
     options.Password.RequireUppercase = false;
     options.Password.RequireNonAlphanumeric = false;
-    options.Password.RequiredLength = 3;  // Þifrenin minimum uzunluðunu belirle
+    options.Password.RequiredLength = 3; // Minimum þifre uzunluðu
+})
+.AddEntityFrameworkStores<ApplicationDbContext>()
+.AddDefaultTokenProviders();
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Kullanici/Giris"; // Kullanýcý giriþi sayfasý yolu
+    options.AccessDeniedPath = "/Home/AccessDenied"; // Eriþim reddi sayfasý yolu
+    options.LogoutPath = "/Kullanici/Logout"; // Kullanýcý çýkýþý için yönlendirme
+
+    // Admin kullanýcý için özel bir yönlendirme
+    options.Events.OnRedirectToLogin = context =>
+    {
+        // Eðer admin sayfasýna eriþmeye çalýþýlýyorsa
+        if (context.Request.Path.StartsWithSegments("/Admin"))
+        {
+            context.Response.Redirect("/Admin/Login"); // Admin login sayfasýna yönlendir
+        }
+        else
+        {
+            context.Response.Redirect("/Kullanici/Giris"); // Kullanýcý login sayfasýna yönlendir
+        }
+        return Task.CompletedTask;
+    };
 });
+
 
 // Controllers ve Views desteði ekleme
 builder.Services.AddControllersWithViews();
@@ -71,8 +92,7 @@ static async Task SeedDatabase(WebApplication app)
         string[] roleNames = { "Admin", "User" };
         foreach (var roleName in roleNames)
         {
-            var roleExist = await roleManager.RoleExistsAsync(roleName);
-            if (!roleExist)
+            if (!await roleManager.RoleExistsAsync(roleName))
             {
                 await roleManager.CreateAsync(new IdentityRole(roleName));
             }
@@ -82,19 +102,54 @@ static async Task SeedDatabase(WebApplication app)
         var adminUser = await userManager.FindByEmailAsync("b221210089@sakarya.edu.tr");
         if (adminUser == null)
         {
-            // Admin kullanýcý oluþturuluyor
             adminUser = new Kullanici
             {
                 UserName = "b221210089@sakarya.edu.tr",
                 Email = "b221210089@sakarya.edu.tr"
             };
 
-            // Admin kullanýcýsý oluþturuluyor ve parola set ediliyor
-            var result = await userManager.CreateAsync(adminUser, "sau");
-            if (result.Succeeded)
+            var createResult = await userManager.CreateAsync(adminUser, "sau");
+            if (createResult.Succeeded)
             {
-                // Admin rolünü ekliyoruz
+                // Admin rolünü ata
                 await userManager.AddToRoleAsync(adminUser, "Admin");
+            }
+        }
+        else
+        {
+            // Eðer kullanýcý zaten varsa, Admin rolüne ekle
+            if (!await userManager.IsInRoleAsync(adminUser, "Admin"))
+            {
+                await userManager.AddToRoleAsync(adminUser, "Admin");
+            }
+        }
+
+        // User rolü için bir kullanýcý oluþturuluyor (Örnek kullanýcý)
+        var user = await userManager.FindByEmailAsync("user@example.com");
+        if (user == null)
+        {
+            user = new Kullanici
+            {
+                UserName = "user@example.com",
+                Email = "user@example.com",
+                KullaniciAd = "Örnek",
+                KullaniciSoyad = "Kullanýcý",
+                KullaniciTelefon = "5551234567"
+            };
+
+            var createResult = await userManager.CreateAsync(user, "userpassword");
+            if (createResult.Succeeded)
+            {
+                // User rolünü ata
+                await userManager.AddToRoleAsync(user, "User");
+            }
+        }
+        else
+        {
+            // Eðer kullanýcý zaten varsa, User rolüne ekle
+            if (!await userManager.IsInRoleAsync(user, "User"))
+            {
+                await userManager.AddToRoleAsync(user, "User");
             }
         }
     }

@@ -23,6 +23,7 @@ namespace MartinBlautweb.Controllers
             return View();
         }
 
+
         [HttpPost]
         public async Task<IActionResult> Giris(string email, string sifre)
         {
@@ -32,12 +33,21 @@ namespace MartinBlautweb.Controllers
                 var result = await _signInManager.PasswordSignInAsync(kullanici, sifre, false, false);
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("Index", "Home");
+                    // Kullanıcı rolünü kontrol et
+                    if (await _userManager.IsInRoleAsync(kullanici, "Admin"))
+                    {
+                        return RedirectToAction("Index", "Admin");
+                    }
+                    else
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
                 }
             }
             ViewBag.Hata = "Geçersiz kullanıcı adı veya şifre.";
             return View();
         }
+
 
         // Kullanıcı Kayıt
         [HttpGet]
@@ -75,5 +85,6 @@ namespace MartinBlautweb.Controllers
             }
             return View(model);
         }
+
     }
 }

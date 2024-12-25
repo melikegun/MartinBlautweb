@@ -1,5 +1,6 @@
 ﻿using MartinBlautweb.Data;
 using MartinBlautweb.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +21,7 @@ namespace MartinBlautweb.Controllers
         }
 
         // Çalışanlar sayfası (Listeleme)
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
             var calisanlar = await _context.Calisanlar
@@ -30,6 +32,7 @@ namespace MartinBlautweb.Controllers
         }
 
         // Çalışan ekleme sayfası (GET)
+        [Authorize(Roles = "Admin")]
         public IActionResult CalisanEkle()
         {
             var islemler = _context.Islemler.ToList() ?? new List<Islem>();
@@ -47,6 +50,7 @@ namespace MartinBlautweb.Controllers
 
 
         // Çalışan ekleme sayfası (POST)
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult CalisanEkle(Calisan calisan, int[] selectedIslemler)
         {
@@ -82,6 +86,7 @@ namespace MartinBlautweb.Controllers
         }
 
         // Çalışan düzenleme sayfası (GET)
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> CalisanDuzenle(int? id)
         {
@@ -118,6 +123,7 @@ namespace MartinBlautweb.Controllers
         }
 
         // Çalışan düzenleme sayfası (POST)
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CalisanDuzenle(int id, Calisan calisan, int[] selectedIslemler)
@@ -175,6 +181,7 @@ namespace MartinBlautweb.Controllers
 
 
         // Çalışan detay sayfası
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CalisanDetay(int? id)
         {
             if (id is null)
@@ -198,6 +205,7 @@ namespace MartinBlautweb.Controllers
         }
 
         // Çalışan silme sayfası
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CalisanSil(int? id)
         {
             if (id is null)

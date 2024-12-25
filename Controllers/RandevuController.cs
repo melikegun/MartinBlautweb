@@ -1,5 +1,6 @@
 ﻿using MartinBlautweb.Data;
 using MartinBlautweb.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
@@ -15,6 +16,7 @@ namespace MartinBlautweb.Controllers
             _context = context;
         }
 
+        [Authorize(Roles = "Admin")]
         // Randevular Listeleme
         public async Task<IActionResult> Index()
         {
@@ -27,6 +29,7 @@ namespace MartinBlautweb.Controllers
             return View(randevular);
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult RandevuEkle(int IslemID)
         {
             var islemler = _context.Islemler.ToList() ?? new List<Islem>();
@@ -65,6 +68,7 @@ namespace MartinBlautweb.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult RandevuEkle(Randevu randevu, int IslemID, int calisanID)
         {
@@ -98,6 +102,7 @@ namespace MartinBlautweb.Controllers
         }
 
 
+        [Authorize(Roles = "Admin")]
         public IActionResult RandevuDetay(int? id)
         {
             var randevu = _context.Randevular
@@ -115,6 +120,7 @@ namespace MartinBlautweb.Controllers
             return View(randevu);
         }
 
+        [Authorize(Roles = "Admin")]
         // Randevu Düzenle
         public IActionResult RandevuDuzenle(int? id, int? IslemID)
         {
@@ -149,6 +155,7 @@ namespace MartinBlautweb.Controllers
             return View(randevu);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult RandevuDuzenle(int id, Randevu randevu, int IslemID, int calisanID)
         {
@@ -180,6 +187,7 @@ namespace MartinBlautweb.Controllers
             return View(randevu);
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult RandevuSil(int? id)
         {
             var randevu = _context.Randevular

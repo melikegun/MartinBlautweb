@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using MartinBlautweb.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MartinBlautweb.Controllers
 {
@@ -16,7 +17,15 @@ namespace MartinBlautweb.Controllers
             _context = context;
         }
 
+        [Authorize(Roles = "User")]
+        public IActionResult IslemBilgiler()
+        {
+            var islemler =  _context.Islemler.ToList();
+            return View(islemler);
+        }
+
         // Listeleme
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
             var islemler = await _context.Islemler.ToListAsync();
@@ -24,6 +33,7 @@ namespace MartinBlautweb.Controllers
         }
 
         // İşlem Detayı
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> IslemDetay(int? id)
         {
             if (id is null)
@@ -44,12 +54,14 @@ namespace MartinBlautweb.Controllers
             return View(islem);
         }
 
+        [Authorize(Roles = "Admin")]
         // Yeni İşlem Ekleme (GET)
         public IActionResult IslemEkle()
         {
             return View();
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> IslemEkle([Bind("IslemID,IslemAdi,Ucret,Aciklama,Sure")] Islem islem)
         {
@@ -68,6 +80,7 @@ namespace MartinBlautweb.Controllers
             return View(islem);
         }
 
+        [Authorize(Roles = "Admin")]
         // İşlem Düzenleme (GET)
         public async Task<IActionResult> IslemDuzenle(int? id)
         {
@@ -87,6 +100,7 @@ namespace MartinBlautweb.Controllers
             return View(islem);
         }
 
+        [Authorize(Roles = "Admin")]
         // İşlem Düzenleme (POST)
         [HttpPost]
         public async Task<IActionResult> IslemDuzenle(int id, [Bind("IslemID,IslemAdi,Ucret,Aciklama,Sure")] Islem islem)
@@ -126,6 +140,7 @@ namespace MartinBlautweb.Controllers
             return View(islem);
         }
 
+        [Authorize(Roles = "Admin")]
         // İşlem Silme
         public async Task<IActionResult> IslemSil(int? id)
         {

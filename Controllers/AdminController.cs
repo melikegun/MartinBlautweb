@@ -17,6 +17,11 @@ namespace MartinBlautweb.Controllers
             _userManager = userManager;
         }
 
+        public IActionResult AccessDenied()
+        {
+            return View(); // AccessDenied.cshtml adlı bir sayfa oluştur
+        }
+
         // Admin Login - GET
         [HttpGet]
         public IActionResult Login()
@@ -34,7 +39,6 @@ namespace MartinBlautweb.Controllers
 
             // Admin bilgileriniz
             const string AdminEmail = "b221210089@sakarya.edu.tr";
-            const string AdminPassword = "sau";
 
             // E-posta ve şifreyi kontrol ediyoruz
             if (email == AdminEmail)
@@ -44,11 +48,13 @@ namespace MartinBlautweb.Controllers
 
                 if (user != null)
                 {
-                    // Şifreyi doğru şekilde kontrol etmek için CheckPasswordAsync kullanıyoruz
-                    var passwordCheck = await _userManager.CheckPasswordAsync(user, password);
-                    if (!passwordCheck)
+                    // Şifreyi manuel olarak kontrol etmek için PasswordHasher kullanımı
+                    var passwordHasher = new PasswordHasher<Kullanici>();
+                    var hashVerification = passwordHasher.VerifyHashedPassword(user, user.PasswordHash, password);
+
+                    if (hashVerification == PasswordVerificationResult.Failed)
                     {
-                        ViewBag.ErrorMessage = "Geçersiz şifre!";
+                        ModelState.AddModelError("", "Şifre doğrulama başarısız.");
                         return View();
                     }
 
@@ -57,32 +63,32 @@ namespace MartinBlautweb.Controllers
 
                     if (result.Succeeded)
                     {
-                        return RedirectToAction("AdminDashboard");  // Başarılı girişten sonra Admin Dashboard'a yönlendirme
+                        return RedirectToAction("Index");  // Başarılı girişten sonra Admin Dashboard'a yönlendirme
                     }
                     else if (result.IsLockedOut)
                     {
-                        ViewBag.ErrorMessage = "Hesabınız kilitlenmiş. Lütfen daha sonra tekrar deneyin.";
+                        ModelState.AddModelError("", "Hesabınız kilitlenmiş. Lütfen daha sonra tekrar deneyin.");
                     }
                     else if (result.IsNotAllowed)
                     {
-                        ViewBag.ErrorMessage = "Hesabınız girişe kapalı.";
+                        ModelState.AddModelError("", "Hesabınız girişe kapalı.");
                     }
                     else
                     {
-                        ViewBag.ErrorMessage = "Bilinmeyen bir hata oluştu.";
+                        ModelState.AddModelError("", "Bilinmeyen bir hata oluştu.");
                     }
                 }
             }
             else
             {
-                ViewBag.ErrorMessage = "Geçersiz e-posta veya şifre!";
+                ModelState.AddModelError("", "Geçersiz e-posta veya şifre!");
             }
 
             return View();  // Hatalı girişte tekrar login sayfasına dön
         }
 
         // Admin Paneli
-        public IActionResult AdminDashboard()
+        public IActionResult Index()
         {
             return View();  // Admin paneline yönlendirme
         }

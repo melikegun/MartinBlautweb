@@ -1,0 +1,109 @@
+﻿@model MartinBlautweb.Models.Salon
+
+@{
+    ViewData["Title"] = "Salon Bilgileri";
+}
+
+<!-- Bootstrap 5 ile şık bir tasarım -->
+<div class="container mt-5">
+    <h1 class="text-center mb-4 text-primary">@Model.SalonAdi</h1>
+
+    <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white">
+            <h3 class="card-title mb-0">@Html.DisplayNameFor(model => model.SalonAdi) Bilgileri</h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <!-- Salon Adı ve Açıklama -->
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">@Html.DisplayNameFor(model => model.SalonAdi)</label>
+                        <p class="form-control-plaintext">@Model.SalonAdi</p>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">@Html.DisplayNameFor(model => model.SalonAciklama)</label>
+                        <p class="form-control-plaintext">@Model.SalonAciklama ?? "Açıklama bulunmamaktadır."</p>
+                    </div>
+                </div>
+
+                <!-- Adres ve Telefon Numarası -->
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">@Html.DisplayNameFor(model => model.SalonAdres)</label>
+                        <p class="form-control-plaintext">@Model.SalonAdres</p>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">@Html.DisplayNameFor(model => model.SalonTelefon)</label>
+                        <p class="form-control-plaintext">@Model.SalonTelefon</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Açılış ve Kapanış Saatleri -->
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">@Html.DisplayNameFor(model => model.SalonAcilisSaati)</label>
+                        <p class="form-control-plaintext">@Model.SalonAcilisSaati.ToString(@"hh\:mm")</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">@Html.DisplayNameFor(model => model.SalonKapanisSaati)</label>
+                        <p class="form-control-plaintext">@Model.SalonKapanisSaati.ToString(@"hh\:mm")</p>
+                    </div>
+                </div>
+            </div>
+
+           @*  <!-- Çalışanlar ve İşlemler Listesi -->
+            @if (Model.Calisanlar != null && Model.Calisanlar.Any())
+            {
+                <div class="mt-4">
+                    <h5 class="text-primary">@Html.DisplayName("Çalışanlar")</h5>
+                    <ul class="list-group">
+                        @foreach (var calisan in Model.Calisanlar)
+                        {
+                            <li class="list-group-item">
+                                <strong>@calisan.CalisanAdi @calisan.CalisanSoyad</strong>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            }
+
+            @if (Model.Islemler != null && Model.Islemler.Any())
+            {
+                <div class="mt-4">
+                    <h5 class="text-primary">@Html.DisplayName("İşlemler")</h5>
+                    <ul class="list-group">
+                        @foreach (var islem in Model.Islemler)
+                        {
+                            <li class="list-group-item">
+                                <strong>@islem.IslemAdi</strong> - @islem.IslemFiyat.ToString("C")
+                            </li>
+                        }
+                    </ul>
+                </div>
+            }
+
+            <!-- Randevular -->
+            @if (Model.Randevular != null && Model.Randevular.Any())
+            {
+                <div class="mt-4">
+                    <h5 class="text-primary">@Html.DisplayName("Randevular")</h5>
+                    <ul class="list-group">
+                        @foreach (var randevu in Model.Randevular)
+                        {
+                            <li class="list-group-item">
+                                <strong>@randevu.RandevuTarihi.ToString("dd/MM/yyyy HH:mm")</strong> - @randevu.RandevuAciklama
+                            </li>
+                        }
+                    </ul>
+                </div>
+            } *@
+        </div>
+        <div class="card-footer text-center bg-light">
+            <a href="@Url.Action("Index", "Home")" class="btn btn-secondary">@Html.DisplayName("Geri Dön")</a>
+        </div>
+    </div>
+</div>

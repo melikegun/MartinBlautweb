@@ -1,0 +1,59 @@
+﻿@model IEnumerable<MartinBlautweb.Models.Islem>
+
+@{
+    ViewData["Title"] = "İşlem Bilgileri";
+}
+
+<!-- Bootstrap 5 ile şık bir tasarım -->
+<div class="container mt-5">
+    <h1 class="text-center mb-4 text-primary">İşlemler</h1>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-warning text-center" role="alert">
+            Henüz işlem bulunmamaktadır.
+        </div>
+    }
+    else
+    {
+        <div class="card shadow-lg">
+            <div class="card-header bg-primary text-white">
+                <h3 class="card-title mb-0">Tüm İşlemler</h3>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>@Html.DisplayNameFor(model => model.First().IslemAdi)</th>
+                                <th>@Html.DisplayNameFor(model => model.First().Ucret)</th>
+                                <th>@Html.DisplayNameFor(model => model.First().Sure)</th>
+                                <th>@Html.DisplayNameFor(model => model.First().Aciklama)</th>
+                                <th>Aksiyon</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var islem in Model)
+                            {
+                                <tr>
+                                    <td>@islem.IslemAdi</td>
+                                    <td>@islem.Ucret.ToString("C")</td>
+                                    <td>@islem.Sure</td>
+                                    <td>@islem.Aciklama ?? "Açıklama bulunmamaktadır."</td>
+                                    <td>
+                                        <a href="@Url.Action("IslemDetay", "Islem", new { id = islem.IslemID })" class="btn btn-info btn-sm">
+                                            Detay
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer text-center bg-light">
+                <a href="@Url.Action("Index", "Home")" class="btn btn-secondary">Ana Sayfaya Dön</a>
+            </div>
+        </div>
+    }
+</div>

@@ -1,0 +1,74 @@
+﻿@model IEnumerable<MartinBlautweb.Models.Calisan>
+
+@{
+    ViewData["Title"] = "Çalışan Listesi";
+}
+
+<!-- Kullanıcı Paneline Dön Butonu -->
+<a asp-action="Index" asp-controller="Kullanici" class="btn btn-primary mt-3">Kullanıcı Paneline Dön</a>
+<br />
+<br />
+
+<div class="container mt-5">
+    <h1 class="text-center mb-4 text-primary">Çalışanlar</h1>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-warning text-center" role="alert">
+            Henüz çalışan bulunmamaktadır.
+        </div>
+    }
+
+    else
+    {
+        <div class="card shadow-lg">
+            <div class="card-header bg-primary text-white">
+                <h3 class="card-title mb-0">Tüm Çalışanlar</h3>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>@Html.DisplayNameFor(model => model.First().CalisanAd)</th>
+                                <th>@Html.DisplayNameFor(model => model.First().CalisanSoyad)</th>
+                                <th>@Html.DisplayNameFor(model => model.First().CalisanMesaiBaslangic)</th>
+                                <th>@Html.DisplayNameFor(model => model.First().CalisanMesaiBitis)</th>
+                                <th>Uzmanlık Alanı</th>
+                                <th>Yetenekler</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var calisan in Model)
+                            {
+                                <tr>
+                                    <td>@calisan.CalisanAd</td>
+                                    <td>@calisan.CalisanSoyad</td>
+                                    <td>@calisan.CalisanMesaiBaslangic.ToString("hh\\:mm")</td>
+                                    <td>@calisan.CalisanMesaiBitis.ToString("hh\\:mm")</td>
+                                    <td>@(calisan.UzmanlikAlan != null ? calisan.UzmanlikAlan.IslemAdi : "Belirtilmemiş")</td>
+                                    <td>
+                                        @if (calisan.Yetenekler != null && calisan.Yetenekler.Any())
+                                        {
+                                            <ul>
+                                                @foreach (var yetenek in calisan.Yetenekler)
+                                                {
+                                                    <li>@yetenek.IslemAdi</li>
+                                                }
+                                            </ul>
+                                        }
+                                        else
+                                        {
+                                            <span>Yetenek bilgisi bulunmamaktadır.</span>
+                                        }
+                                    </td>
+                                   
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+</div>

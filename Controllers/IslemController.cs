@@ -16,8 +16,6 @@ namespace MartinBlautweb.Controllers
         {
             _context = context;
         }
-
-        [Authorize(Roles = "User")]
         public IActionResult IslemBilgiler()
         {
             var islemler =  _context.Islemler.ToList();
@@ -62,15 +60,22 @@ namespace MartinBlautweb.Controllers
         }
 
         [Authorize(Roles = "Admin")]
+        // Yeni İşlem Ekleme (POST)
         [HttpPost]
         public async Task<IActionResult> IslemEkle([Bind("IslemID,IslemAdi,Ucret,Aciklama,Sure")] Islem islem)
         {
             islem.SalonID = 1;
 
             if (islem != null)
-            {          
+            {
+                // Yeni işlemi ekle
                 _context.Islemler.Add(islem);
                 await _context.SaveChangesAsync();
+
+                // ID sıralamasını sıfırlama (yeni eklenen kaydın ID'sini kullan)
+                var maxId = await _context.Islemler.MaxAsync(x => x.IslemID);
+                await _context.Database.ExecuteSqlRawAsync($"DBCC CHECKIDENT ('Islemler', RESEED, {maxId});");
+
 
                 TempData["msj"] = islem.IslemAdi + " adlı işlem başarıyla eklenmiştir.";
                 return RedirectToAction("Index");
@@ -79,6 +84,7 @@ namespace MartinBlautweb.Controllers
             TempData["hata"] = "İşlem eklenemedi. Lütfen tüm alanları doldurduğunuzdan emin olun.";
             return View(islem);
         }
+
 
         [Authorize(Roles = "Admin")]
         // İşlem Düzenleme (GET)
@@ -111,7 +117,7 @@ namespace MartinBlautweb.Controllers
                 return View("IslemHata");
             }
 
-            if (ModelState.IsValid)
+            if (islem != null)
             {
                 try
                 {
@@ -166,9 +172,16 @@ namespace MartinBlautweb.Controllers
             _context.Islemler.Remove(islem);
             await _context.SaveChangesAsync();
 
+            // Silme işleminden sonra ID sıralamasını sıfırlama
+            var maxId = await _context.Islemler.MaxAsync(x => x.IslemID);
+            await _context.Database.ExecuteSqlRawAsync($"DBCC CHECKIDENT ('Islemler', RESEED, {maxId});");
+
             TempData["msj"] = islem.IslemAdi + " adlı işlem başarıyla silindi.";
             return RedirectToAction("Index");
         }
+
+
+
 
         // Yardımcı Fonksiyon: İşlem Mevcut mu
         private bool IslemExists(int id)

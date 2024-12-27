@@ -20,6 +20,15 @@ namespace MartinBlautweb.Controllers
             _context = context;
         }
 
+        public IActionResult CalisanBilgiler()
+        {
+            var calisanlar =  _context.Calisanlar
+                .Include(c => c.Yetenekler) // Yetenekleri (Islem) dahil et
+                .Include(c => c.UzmanlikAlan)
+                .ToList();
+            return View(calisanlar);
+        }
+
         // Çalışanlar sayfası (Listeleme)
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
@@ -40,6 +49,7 @@ namespace MartinBlautweb.Controllers
             {
                 TempData["hata"] = "IslemListesi boş! Islemler tablosunda veri yok.";
                 return View("CalisanHata");
+
             }
 
             // IslemListesi'ni ViewData'ya gönder
@@ -47,43 +57,48 @@ namespace MartinBlautweb.Controllers
 
             return View();
         }
-
-
         // Çalışan ekleme sayfası (POST)
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public IActionResult CalisanEkle(Calisan calisan, int[] selectedIslemler)
+        public async Task<IActionResult> CalisanEkle(Calisan calisan, int[] selectedIslemler)
         {
             if (selectedIslemler == null || !selectedIslemler.Any())
             {
                 ModelState.AddModelError("", "Lütfen en az bir yetenek seçin.");
-                ViewData["IslemListesi"] = _context.Islemler.ToList();
+                ViewData["IslemListesi"] = await _context.Islemler.ToListAsync(); // Asenkron işlemi senkron hale getirdik
                 return View(calisan);
             }
 
             calisan.SalonID = 1;
-            var uzmanlik = _context.Islemler.FirstOrDefault(i => i.IslemID == calisan.UzmanlikAlanID);
+            var uzmanlik = await _context.Islemler.FirstOrDefaultAsync(i => i.IslemID == calisan.UzmanlikAlanID); // Asenkron hale getirildi
             if (calisan != null)
             {
                 // Yetenekleri ekliyoruz
                 foreach (var islemId in selectedIslemler)
                 {
-                    var islem = _context.Islemler.Find(islemId);
+                    var islem = await _context.Islemler.FindAsync(islemId); // Asenkron hale getirildi
                     if (islem != null)
                     {
                         calisan.Yetenekler.Add(islem);
                     }
                 }
                 calisan.UzmanlikAlan = uzmanlik;
+
                 _context.Calisanlar.Add(calisan);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync(); // Asenkron hale getirildi
+
+                // Silme işleminden sonra ID sıralamasını sıfırlama
+                var maxId = await _context.Calisanlar.MaxAsync(x => x.CalisanID); // Asenkron hale getirildi
+                await _context.Database.ExecuteSqlRawAsync($"DBCC CHECKIDENT ('Calisanlar', RESEED, {maxId});"); // Asenkron hale getirildi
+
                 TempData["msj"] = "Çalışan başarıyla eklendi.";
                 return RedirectToAction("Index");
             }
 
-            ViewData["IslemListesi"] = _context.Islemler?.ToList() ?? new List<Islem>();
+            ViewData["IslemListesi"] = await _context.Islemler.ToListAsync(); // Asenkron hale getirildi
             return View(calisan);
         }
+
 
         // Çalışan düzenleme sayfası (GET)
         [Authorize(Roles = "Admin")]
@@ -224,10 +239,24 @@ namespace MartinBlautweb.Controllers
             // Çalışanı sil
             _context.Calisanlar.Remove(calisan);
             await _context.SaveChangesAsync();
-            TempData["msj"] = $"{calisan.CalisanAd} {calisan.CalisanSoyad} adlı çalışan başarıyla silindi.";
 
+            // Silme işleminden sonra ID sıralamasını sıfırlama
+            var anyData = await _context.Calisanlar.AnyAsync();
+            if (!anyData)
+            {
+                await _context.Database.ExecuteSqlRawAsync("DBCC CHECKIDENT ('Calisanlar', RESEED, 0);");
+            }
+            else
+            {
+                var maxId = await _context.Calisanlar.MaxAsync(x => x.CalisanID);
+                await _context.Database.ExecuteSqlRawAsync($"DBCC CHECKIDENT ('Calisanlar', RESEED, {maxId});");
+            }
+
+            TempData["msj"] = $"{calisan.CalisanAd} {calisan.CalisanSoyad} adlı çalışan başarıyla silindi.";
             return RedirectToAction("Index");
         }
+
+
 
         // Yardımcı metod: Çalışan var mı?
         private bool CalisanExists(int id)

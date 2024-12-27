@@ -16,6 +16,11 @@ namespace MartinBlautweb.Controllers
             _signInManager = signInManager;
         }
 
+        public IActionResult Index()
+        {
+            return View();
+        }
+
         // Kullanıcı Giriş
         [HttpGet]
         public IActionResult Giris()
@@ -40,7 +45,7 @@ namespace MartinBlautweb.Controllers
                     }
                     else
                     {
-                        return RedirectToAction("Index", "Home");
+                        return RedirectToAction("Index", "Kullanici");
                     }
                 }
             }

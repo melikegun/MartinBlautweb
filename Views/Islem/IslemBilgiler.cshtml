@@ -4,6 +4,11 @@
     ViewData["Title"] = "İşlem Bilgileri";
 }
 
+<!-- Kullanıcı Paneline Dön Butonu -->
+<a asp-action="Index" asp-controller="Kullanici" class="btn btn-primary mt-3">Kullanıcı Paneline Dön</a>
+<br />
+<br />
+
 <!-- Bootstrap 5 ile şık bir tasarım -->
 <div class="container mt-5">
     <h1 class="text-center mb-4 text-primary">İşlemler</h1>
@@ -29,7 +34,6 @@
                                 <th>@Html.DisplayNameFor(model => model.First().Ucret)</th>
                                 <th>@Html.DisplayNameFor(model => model.First().Sure)</th>
                                 <th>@Html.DisplayNameFor(model => model.First().Aciklama)</th>
-                                <th>Aksiyon</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -39,20 +43,13 @@
                                     <td>@islem.IslemAdi</td>
                                     <td>@islem.Ucret.ToString("C")</td>
                                     <td>@islem.Sure</td>
-                                    <td>@islem.Aciklama ?? "Açıklama bulunmamaktadır."</td>
-                                    <td>
-                                        <a href="@Url.Action("IslemDetay", "Islem", new { id = islem.IslemID })" class="btn btn-info btn-sm">
-                                            Detay
-                                        </a>
-                                    </td>
+                                    <td>@Html.Raw(islem.Aciklama ?? "Açıklama bulunmamaktadır.")</td>
+         
                                 </tr>
                             }
                         </tbody>
                     </table>
                 </div>
-            </div>
-            <div class="card-footer text-center bg-light">
-                <a href="@Url.Action("Index", "Home")" class="btn btn-secondary">Ana Sayfaya Dön</a>
             </div>
         </div>
     }

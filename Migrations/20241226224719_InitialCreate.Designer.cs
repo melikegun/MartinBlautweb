@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MartinBlautweb.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241224000907_InıtıalCreate")]
-    partial class InıtıalCreate
+    [Migration("20241226224719_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

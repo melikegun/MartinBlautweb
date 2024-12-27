@@ -40,6 +40,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cTG9naW4uY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/melik/source/repos/MartinBlautweb/MartinBlautweb/Views/Calisan/CalisanBilgiler.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FsaXNhblxDYWxpc2FuQmlsZ2lsZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/melik/source/repos/MartinBlautweb/MartinBlautweb/Views/Calisan/CalisanDetay.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FsaXNhblxDYWxpc2FuRGV0YXkuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
@@ -104,12 +108,20 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS3VsbGFuaWNpXEdpcmlzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/melik/source/repos/MartinBlautweb/MartinBlautweb/Views/Kullanici/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS3VsbGFuaWNpXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/melik/source/repos/MartinBlautweb/MartinBlautweb/Views/Kullanici/Kayit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS3VsbGFuaWNpXEtheWl0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/melik/source/repos/MartinBlautweb/MartinBlautweb/Views/Randevu/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmFuZGV2dVxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/melik/source/repos/MartinBlautweb/MartinBlautweb/Views/Randevu/KullaniciRandevulari.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmFuZGV2dVxLdWxsYW5pY2lSYW5kZXZ1bGFyaS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/melik/source/repos/MartinBlautweb/MartinBlautweb/Views/Randevu/RandevuDetay.cshtml]

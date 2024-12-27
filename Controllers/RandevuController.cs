@@ -4,6 +4,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
 
 namespace MartinBlautweb.Controllers
 {
@@ -16,8 +22,33 @@ namespace MartinBlautweb.Controllers
             _context = context;
         }
 
+        private IActionResult RedirectBasedOnRole()
+        {
+            if (User.IsInRole("Admin"))
+            {
+                return RedirectToAction("Index");
+            }
+            else if (User.IsInRole("User"))
+            {
+                return RedirectToAction("KullaniciRandevulari");
+            }
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        [Authorize(Roles = "User")]
+        public async Task<IActionResult> KullaniciRandevulari()
+        {
+            var kullaniciId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var randevular = await _context.Randevular
+                .Include(r => r.Calisan)
+                .Include(r => r.Islem)
+                .Where(r => r.KullaniciId == kullaniciId)
+                .ToListAsync();
+            return View(randevular);
+        }
+
         [Authorize(Roles = "Admin")]
-        // Randevular Listeleme
         public async Task<IActionResult> Index()
         {
             var randevular = await _context.Randevular
@@ -29,7 +60,7 @@ namespace MartinBlautweb.Controllers
             return View(randevular);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "User")]
         public IActionResult RandevuEkle(int IslemID)
         {
             var islemler = _context.Islemler.ToList() ?? new List<Islem>();
@@ -39,15 +70,11 @@ namespace MartinBlautweb.Controllers
                 return View("CalisanHata");
             }
 
-            // İşlem Listesi'ni ViewData'ya gönder
             ViewData["IslemListesi"] = islemler;
-
-            // Seçili işlem ID'sini ViewData'ya ekle
             ViewData["SelectedIslemID"] = IslemID;
 
             if (IslemID > 0)
             {
-                // Eğer IslemID gönderildiyse, o işleme uygun çalışanları filtrele
                 var calisanlar = _context.Calisanlar
                                          .Include(c => c.Yetenekler)
                                          .Where(c => c.Yetenekler.Any(y => y.IslemID == IslemID))
@@ -55,7 +82,6 @@ namespace MartinBlautweb.Controllers
 
                 if (calisanlar == null || !calisanlar.Any())
                 {
-                    // Çalışan yoksa ViewData'ya boş liste aktarılır
                     ViewData["CalisanListesi"] = new List<Calisan>();
                     TempData["hata"] = "Seçilen işlem için uygun çalışan bulunamadı.";
                 }
@@ -68,9 +94,9 @@ namespace MartinBlautweb.Controllers
             return View();
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "User")]
         [HttpPost]
-        public IActionResult RandevuEkle(Randevu randevu, int IslemID, int calisanID)
+        public async Task<IActionResult> RandevuEkle(Randevu randevu, int IslemID, int calisanID, DateTime randevuTarihi, TimeSpan randevuSaati)
         {
             if (randevu == null)
             {
@@ -78,31 +104,61 @@ namespace MartinBlautweb.Controllers
                 return View(randevu);
             }
 
-            // Kullanıcı kimliğini al
             var kullaniciId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
             if (string.IsNullOrEmpty(kullaniciId))
             {
                 TempData["hata"] = "Kullanıcı kimliği alınamadı. Lütfen giriş yapın.";
                 return View(randevu);
             }
 
-            randevu.SalonID = 1;
-            randevu.KullaniciId = kullaniciId;  // Kullanıcı kimliğini atama
+            // Çalışan bilgisini al
+            var calisan = await _context.Calisanlar
+                                         .Include(c => c.Randevular)
+                                         .FirstOrDefaultAsync(c => c.CalisanID == calisanID);
 
+            if (calisan == null)
+            {
+                TempData["hata"] = "Seçilen çalışan bulunamadı.";
+                return View(randevu);
+            }
+
+            // Çalışanın mesai saatlerini kontrol et
+            if (randevuSaati < calisan.CalisanMesaiBaslangic || randevuSaati > calisan.CalisanMesaiBitis)
+            {
+                TempData["hata"] = "Çalışan mesai saatleri dışında çalışmıyor.";
+                return View(randevu);
+            }
+
+            // Çalışanın mevcut randevularını kontrol et
+            var mevcutRandevular = calisan.Randevular
+                .Where(r => r.RandevuTarihi.Date == randevuTarihi.Date &&
+                            r.RandevuSaati == randevuSaati)
+                .ToList();
+
+            // Çalışanın belirli bir saatte başka bir randevusu olup olmadığını kontrol et
+            if (mevcutRandevular.Any())
+            {
+                TempData["hata"] = "Seçilen saat için çalışan zaten bir randevuya sahip.";
+                return View(randevu);
+            }
+
+            // Randevu ekleme işlemi
+            randevu.SalonID = 1;  // Varsayılan salon
+            randevu.KullaniciId = kullaniciId;
             randevu.IslemID = IslemID;
             randevu.CalisanID = calisanID;
+            randevu.RandevuTarihi = randevuTarihi;
 
-            // Randevu ekle
             _context.Randevular.Add(randevu);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             TempData["msj"] = "Randevu başarıyla eklendi!";
-            return RedirectToAction("Index");
+            return RedirectBasedOnRole(); // Kullanıcıya göre yönlendirme
         }
 
 
-        [Authorize(Roles = "Admin")]
+
+        [Authorize(Roles = "Admin , User")]
         public IActionResult RandevuDetay(int? id)
         {
             var randevu = _context.Randevular
@@ -114,14 +170,13 @@ namespace MartinBlautweb.Controllers
             if (randevu == null)
             {
                 TempData["hata"] = "Randevu bulunamadı!";
-                return RedirectToAction("Index");
+                return RedirectBasedOnRole();
             }
 
             return View(randevu);
         }
 
-        [Authorize(Roles = "Admin")]
-        // Randevu Düzenle
+        [Authorize(Roles = "Admin, User")]
         public IActionResult RandevuDuzenle(int? id, int? IslemID)
         {
             if (id == null)
@@ -139,7 +194,7 @@ namespace MartinBlautweb.Controllers
             if (randevu == null)
             {
                 TempData["hata"] = "Randevu bulunamadı!";
-                return RedirectToAction("Index");
+                return RedirectBasedOnRole();
             }
 
             IslemID ??= randevu.IslemID;
@@ -147,7 +202,6 @@ namespace MartinBlautweb.Controllers
             ViewData["SelectedIslemID"] = IslemID;
             ViewData["IslemListesi"] = _context.Islemler.ToList();
 
-            // Çalışanlar için, seçili işlem ile uyumlu çalışanları filtreleyelim
             ViewData["CalisanListesi"] = _context.Calisanlar
                 .Where(c => c.Yetenekler.Any(y => y.IslemID == IslemID))
                 .ToList();
@@ -155,7 +209,7 @@ namespace MartinBlautweb.Controllers
             return View(randevu);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, User")]
         [HttpPost]
         public IActionResult RandevuDuzenle(int id, Randevu randevu, int IslemID, int calisanID)
         {
@@ -176,10 +230,9 @@ namespace MartinBlautweb.Controllers
                 _context.SaveChanges();
 
                 TempData["msj"] = "Randevu başarıyla güncellendi!";
-                return RedirectToAction("Index");
+                return RedirectBasedOnRole();
             }
 
-            // Hata durumunda tekrar formu göster
             ViewData["IslemListesi"] = _context.Islemler.ToList();
             ViewData["CalisanListesi"] = _context.Calisanlar
                 .Where(c => c.Yetenekler.Any(y => y.IslemID == randevu.IslemID))
@@ -187,26 +240,34 @@ namespace MartinBlautweb.Controllers
             return View(randevu);
         }
 
-        [Authorize(Roles = "Admin")]
-        public IActionResult RandevuSil(int? id)
+        [Authorize(Roles = "Admin, User")]
+        public async Task<IActionResult> RandevuSil(int? id)
         {
-            var randevu = _context.Randevular
-                                  .Include(r => r.Calisan)
-                                  .Include(r => r.Islem)
-                                  .Include(r => r.Kullanici)
-                                  .FirstOrDefault(r => r.RandevuID == id);
+            var randevu = await _context.Randevular
+                                        .Include(r => r.Calisan)
+                                        .Include(r => r.Islem)
+                                        .Include(r => r.Kullanici)
+                                        .FirstOrDefaultAsync(r => r.RandevuID == id); // Asenkron hale getirildi
 
             if (randevu == null)
             {
                 TempData["hata"] = "Randevu bulunamadı!";
-                return RedirectToAction("Index");
+                return RedirectBasedOnRole(); // Asenkron hale getirildi
             }
 
             _context.Randevular.Remove(randevu);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync(); // Asenkron hale getirildi
+
+
+
+            //// Silme işleminden sonra ID sıralamasını sıfırlama
+            var maxId = await _context.Randevular.MaxAsync(x => x.RandevuID); // Asenkron hale getirildi
+            await _context.Database.ExecuteSqlRawAsync($"DBCC CHECKIDENT ('Randevular', RESEED, {maxId});"); // Asenkron hale getirildi
+
 
             TempData["msj"] = "Randevu başarıyla silindi!";
-            return RedirectToAction("Index");
+            return RedirectBasedOnRole(); // Asenkron hale getirildi
         }
+
     }
 }

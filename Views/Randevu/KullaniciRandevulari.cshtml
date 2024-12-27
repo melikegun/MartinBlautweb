@@ -1,0 +1,57 @@
+﻿@model IEnumerable<MartinBlautweb.Models.Randevu>
+
+@{
+    ViewData["Title"] = "Kullanıcı Randevuları";
+}
+
+<!-- Kullanıcı Paneline Dön Butonu -->
+<a asp-action="Index" asp-controller="Kullanici" class="btn btn-primary mt-3">Kullanıcı Paneline Dön</a>
+<br />
+<br />
+
+
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Randevularım</h1>
+
+    <p>
+        <a asp-action="RandevuEkle" class="btn btn-primary">Yeni Randevu Ekle</a>
+    </p>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-warning text-center" role="alert">
+            Henüz randevunuz bulunmamaktadır.
+        </div>
+    }
+    else
+    {
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Tarih</th>
+                    <th>Saati</th>
+                    <th>İşlem</th>
+                    <th>Çalışan</th>
+                    <th>Onay Durumu</th>
+                    <th>İşlemler</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var randevu in Model)
+                {
+                    <tr>
+                        <td>@randevu.RandevuTarihi</td>
+                        <td>@randevu.RandevuSaati</td>
+                        <td>@(randevu.Islem?.IslemAdi ?? "İşlem Belirtilmemiş")</td>
+                        <td>@(randevu.Calisan?.CalisanAd + " " + randevu.Calisan?.CalisanSoyad ?? "Çalışan Belirtilmemiş")</td>
+                        <td>@randevu.OnayDurumu</td>
+                        <td>
+                            <a asp-action="RandevuDuzenle" asp-route-id="@randevu.RandevuID" class="btn btn-primary btn-sm">Düzenle</a>
+                            <a asp-action="RandevuSil" asp-route-id="@randevu.RandevuID" class="btn btn-danger btn-sm">Sil</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

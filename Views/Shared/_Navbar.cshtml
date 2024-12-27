@@ -11,23 +11,24 @@
                     <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Ana Sayfa</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" asp-area="" asp-controller="Islem" asp-action="Index">İşlemler</a>
+                    <a class="nav-link" asp-area="" asp-controller="Islem" asp-action="IslemBilgiler">İşlemler</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" asp-area="" asp-controller="Calisan" asp-action="Index">Uzmanlarımız</a>
+                    <a class="nav-link" asp-area="" asp-controller="Calisan" asp-action="CalisanBilgiler">Uzmanlarımız</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" asp-area="" asp-controller="Randevu" asp-action="Index">Randevu Oluştur</a>
+                    <a class="nav-link" asp-area="" asp-controller="Randevu" asp-action="RandevuEkle">Randevu Oluştur</a>
                 </li>
 
                 <!-- Kullanıcı Girişi Butonu -->
                 <li class="nav-item">
-                    <a class="btn btn-primary login-btn ml-3" asp-area="" asp-controller="Kullanici" asp-action="Index">Giriş Yap/Üye Ol</a>
+                    <a class="btn btn-primary login-btn ml-3" asp-area="" asp-controller="Kullanici" asp-action="Giris">Giriş Yap</a>
+                    <a class="btn btn-primary login-btn ml-3" asp-area="" asp-controller="Kullanici" asp-action="Kayit">Üye Ol</a>
                 </li>
 
                 <!-- Admin Girişi Butonu -->
                 <li class="nav-item">
-                    <a class="btn btn-primary login-btn ml-3" asp-area="" asp-controller="Admin" asp-action="Index">Admin Giriş</a>
+                    <a class="btn btn-primary login-btn ml-3" asp-area="" asp-controller="Admin" asp-action="Login">Admin Giriş</a>
                 </li>
             </ul>
         </div>

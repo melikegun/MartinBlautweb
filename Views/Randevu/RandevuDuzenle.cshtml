@@ -4,73 +4,101 @@
     ViewData["Title"] = "Randevu Düzenle";
 }
 
-<h2>@ViewData["Title"]</h2>
+<h2 class="text-center text-primary font-weight-bold mb-4">@ViewData["Title"]</h2>
 
 @if (TempData["hata"] != null)
 {
-    <div class="alert alert-danger">
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
         @TempData["hata"]
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
 }
 
 @if (TempData["msj"] != null)
 {
-    <div class="alert alert-success">
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
         @TempData["msj"]
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
 }
 
-<!-- Filtreleme Formu -->
-<form asp-action="RandevuDuzenle" method="get">
-    <label for="IslemID">İşlem Seçerek Çalışanları Filtrele:</label>
-    <select id="IslemID" name="IslemID" class="form-control"
-            asp-items="@(ViewData["IslemListesi"] != null
-                        ? new SelectList(ViewData["IslemListesi"] as IEnumerable<MartinBlautweb.Models.Islem>, "IslemID", "IslemAdi", ViewData["SelectedIslemID"])
-                        : new SelectList(Enumerable.Empty<string>()))">
-        <option value="">-- İşlem Seçiniz --</option>
-    </select>
-    <span asp-validation-for="IslemID" class="text-danger"></span>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <!-- Filtreleme Formu -->
+            <div class="card mb-4 shadow-lg">
+                <div class="card-header bg-info text-white">
+                    <h4>İşlem Seçerek Çalışanları Filtrele</h4>
+                </div>
+                <div class="card-body">
+                    <form asp-action="RandevuDuzenle" method="get">
+                        <div class="form-group">
+                            <label for="IslemID">İşlem Seçerek Çalışanları Filtrele:</label>
+                            <select id="IslemID" name="IslemID" class="form-control"
+                                    asp-items="@(ViewData["IslemListesi"] != null
+                                                ? new SelectList(ViewData["IslemListesi"] as IEnumerable<MartinBlautweb.Models.Islem>, "IslemID", "IslemAdi", ViewData["SelectedIslemID"])
+                                                : new SelectList(Enumerable.Empty<string>()))">
+                                <option value="">-- İşlem Seçiniz --</option>
+                            </select>
+                            <span asp-validation-for="IslemID" class="text-danger"></span>
+                        </div>
+                        <button type="submit" class="btn btn-secondary btn-block mt-3">Çalışanları Filtrele</button>
+                    </form>
+                </div>
+            </div>
 
-    <button type="submit" class="btn btn-secondary mt-2">Çalışanları Filtrele</button>
-</form>
+            <!-- Randevu Düzenleme Formu -->
+            <div class="card shadow-lg">
+                <div class="card-header bg-warning text-white">
+                    <h4>Randevu Düzenleme</h4>
+                </div>
+                <div class="card-body">
+                    <form asp-action="RandevuDuzenle" method="post">
+                        <input type="hidden" name="IslemID" value="@ViewData["SelectedIslemID"]" />
+                        <input type="hidden" asp-for="RandevuID" />
 
-<!-- Randevu Düzenleme Formu -->
-<form asp-action="RandevuDuzenle" method="post">
-    <input type="hidden" name="IslemID" value="@ViewData["SelectedIslemID"]" />
-    <input type="hidden" asp-for="RandevuID" />
-    <div class="form-group">
-        <label asp-for="RandevuTarihi">Randevu Tarihi</label>
-        <input asp-for="RandevuTarihi" class="form-control" type="date" required />
-        <span asp-validation-for="RandevuTarihi" class="text-danger"></span>
+                        <div class="form-group">
+                            <label asp-for="RandevuTarihi">Randevu Tarihi</label>
+                            <input asp-for="RandevuTarihi" class="form-control" type="date" required />
+                            <span asp-validation-for="RandevuTarihi" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="RandevuSaati">Randevu Saati</label>
+                            <input asp-for="RandevuSaati" class="form-control" type="time" required />
+                            <span asp-validation-for="RandevuSaati" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="CalisanID">Çalışan Seçiniz</label>
+                            <select asp-for="CalisanID" class="form-control">
+                                <option value="">-- Çalışan Seçiniz --</option>
+                                @if (ViewData["CalisanListesi"] != null && ViewData["CalisanListesi"] is IEnumerable<MartinBlautweb.Models.Calisan> calisanlar && calisanlar.Any())
+                                {
+                                    foreach (var calisan in calisanlar)
+                                    {
+                                        <option value="@calisan.CalisanID">@calisan.CalisanAd @calisan.CalisanSoyad (ID: @calisan.CalisanID)</option>
+                                    }
+                                }
+                                else
+                                {
+                                    <option disabled>Seçilen işlem için uygun çalışan bulunamadı.</option>
+                                }
+                            </select>
+                            <span asp-validation-for="CalisanID" class="text-danger"></span>
+                        </div>
+
+                        <button type="submit" class="btn btn-success btn-block mt-4">Randevuyu Kaydet</button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <div class="form-group">
-        <label asp-for="RandevuSaati">Randevu Saati</label>
-        <input asp-for="RandevuSaati" class="form-control" type="time" required />
-        <span asp-validation-for="RandevuSaati" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label for="CalisanID">Çalışan Seçiniz</label>
-        <select asp-for="CalisanID" class="form-control">
-            <option value="">-- Çalışan Seçiniz --</option>
-            @if (ViewData["CalisanListesi"] != null && ViewData["CalisanListesi"] is IEnumerable<MartinBlautweb.Models.Calisan> calisanlar && calisanlar.Any())
-            {
-                foreach (var calisan in calisanlar)
-                {
-                    <option value="@calisan.CalisanID">@calisan.CalisanAd @calisan.CalisanSoyad (ID: @calisan.CalisanID)</option>
-                }
-            }
-            else
-            {
-                <option disabled>Seçilen işlem için uygun çalışan bulunamadı.</option>
-            }
-        </select>
-        <span asp-validation-for="CalisanID" class="text-danger"></span>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Kaydet</button>
-</form>
+</div>
 
 @section Scripts {
     @{

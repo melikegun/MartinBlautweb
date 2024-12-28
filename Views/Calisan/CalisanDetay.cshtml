@@ -4,53 +4,80 @@
     ViewData["Title"] = "Çalışan Detayı";
 }
 
-<h1>@Model.CalisanAd @Model.CalisanSoyad - Detay</h1>
+<div class="container mt-5">
+    <h1 class="display-4 text-primary">@Model.CalisanAd @Model.CalisanSoyad - Detay</h1>
 
-@if (TempData["hata"] != null)
-{
-    <div class="alert alert-danger">
-        @TempData["hata"]
-    </div>
-}
+    @if (TempData["hata"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["hata"]
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
 
-<div>
-    <h3>Çalışan Bilgileri</h3>
-    <ul class="list-group">
-        <li class="list-group-item">
-            <strong>@Html.DisplayNameFor(model => model.CalisanAd)</strong>: @Model.CalisanAd
-        </li>
-        <li class="list-group-item">
-            <strong>@Html.DisplayNameFor(model => model.CalisanSoyad)</strong>: @Model.CalisanSoyad
-        </li>
-        <li class="list-group-item">
-            <strong>@Html.DisplayNameFor(model => model.CalisanTelefon)</strong>: @Model.CalisanTelefon
-        </li>
-        <li class="list-group-item">
-            <strong>@Html.DisplayNameFor(model => model.CalisanMesaiBaslangic)</strong>: @Model.CalisanMesaiBaslangic.ToString(@"hh\:mm")
-        </li>
-        <li class="list-group-item">
-            <strong>@Html.DisplayNameFor(model => model.CalisanMesaiBitis)</strong>: @Model.CalisanMesaiBitis.ToString(@"hh\:mm")
-        </li>
-        <li class="list-group-item">
-            <strong>Uzmanlık Alanı</strong>: @(Model.UzmanlikAlan != null ? Model.UzmanlikAlan.IslemAdi : "Belirtilmemiş")
-        </li>
-        <li class="list-group-item">
-            <strong>Yetenekler</strong>:
-            @if(Model.Yetenekler != null && Model.Yetenekler.Any())
-            {
-                <ul>
-                    @foreach(var yetenek in Model.Yetenekler)
+    <div class="card shadow-lg rounded-lg border-primary mt-4">
+        <div class="card-header bg-primary text-white">
+            <h3 class="card-title mb-0">Çalışan Bilgileri</h3>
+        </div>
+        <div class="card-body">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                    <strong>@Html.DisplayNameFor(model => model.CalisanAd)</strong>: @Model.CalisanAd
+                </li>
+                <li class="list-group-item">
+                    <strong>@Html.DisplayNameFor(model => model.CalisanSoyad)</strong>: @Model.CalisanSoyad
+                </li>
+                <li class="list-group-item">
+                    <strong>@Html.DisplayNameFor(model => model.CalisanTelefon)</strong>: @Model.CalisanTelefon
+                </li>
+                <li class="list-group-item">
+                    <strong>@Html.DisplayNameFor(model => model.CalisanMesaiBaslangic)</strong>: @Model.CalisanMesaiBaslangic.ToString(@"hh\:mm")
+                </li>
+                <li class="list-group-item">
+                    <strong>@Html.DisplayNameFor(model => model.CalisanMesaiBitis)</strong>: @Model.CalisanMesaiBitis.ToString(@"hh\:mm")
+                </li>
+                <li class="list-group-item">
+                    <strong>Uzmanlık Alanı</strong>: @(Model.UzmanlikAlan != null ? Model.UzmanlikAlan.IslemAdi : "Belirtilmemiş")
+                </li>
+                <li class="list-group-item">
+                    <strong>Yetenekler</strong>:
+                    @if (Model.Yetenekler != null && Model.Yetenekler.Any())
                     {
-                        <li>@yetenek.IslemAdi</li>
+                        <ul class="list-inline">
+                            @foreach (var yetenek in Model.Yetenekler)
+                            {
+                                <li class="list-inline-item badge badge-info">@yetenek.IslemAdi</li>
+                            }
+                        </ul>
                     }
-                </ul>
-            }
-        </li>
-    </ul>
+                    else
+                    {
+                        <span class="badge badge-warning">Yetenek bilgisi bulunmamaktadır.</span>
+                    }
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <a asp-action="CalisanDuzenle" asp-route-id="@Model.CalisanID" class="btn btn-warning btn-lg">
+            <i class="fas fa-edit"></i> Düzenle
+        </a>
+        <a asp-action="CalisanSil" asp-route-id="@Model.CalisanID" class="btn btn-danger btn-lg" onclick="return confirm('Bu çalışanı silmek istediğinizden emin misiniz?')">
+            <i class="fas fa-trash-alt"></i> Sil
+        </a>
+
+        <a asp-action="CalisanVerimKazanc" asp-route-id="@Model.CalisanID" class="btn btn-warning btn-lg">
+            <i class="fas fa-edit"></i> Verim/Kazanç
+        </a>
+        <a asp-action="Index" class="btn btn-secondary btn-lg">
+            <i class="fas fa-arrow-left"></i> Geri
+        </a>
+    </div>
 </div>
 
-<p>
-    <a asp-action="CalisanDuzenle" asp-route-id="@Model.CalisanID" class="btn btn-warning">Düzenle</a>
-    <a asp-action="CalisanSil" asp-route-id="@Model.CalisanID" class="btn btn-danger" onclick="return confirm('Bu çalışanı silmek istediğinizden emin misiniz?')">Sil</a>
-    <a asp-action="Index" class="btn btn-secondary">Geri</a>
-</p>
+@section Scripts {
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+}

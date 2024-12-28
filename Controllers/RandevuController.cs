@@ -111,6 +111,14 @@ namespace MartinBlautweb.Controllers
                 return View(randevu);
             }
 
+            // İşlem ve çalışan bilgilerini alın
+            var islem = await _context.Islemler.FindAsync(IslemID);
+            if (islem == null)
+            {
+                TempData["hata"] = "Seçilen işlem bulunamadı.";
+                return View(randevu);
+            }
+
             // Çalışan bilgisini al
             var calisan = await _context.Calisanlar
                                          .Include(c => c.Randevular)
@@ -129,18 +137,32 @@ namespace MartinBlautweb.Controllers
                 return View(randevu);
             }
 
-            // Çalışanın mevcut randevularını kontrol et
-            var mevcutRandevular = calisan.Randevular
-                .Where(r => r.RandevuTarihi.Date == randevuTarihi.Date &&
-                            r.RandevuSaati == randevuSaati)
-                .ToList();
 
-            // Çalışanın belirli bir saatte başka bir randevusu olup olmadığını kontrol et
-            if (mevcutRandevular.Any())
+            // Yeni randevu süre hesaplamaları
+            TimeSpan islemSuresi = TimeSpan.FromMinutes(islem.Sure);
+            var yeniRandevuBaslangic = randevuSaati;
+            var yeniRandevuBitis = randevuSaati.Add(islemSuresi);
+
+
+            var mevcutRandevular = await _context.Randevular
+                                    .Include(r => r.Islem) // İşlem bilgilerini dahil et
+                                    .Where(r => r.CalisanID == calisanID && r.RandevuTarihi.Date == randevuTarihi.Date)
+                                    .ToListAsync();
+
+
+
+            foreach (var mevcutRandevu in mevcutRandevular)
             {
-                TempData["hata"] = "Seçilen saat için çalışan zaten bir randevuya sahip.";
-                return View(randevu);
+                var mevcutRandevuBaslangic = mevcutRandevu.RandevuSaati;
+                var mevcutRandevuBitis = mevcutRandevu.RandevuSaati.Add(TimeSpan.FromMinutes(mevcutRandevu.Islem.Sure));
+
+                if (yeniRandevuBaslangic < mevcutRandevuBitis && yeniRandevuBitis > mevcutRandevuBaslangic)
+                {
+                    TempData["hata"] = "Seçilen saat ve işlem süresi içinde çalışan başka bir randevuya sahip.";
+                    return View(randevu);
+                }
             }
+
 
             // Randevu ekleme işlemi
             randevu.SalonID = 1;  // Varsayılan salon
@@ -268,6 +290,51 @@ namespace MartinBlautweb.Controllers
             TempData["msj"] = "Randevu başarıyla silindi!";
             return RedirectBasedOnRole(); // Asenkron hale getirildi
         }
+
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public async Task<IActionResult> RandevuOnayla(int randevuID)
+        {
+            var randevu = await _context.Randevular
+                                        .FirstOrDefaultAsync(r => r.RandevuID == randevuID);
+
+            if (randevu == null)
+            {
+                TempData["hata"] = "Randevu bulunamadı.";
+                return RedirectToAction("Index");
+            }
+
+            randevu.OnayDurumu = true;
+            _context.Randevular.Update(randevu);
+            await _context.SaveChangesAsync();
+
+            TempData["msj"] = "Randevu başarıyla onaylandı.";
+            return RedirectToAction("Index");
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public async Task<IActionResult> RandevuOnayKaldir(int randevuID)
+        {
+            var randevu = await _context.Randevular
+                                        .FirstOrDefaultAsync(r => r.RandevuID == randevuID);
+
+            if (randevu == null)
+            {
+                TempData["hata"] = "Randevu bulunamadı.";
+                return RedirectToAction("Index");
+            }
+
+            randevu.OnayDurumu = false;
+            _context.Randevular.Update(randevu);
+            await _context.SaveChangesAsync();
+
+            TempData["msj"] = "Randevunun onayı kaldırıldı.";
+            return RedirectToAction("Index");
+        }
+
+
 
     }
 }

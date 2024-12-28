@@ -34,7 +34,6 @@ namespace MartinBlautweb.Data
                 }
             );
 
-            // Çalışan ve İşlem (Yetenekler) arasındaki çoktan çoğa ilişki
             modelBuilder.Entity<Calisan>()
                 .HasMany(c => c.Yetenekler) // Çalışanın yetenekleri
                 .WithMany(i => i.Calisanlar) // İşlemi yapan çalışanlar

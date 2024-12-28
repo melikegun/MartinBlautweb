@@ -5,14 +5,15 @@
 }
 
 <!-- Kullanıcı Paneline Dön Butonu -->
-<a asp-action="Index" asp-controller="Kullanici" class="btn btn-primary mt-3">Kullanıcı Paneline Dön</a>
-<br />
-<br />
+<div class="container mt-3">
+    <a asp-action="Index" asp-controller="Kullanici" class="btn btn-primary btn-lg">
+        <i class="fas fa-arrow-left"></i> Kullanıcı Paneline Dön
+    </a>
+</div>
 
 <!-- Bootstrap 5 ile şık bir tasarım -->
 <div class="container mt-5">
-    <h1 class="text-center mb-4 text-primary">İşlemler</h1>
-
+ 
     @if (!Model.Any())
     {
         <div class="alert alert-warning text-center" role="alert">
@@ -27,13 +28,13 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered table-striped">
-                        <thead>
+                    <table class="table table-bordered table-striped table-hover">
+                        <thead class="thead-dark">
                             <tr>
-                                <th>@Html.DisplayNameFor(model => model.First().IslemAdi)</th>
-                                <th>@Html.DisplayNameFor(model => model.First().Ucret)</th>
-                                <th>@Html.DisplayNameFor(model => model.First().Sure)</th>
-                                <th>@Html.DisplayNameFor(model => model.First().Aciklama)</th>
+                                <th>İşlem Adı</th>
+                                <th>Ücret</th>
+                                <th>Süre</th>
+                                <th>Açıklama</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -43,8 +44,7 @@
                                     <td>@islem.IslemAdi</td>
                                     <td>@islem.Ucret.ToString("C")</td>
                                     <td>@islem.Sure</td>
-                                    <td>@Html.Raw(islem.Aciklama ?? "Açıklama bulunmamaktadır.")</td>
-         
+                                    <td>@(string.IsNullOrEmpty(islem.Aciklama) ? "Açıklama bulunmamaktadır." : islem.Aciklama)</td>
                                 </tr>
                             }
                         </tbody>
@@ -54,3 +54,7 @@
         </div>
     }
 </div>
+
+@section Scripts {
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+}

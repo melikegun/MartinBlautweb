@@ -4,64 +4,92 @@
     ViewData["Title"] = "İşlemler";
 }
 
-<h1>@ViewData["Title"]</h1>
+<h1 class="text-center text-primary">@ViewData["Title"]</h1>
 
 @if (TempData["msj"] != null)
 {
-    <div class="alert alert-success">
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
         @TempData["msj"]
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
 }
 
 @if (TempData["hata"] != null)
 {
-    <div class="alert alert-danger">
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
         @TempData["hata"]
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
 }
 
 <!-- Admin Paneline Dön Butonu -->
-<a asp-action="Index" asp-controller="Admin" class="btn btn-primary mt-3">Admin Paneline Dön</a>
-<br />
-<br />
+<div class="container mt-3">
+    <a asp-action="Index" asp-controller="Admin" class="btn btn-outline-primary btn-lg">
+        <i class="fas fa-arrow-left"></i> Admin Paneline Dön
+    </a>
+</div>
 
-<p>
-    <a asp-action="IslemEkle" class="btn btn-primary">Yeni İşlem Ekle</a>
-</p>
+<div class="container mt-5">
+    <p>
+        <a asp-action="IslemEkle" class="btn btn-success btn-lg shadow-sm">
+            <i class="fas fa-plus-circle"></i> Yeni İşlem Ekle
+        </a>
+    </p>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>İşlem ID</th>
-            <th>İşlem Adı</th>
-            <th>Ücret</th>
-            <th>Süre (Dakika)</th>
-            <th>Açıklama</th>
-            <th>İşlem</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var islem in Model)
-        {
-            <tr>
-                <td>@islem.IslemID</td>
-                <td>@islem.IslemAdi</td>
-                <td>@islem.Ucret.ToString("C")</td>
-                <td>@islem.Sure</td>
-                <td>@islem.Aciklama</td>
-                <td>
-                    <a asp-action="IslemDetay" asp-route-id="@islem.IslemID" class="btn btn-info btn-sm">Detay</a>
-                    <a asp-action="IslemDuzenle" asp-route-id="@islem.IslemID" class="btn btn-warning btn-sm">Düzenle</a>
-                    <a asp-action="IslemSil" asp-route-id="@islem.IslemID" class="btn btn-danger btn-sm"
-                       data-confirm="Bu işlemi silmek istediğinize emin misiniz?">Sil</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+    <div class="card shadow-lg rounded-lg border-primary">
+        <div class="card-header bg-primary text-white">
+            <h4 class="card-title mb-0">İşlem Listesi</h4>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped table-hover">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>İşlem ID</th>
+                            <th>İşlem Adı</th>
+                            <th>Ücret</th>
+                            <th>Süre (Dakika)</th>
+                            <th>Açıklama</th>
+                            <th>İşlem</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var islem in Model)
+                        {
+                            <tr>
+                                <td>@islem.IslemID</td>
+                                <td>@islem.IslemAdi</td>
+                                <td>@islem.Ucret.ToString("C")</td>
+                                <td>@islem.Sure</td>
+                                <td>@islem.Aciklama</td>
+                                <td>
+                                    <a asp-action="IslemDetay" asp-route-id="@islem.IslemID" class="btn btn-info btn-sm mb-2">
+                                        <i class="fas fa-info-circle"></i> Detay
+                                    </a>
+                                    <a asp-action="IslemDuzenle" asp-route-id="@islem.IslemID" class="btn btn-warning btn-sm mb-2">
+                                        <i class="fas fa-edit"></i> Düzenle
+                                    </a>
+                                    <a asp-action="IslemSil" asp-route-id="@islem.IslemID" class="btn btn-danger btn-sm mb-2"
+                                       data-confirm="Bu işlemi silmek istediğinize emin misiniz?">
+                                        <i class="fas fa-trash-alt"></i> Sil
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section Scripts {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <script>
         // Silme işlemi için onay mekanizması
         $('a[data-confirm]').click(function (e) {

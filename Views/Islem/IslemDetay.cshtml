@@ -4,51 +4,73 @@
     ViewData["Title"] = "İşlem Detayı";
 }
 
-<h1>@ViewData["Title"]</h1>
+<h1 class="text-center text-primary">@ViewData["Title"]</h1>
 
 @if (TempData["msj"] != null)
 {
-    <div class="alert alert-success">
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
         @TempData["msj"]
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
 }
 
 @if (TempData["hata"] != null)
 {
-    <div class="alert alert-danger">
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
         @TempData["hata"]
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
 }
 
-<div class="form-group">
-    <label asp-for="IslemAdi" class="control-label">İşlem Adı</label>
-    <input asp-for="IslemAdi" class="form-control" readonly />
-</div>
+<div class="container mt-4">
+    <div class="card shadow-lg rounded-lg border-primary">
+        <div class="card-header bg-primary text-white">
+            <h4 class="card-title mb-0">İşlem Detayı</h4>
+        </div>
+        <div class="card-body">
+            <div class="form-group">
+                <label asp-for="IslemAdi" class="control-label font-weight-bold">İşlem Adı</label>
+                <input asp-for="IslemAdi" class="form-control" readonly />
+            </div>
 
-<div class="form-group">
-    <label asp-for="Ucret" class="control-label">Ücret</label>
-    <input asp-for="Ucret" class="form-control" type="number" step="0.01" readonly />
-</div>
+            <div class="form-group">
+                <label asp-for="Ucret" class="control-label font-weight-bold">Ücret</label>
+                <input asp-for="Ucret" class="form-control" type="number" step="0.01" readonly />
+            </div>
 
-<div class="form-group">
-    <label asp-for="Sure" class="control-label">Süre (Dakika)</label>
-    <input asp-for="Sure" class="form-control" type="number" min="1" readonly />
-</div>
+            <div class="form-group">
+                <label asp-for="Sure" class="control-label font-weight-bold">Süre (Dakika)</label>
+                <input asp-for="Sure" class="form-control" type="number" min="1" readonly />
+            </div>
 
-<div class="form-group">
-    <label asp-for="Aciklama" class="control-label">Açıklama</label>
-    <textarea asp-for="Aciklama" class="form-control" readonly></textarea>
-</div>
+            <div class="form-group">
+                <label asp-for="Aciklama" class="control-label font-weight-bold">Açıklama</label>
+                <textarea asp-for="Aciklama" class="form-control" readonly></textarea>
+            </div>
 
-<div class="form-group">
-    <a asp-action="Index" class="btn btn-primary">Geri Dön</a>
-    <a asp-action="IslemDuzenle" asp-route-id="@Model.IslemID" class="btn btn-warning">Düzenle</a>
-    <a asp-action="IslemSil" asp-route-id="@Model.IslemID" class="btn btn-danger"
-       data-confirm="Bu işlemi silmek istediğinize emin misiniz?">Sil</a>
+            <div class="form-group text-center mt-4">
+                <a asp-action="Index" class="btn btn-outline-primary btn-lg shadow-sm">
+                    <i class="fas fa-arrow-left"></i> Geri Dön
+                </a>
+                <a asp-action="IslemDuzenle" asp-route-id="@Model.IslemID" class="btn btn-warning btn-lg shadow-sm mx-2">
+                    <i class="fas fa-edit"></i> Düzenle
+                </a>
+                <a asp-action="IslemSil" asp-route-id="@Model.IslemID" class="btn btn-danger btn-lg shadow-sm"
+                   data-confirm="Bu işlemi silmek istediğinize emin misiniz?">
+                    <i class="fas fa-trash-alt"></i> Sil
+                </a>
+            </div>
+        </div>
+    </div>
 </div>
 
 @section Scripts {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <script>
         // Silme işlemi için onay mekanizması
         $('a[data-confirm]').click(function (e) {

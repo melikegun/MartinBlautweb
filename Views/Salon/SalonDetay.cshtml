@@ -4,60 +4,66 @@
     ViewData["Title"] = "Salon Detay";
 }
 
-<h2>@Model.SalonAdi - @ViewData["Title"]</h2>
+<h2 class="text-center text-info display-4 mb-5">@Model.SalonAdi - @ViewData["Title"]</h2>
 
 <!-- Başarı ve hata mesajları için TempData kullanımı -->
 @if (TempData["hata"] != null)
 {
-    <div class="alert alert-danger">
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
         @TempData["hata"]
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
 }
 
 @if (TempData["SuccessMessage"] != null)
 {
-    <div class="alert alert-success">
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
         @TempData["SuccessMessage"]
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
 }
 
-<!-- Salon Bilgileri -->
-<div class="card">
-    <div class="card-header">
-        <h5>@Html.DisplayNameFor(model => model.SalonAdi) Bilgileri</h5>
+<!-- Salon Bilgileri Kartı -->
+<div class="card shadow-lg mb-4">
+    <div class="card-header bg-info text-white">
+        <h5 class="mb-0">@Html.DisplayNameFor(model => model.SalonAdi) Bilgileri</h5>
     </div>
     <div class="card-body">
         <dl class="row">
-            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.SalonAdi):</dt>
-            <dd class="col-sm-9">@Model.SalonAdi</dd>
+            <dt class="col-sm-4">@Html.DisplayNameFor(model => model.SalonAdi):</dt>
+            <dd class="col-sm-8">@Model.SalonAdi</dd>
 
-            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.SalonAdres):</dt>
-            <dd class="col-sm-9">@Model.SalonAdres</dd>
+            <dt class="col-sm-4">@Html.DisplayNameFor(model => model.SalonAdres):</dt>
+            <dd class="col-sm-8">@Model.SalonAdres</dd>
 
-            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.SalonTelefon):</dt>
-            <dd class="col-sm-9">@Model.SalonTelefon</dd>
+            <dt class="col-sm-4">@Html.DisplayNameFor(model => model.SalonTelefon):</dt>
+            <dd class="col-sm-8">@Model.SalonTelefon</dd>
 
-            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.SalonAcilisSaati):</dt>
-            <dd class="col-sm-9">@Model.SalonAcilisSaati.ToString(@"hh\:mm")</dd>
+            <dt class="col-sm-4">@Html.DisplayNameFor(model => model.SalonAcilisSaati):</dt>
+            <dd class="col-sm-8">@Model.SalonAcilisSaati.ToString(@"hh\:mm")</dd>
 
-            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.SalonKapanisSaati):</dt>
-            <dd class="col-sm-9">@Model.SalonKapanisSaati.ToString(@"hh\:mm")</dd>
+            <dt class="col-sm-4">@Html.DisplayNameFor(model => model.SalonKapanisSaati):</dt>
+            <dd class="col-sm-8">@Model.SalonKapanisSaati.ToString(@"hh\:mm")</dd>
 
-            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.SalonAciklama):</dt>
-            <dd class="col-sm-9">@Model.SalonAciklama</dd>
+            <dt class="col-sm-4">@Html.DisplayNameFor(model => model.SalonAciklama):</dt>
+            <dd class="col-sm-8">@Model.SalonAciklama</dd>
         </dl>
 
         <!-- Salon Düzenleme Butonu -->
-        <a asp-action="SalonDuzenle" asp-controller="Salon" asp-route-id="@Model.SalonID" class="btn btn-warning">@Html.DisplayName("Düzenle")</a>
+        <a asp-action="SalonDuzenle" asp-controller="Salon" asp-route-id="@Model.SalonID" class="btn btn-warning btn-lg shadow-lg"><i class="fas fa-edit"></i> Düzenle</a>
     </div>
 </div>
 
-<!-- Çalışanlar -->
-<h3>@Html.DisplayName("Çalışanlar")</h3>
+<!-- Çalışanlar Başlığı -->
+<h3 class="text-info mb-3"><i class="fas fa-users"></i> Çalışanlar</h3>
 @if (Model.Calisanlar != null && Model.Calisanlar.Any())
 {
-    <table class="table table-bordered table-responsive">
-        <thead>
+    <table class="table table-striped table-hover table-bordered table-responsive-lg">
+        <thead class="thead-dark">
             <tr>
                 <th>@Html.DisplayName("Çalışan Adı")</th>
                 <th>@Html.DisplayName("Uzmanlık Alanı")</th>
@@ -85,12 +91,12 @@ else
     <p>Henüz bu salonda çalışan bulunmamaktadır.</p>
 }
 
-<!-- İşlemler -->
-<h3>@Html.DisplayName("İşlemler")</h3>
+<!-- İşlemler Başlığı -->
+<h3 class="text-info mb-3"><i class="fas fa-cogs"></i> İşlemler</h3>
 @if (Model.Islemler != null && Model.Islemler.Any())
 {
-    <table class="table table-bordered table-responsive">
-        <thead>
+    <table class="table table-striped table-hover table-bordered table-responsive-lg">
+        <thead class="thead-dark">
             <tr>
                 <th>@Html.DisplayName("İşlem Adı")</th>
                 <th>@Html.DisplayName("Süre (Dakika)")</th>

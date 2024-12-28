@@ -20,6 +20,56 @@ namespace MartinBlautweb.Controllers
             _context = context;
         }
 
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> Verim(int CalisanID, DateTime Tarih)
+        {
+            // Çalışanı al
+            var calisan = await _context.Calisanlar
+                .FirstOrDefaultAsync(c => c.CalisanID == CalisanID);
+
+            if (calisan == null)
+            {
+                TempData["hata"] = "Çalışan bulunamadı!";
+                return RedirectToAction("Index", "Admin");
+            }
+
+            // Seçilen tarihteki randevuları al
+            var randevular = await _context.Randevular
+                .Where(r => r.CalisanID == CalisanID && r.RandevuTarihi.Date == Tarih.Date)
+                .ToListAsync();
+
+            // Mesai süresi hesapla
+            TimeSpan mesaiSuresi = calisan.CalisanMesaiBitis - calisan.CalisanMesaiBaslangic;
+
+            // Toplam işlem süresi hesapla
+            TimeSpan toplamIslemSuresi = new TimeSpan();
+            double kazanc = 0;
+            foreach (var randevu in randevular)
+            {
+                var islem = await _context.Islemler.FindAsync(randevu.IslemID);
+                if (islem != null)
+                {
+                    toplamIslemSuresi += TimeSpan.FromMinutes(islem.Sure);
+                    kazanc += islem.Ucret;
+                    
+                }
+            }
+
+            // Verim hesapla (yüzde olarak)
+            double verim = mesaiSuresi.TotalMinutes > 0 ? (toplamIslemSuresi.TotalMinutes / mesaiSuresi.TotalMinutes) * 100 : 0;
+
+
+            // ViewBag'e verim ve kazançı aktar
+            ViewBag.Verim = verim;
+            ViewBag.Kazanc = kazanc;
+
+            // Çalışanı View'a gönder
+            return View(calisan);
+        }
+
+
+
+
         public IActionResult CalisanBilgiler()
         {
             var calisanlar =  _context.Calisanlar
@@ -70,6 +120,8 @@ namespace MartinBlautweb.Controllers
             }
 
             calisan.SalonID = 1;
+            calisan.Yetenekler = new List<Islem>();
+
             var uzmanlik = await _context.Islemler.FirstOrDefaultAsync(i => i.IslemID == calisan.UzmanlikAlanID); // Asenkron hale getirildi
             if (calisan != null)
             {

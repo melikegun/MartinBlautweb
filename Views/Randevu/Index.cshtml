@@ -61,10 +61,26 @@
                         @if (randevu.OnayDurumu)
                         {
                             <span class="badge bg-success">Onaylı</span>
+                            <!-- Onayı Kaldır Butonu -->
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <form asp-action="RandevuOnayKaldir" method="post" style="display:inline;">
+                                    <input type="hidden" name="randevuID" value="@randevu.RandevuID" />
+                                    <button type="submit" class="btn btn-danger btn-sm">Onayı Kaldır</button>
+                                </form>
+                            }
                         }
                         else
                         {
                             <span class="badge bg-warning">Onaysız</span>
+                            <!-- Onayla Butonu -->
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <form asp-action="RandevuOnayla" method="post" style="display:inline;">
+                                    <input type="hidden" name="randevuID" value="@randevu.RandevuID" />
+                                    <button type="submit" class="btn btn-success btn-sm">Onayla</button>
+                                </form>
+                            }
                         }
                     </td>
                     <td>

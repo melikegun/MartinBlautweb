@@ -1,0 +1,46 @@
+﻿@model MartinBlautweb.Models.Calisan
+
+@{
+    ViewData["Title"] = "Verim ve Kazanç";
+}
+
+<h1 class="text-center text-primary">@ViewData["Title"]</h1>
+
+<!-- TempData Mesajları -->
+@if (TempData["msj"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["msj"]
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+
+@if (TempData["hata"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["hata"]
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+
+<form method="get" action="@Url.Action("Verim", "Calisan")">
+    <div class="form-group">
+        <label for="Tarih">Tarih Seçin:</label>
+        <input type="date" id="Tarih" name="Tarih" class="form-control" required />
+    </div>
+    <input type="hidden" name="CalisanID" value="@Model.CalisanID" />
+    <button type="submit" class="btn btn-primary">Verim & Kazanç Hesapla</button>
+</form>
+
+<!-- Verim ve Kazanç Bilgisi -->
+@if (ViewBag.Verim != null && ViewBag.Kazanc != null)
+{
+    <div class="mt-4">
+        <p><strong>Verim:</strong> @ViewBag.Verim %</p>
+        <p><strong>Kazanç:</strong> @ViewBag.Kazanc TL</p>
+    </div>
+}

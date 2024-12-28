@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MartinBlautweb.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241226224719_InitialCreate")]
+    [Migration("20241228142632_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />

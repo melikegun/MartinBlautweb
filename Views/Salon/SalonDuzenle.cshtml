@@ -4,80 +4,97 @@
     ViewData["Title"] = "Salon Düzenle";
 }
 
-<h2>Salon Düzenle</h2>
+<h2 class="text-center text-info display-4 mb-4">Salon Düzenle</h2>
 
 <!-- Başarı ve hata mesajları için TempData kullanımı -->
 @if (TempData["hata"] != null)
 {
-    <div class="alert alert-danger">
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
         @TempData["hata"]
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
 }
 
 @if (TempData["msj"] != null)
 {
-    <div class="alert alert-success">
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
         @TempData["msj"]
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
 }
 
-<form asp-action="SalonDuzenle" method="post" class="form-horizontal">
+<!-- Form Başlangıcı -->
+<form asp-action="SalonDuzenle" method="post" class="form-horizontal shadow-lg p-4 rounded bg-light">
+
+    <!-- Gizli SalonID -->
     <input type="hidden" asp-for="SalonID" />
 
+    <!-- Salon Adı -->
     <div class="form-group row">
-        <label asp-for="SalonAdi" class="control-label col-sm-2"></label>
+        <label asp-for="SalonAdi" class="control-label col-sm-2 col-form-label font-weight-bold">Salon Adı</label>
         <div class="col-sm-10">
-            <input asp-for="SalonAdi" class="form-control" />
+            <input asp-for="SalonAdi" class="form-control form-control-lg" />
             <span asp-validation-for="SalonAdi" class="text-danger"></span>
         </div>
     </div>
 
+    <!-- Salon Adresi -->
     <div class="form-group row">
-        <label asp-for="SalonAdres" class="control-label col-sm-2"></label>
+        <label asp-for="SalonAdres" class="control-label col-sm-2 col-form-label font-weight-bold">Salon Adresi</label>
         <div class="col-sm-10">
-            <input asp-for="SalonAdres" class="form-control" />
+            <input asp-for="SalonAdres" class="form-control form-control-lg" />
             <span asp-validation-for="SalonAdres" class="text-danger"></span>
         </div>
     </div>
 
+    <!-- Salon Telefonu -->
     <div class="form-group row">
-        <label asp-for="SalonTelefon" class="control-label col-sm-2"></label>
+        <label asp-for="SalonTelefon" class="control-label col-sm-2 col-form-label font-weight-bold">Salon Telefon</label>
         <div class="col-sm-10">
-            <input asp-for="SalonTelefon" class="form-control" />
+            <input asp-for="SalonTelefon" class="form-control form-control-lg" />
             <span asp-validation-for="SalonTelefon" class="text-danger"></span>
         </div>
     </div>
 
+    <!-- Açılış Saati -->
     <div class="form-group row">
-        <label asp-for="SalonAcilisSaati" class="control-label col-sm-2"></label>
+        <label asp-for="SalonAcilisSaati" class="control-label col-sm-2 col-form-label font-weight-bold">Açılış Saati</label>
         <div class="col-sm-10">
-            <input asp-for="SalonAcilisSaati" class="form-control" type="time" />
+            <input asp-for="SalonAcilisSaati" class="form-control form-control-lg" type="time" />
             <span asp-validation-for="SalonAcilisSaati" class="text-danger"></span>
         </div>
     </div>
 
+    <!-- Kapanış Saati -->
     <div class="form-group row">
-        <label asp-for="SalonKapanisSaati" class="control-label col-sm-2"></label>
+        <label asp-for="SalonKapanisSaati" class="control-label col-sm-2 col-form-label font-weight-bold">Kapanış Saati</label>
         <div class="col-sm-10">
-            <input asp-for="SalonKapanisSaati" class="form-control" type="time" />
+            <input asp-for="SalonKapanisSaati" class="form-control form-control-lg" type="time" />
             <span asp-validation-for="SalonKapanisSaati" class="text-danger"></span>
         </div>
     </div>
 
+    <!-- Açıklama -->
     <div class="form-group row">
-        <label asp-for="SalonAciklama" class="control-label col-sm-2"></label>
+        <label asp-for="SalonAciklama" class="control-label col-sm-2 col-form-label font-weight-bold">Açıklama</label>
         <div class="col-sm-10">
-            <textarea asp-for="SalonAciklama" class="form-control"></textarea>
+            <textarea asp-for="SalonAciklama" class="form-control form-control-lg" rows="4"></textarea>
             <span asp-validation-for="SalonAciklama" class="text-danger"></span>
         </div>
     </div>
 
+    <!-- Butonlar -->
     <div class="form-group row">
-        <div class="col-sm-offset-2 col-sm-10">
-            <button type="submit" class="btn btn-primary">Güncelle</button>
-            <a href="@Url.Action("Index", "Salon")" class="btn btn-secondary">İptal</a>
+        <div class="col-sm-offset-2 col-sm-10 d-flex justify-content-between">
+            <button type="submit" class="btn btn-primary btn-lg shadow"><i class="fas fa-save"></i> Güncelle</button>
+            <a href="@Url.Action("Index", "Salon")" class="btn btn-secondary btn-lg shadow"><i class="fas fa-times"></i> İptal</a>
         </div>
     </div>
+
 </form>
 
 <!-- Validasyon İçin jQuery ve Script Tagları -->
@@ -85,4 +102,5 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate-unobtrusive/3.0.0/jquery.validate.unobtrusive.min.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 }

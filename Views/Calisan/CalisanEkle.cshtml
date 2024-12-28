@@ -4,90 +4,125 @@
     ViewData["Title"] = "Çalışan Ekle";
 }
 
-<h1>@ViewData["Title"]</h1>
+<h1 class="text-center text-primary font-weight-bold">@ViewData["Title"]</h1>
 
 @if (TempData["msj"] != null)
 {
-    <div class="alert alert-success">
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
         @TempData["msj"]
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
 }
 
 @if (TempData["hata"] != null)
 {
-    <div class="alert alert-danger">
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
         @TempData["hata"]
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
 }
 
 <form asp-action="CalisanEkle" method="post">
-    <div class="form-group">
-        <label asp-for="CalisanAd">Ad</label>
-        <input asp-for="CalisanAd" class="form-control" required />
-        <span asp-validation-for="CalisanAd" class="text-danger"></span>
-    </div>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow-lg">
+                    <div class="card-header bg-info text-white">
+                        <h4>Çalışan Bilgilerini Girin</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label asp-for="CalisanAd" class="control-label">Ad</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                </div>
+                                <input asp-for="CalisanAd" class="form-control" required />
+                            </div>
+                            <span asp-validation-for="CalisanAd" class="text-danger"></span>
+                        </div>
 
-    <div class="form-group">
-        <label asp-for="CalisanSoyad">Soyad</label>
-        <input asp-for="CalisanSoyad" class="form-control" required />
-        <span asp-validation-for="CalisanSoyad" class="text-danger"></span>
-    </div>
-    
-    <div class="form-group">
-        <label asp-for="UzmanlikAlanID">Uzmanlık Alanı</label>
-        <select asp-for="UzmanlikAlanID" class="form-control"
-                asp-items="@(ViewData["IslemListesi"] != null
-            ? new SelectList(ViewData["IslemListesi"] as IEnumerable<MartinBlautweb.Models.Islem>, "IslemID", "IslemAdi")
-            : new SelectList(Enumerable.Empty<string>()))">
-            <option value="">Uzmanlık alanı seçiniz</option>
-        </select>
-        <span asp-validation-for="UzmanlikAlanID" class="text-danger"></span>
-    </div>
-    
-    <div class="form-group">
-        <label>Yetenekler</label>
-        <select name="selectedIslemler[]" class="form-control" multiple>
-            @if (ViewData["IslemListesi"] != null && ViewData["IslemListesi"] is IEnumerable<MartinBlautweb.Models.Islem> islemlerYetenek && islemlerYetenek.Any())
-            {
-                @foreach (var islem in islemlerYetenek)
-                {
-                    <option value="@islem.IslemID">@islem.IslemAdi</option>
-                }
-            }
-            else
-            {
-                <option disabled>Henüz bir işlem tanımlanmamış. Lütfen önce işlem ekleyin.</option>
-            }
-        </select>
-        <small class="form-text text-muted">CTRL veya SHIFT tuşu ile birden fazla yetenek seçebilirsiniz.</small>
-    </div>
+                        <div class="form-group">
+                            <label asp-for="CalisanSoyad" class="control-label">Soyad</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                </div>
+                                <input asp-for="CalisanSoyad" class="form-control" required />
+                            </div>
+                            <span asp-validation-for="CalisanSoyad" class="text-danger"></span>
+                        </div>
 
-    <style>
-        select[multiple] {
-            height: 150px !important;
-        }
-    </style>
+                        <div class="form-group">
+                            <label asp-for="UzmanlikAlanID" class="control-label">Uzmanlık Alanı</label>
+                            <select asp-for="UzmanlikAlanID" class="form-control"
+                                    asp-items="@(ViewData["IslemListesi"] != null
+                                ? new SelectList(ViewData["IslemListesi"] as IEnumerable<MartinBlautweb.Models.Islem>, "IslemID", "IslemAdi")
+                                : new SelectList(Enumerable.Empty<string>()))">
+                                <option value="">Uzmanlık alanı seçiniz</option>
+                            </select>
+                            <span asp-validation-for="UzmanlikAlanID" class="text-danger"></span>
+                        </div>
 
+                        <div class="form-group">
+                            <label>Yetenekler</label>
+                            <select name="selectedIslemler[]" class="form-control" multiple>
+                                @if (ViewData["IslemListesi"] != null && ViewData["IslemListesi"] is IEnumerable<MartinBlautweb.Models.Islem> islemlerYetenek && islemlerYetenek.Any())
+                                {
+                                    @foreach (var islem in islemlerYetenek)
+                                    {
+                                        <option value="@islem.IslemID">@islem.IslemAdi</option>
+                                    }
+                                }
+                                else
+                                {
+                                    <option disabled>Henüz bir işlem tanımlanmamış. Lütfen önce işlem ekleyin.</option>
+                                }
+                            </select>
+                            <small class="form-text text-muted">CTRL veya SHIFT tuşu ile birden fazla yetenek seçebilirsiniz.</small>
+                        </div>
 
-    <div class="form-group">
-        <label asp-for="CalisanTelefon">Telefon</label>
-        <input asp-for="CalisanTelefon" class="form-control" required />
-        <span asp-validation-for="CalisanTelefon" class="text-danger"></span>
+                        <style>
+                            select[multiple] {
+                                height: 150px !important;
+                            }
+                        </style>
+
+                        <div class="form-group">
+                            <label asp-for="CalisanTelefon" class="control-label">Telefon</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                </div>
+                                <input asp-for="CalisanTelefon" class="form-control" required />
+                            </div>
+                            <span asp-validation-for="CalisanTelefon" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="CalisanMesaiBaslangic" class="control-label">Mesai Başlangıç Saati</label>
+                            <input asp-for="CalisanMesaiBaslangic" class="form-control" type="time" required />
+                            <span asp-validation-for="CalisanMesaiBaslangic" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="CalisanMesaiBitis" class="control-label">Mesai Bitiş Saati</label>
+                            <input asp-for="CalisanMesaiBitis" class="form-control" type="time" required />
+                            <span asp-validation-for="CalisanMesaiBitis" class="text-danger"></span>
+                        </div>
+
+                        <button type="submit" class="btn btn-success btn-block mt-4">
+                            <i class="fas fa-save"></i> Ekle
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <div class="form-group">
-        <label asp-for="CalisanMesaiBaslangic">Mesai Başlangıç Saati</label>
-        <input asp-for="CalisanMesaiBaslangic" class="form-control" type="time" required />
-        <span asp-validation-for="CalisanMesaiBaslangic" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="CalisanMesaiBitis">Mesai Bitiş Saati</label>
-        <input asp-for="CalisanMesaiBitis" class="form-control" type="time" required />
-        <span asp-validation-for="CalisanMesaiBitis" class="text-danger"></span>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Ekle</button>
 </form>
 
 @section Scripts {

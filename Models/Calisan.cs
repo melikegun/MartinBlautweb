@@ -53,5 +53,7 @@ namespace MartinBlautweb.Models
             Yetenekler = new List<Islem>();
             Randevular = new List<Randevu>();
         }
+
     }
 }
+

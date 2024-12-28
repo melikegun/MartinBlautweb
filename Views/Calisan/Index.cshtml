@@ -4,73 +4,88 @@
     ViewData["Title"] = "Çalışanlar";
 }
 
-<h1>Çalışanlar</h1>
+<h1 class="text-center text-primary">@ViewData["Title"]</h1>
 
 <!-- TempData Mesajları -->
 @if (TempData["msj"] != null)
 {
-    <div class="alert alert-success">
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
         @TempData["msj"]
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
 }
 
 @if (TempData["hata"] != null)
 {
-    <div class="alert alert-danger">
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
         @TempData["hata"]
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
 }
 
 <!-- Admin Paneline Dön Butonu -->
-<a asp-action="Index" asp-controller="Admin" class="btn btn-primary mt-3">Admin Paneline Dön</a>
+<div class="d-flex justify-content-between">
+    <a asp-action="Index" asp-controller="Admin" class="btn btn-outline-primary mt-3">Admin Paneline Dön</a>
+    <!-- Yeni Çalışan Ekle Butonu -->
+    <a asp-action="CalisanEkle" class="btn btn-success mt-3"><i class="fas fa-user-plus"></i> Yeni Çalışan Ekle</a>
+</div>
 <br />
-<br />
-
-<!-- Yeni Çalışan Ekle Butonu -->
-<p>
-    <a asp-action="CalisanEkle" class="btn btn-primary">Yeni Çalışan Ekle</a>
-</p>
 
 <!-- Çalışanlar Tablosu -->
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>@Html.DisplayName("ID")</th>
-            <th>@Html.DisplayName("Ad")</th>
-            <th>@Html.DisplayName("Soyad")</th>
-            <th>@Html.DisplayName("Uzmanlık Alanı")</th>
-            <th>@Html.DisplayName("Telefon")</th>
-            <th>@Html.DisplayName("Mesai Başlangıç")</th>
-            <th>@Html.DisplayName("Mesai Bitiş")</th>
-            <th>İşlemler</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (Model != null && Model.Any())
-        {
-            foreach (var calisan in Model)
+<div class="table-responsive mt-4">
+    <table class="table table-striped table-bordered table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th>@Html.DisplayName("ID")</th>
+                <th>@Html.DisplayName("Ad")</th>
+                <th>@Html.DisplayName("Soyad")</th>
+                <th>@Html.DisplayName("Uzmanlık Alanı")</th>
+                <th>@Html.DisplayName("Telefon")</th>
+                <th>@Html.DisplayName("Mesai Başlangıç")</th>
+                <th>@Html.DisplayName("Mesai Bitiş")</th>
+                <th>İşlemler</th>
+                <th>Verim & Kazanç</th> <!-- Yeni sütun -->
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var calisan in Model)
+                {
+                    <tr>
+                        <th>@calisan.CalisanID</th>
+                        <td>@calisan.CalisanAd</td>
+                        <td>@calisan.CalisanSoyad</td>
+                        <td>@(calisan.UzmanlikAlan != null ? calisan.UzmanlikAlan.IslemAdi : "Belirtilmemiş")</td>
+                        <td>@calisan.CalisanTelefon</td>
+                        <td>@calisan.CalisanMesaiBaslangic.ToString(@"hh\:mm")</td>
+                        <td>@calisan.CalisanMesaiBitis.ToString(@"hh\:mm")</td>
+                        <td>
+                            <a asp-action="CalisanDetay" asp-route-id="@calisan.CalisanID" class="btn btn-info btn-sm"><i class="fas fa-eye"></i> Detay</a>
+                            <a asp-action="CalisanDuzenle" asp-route-id="@calisan.CalisanID" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Düzenle</a>
+                            <a asp-action="CalisanSil" asp-route-id="@calisan.CalisanID" class="btn btn-danger btn-sm" onclick="return confirm('Bu çalışanı silmek istediğinizden emin misiniz?')"><i class="fas fa-trash"></i> Sil</a>
+                        </td>
+                        <td>
+                            <!-- Verim ve Kazanç Butonu -->
+                            <a asp-action="Verim" asp-route-CalisanID="@calisan.CalisanID" class="btn btn-primary btn-sm"><i class="fas fa-chart-line"></i> Verim & Kazanç</a>
+                        </td>
+                    </tr>
+                }
+            }
+            else
             {
                 <tr>
-                    <th>@calisan.CalisanID</th>
-                    <td>@calisan.CalisanAd</td>
-                    <td>@calisan.CalisanSoyad</td>
-                    <td>@(calisan.UzmanlikAlan != null ? calisan.UzmanlikAlan.IslemAdi : "Belirtilmemiş")</td>
-                    <td>@calisan.CalisanTelefon</td>
-                    <td>@calisan.CalisanMesaiBaslangic.ToString(@"hh\:mm")</td>
-                    <td>@calisan.CalisanMesaiBitis.ToString(@"hh\:mm")</td>
-                    <td>
-                        <a asp-action="CalisanDetay" asp-route-id="@calisan.CalisanID" class="btn btn-info">Detay</a>
-                        <a asp-action="CalisanDuzenle" asp-route-id="@calisan.CalisanID" class="btn btn-warning">Düzenle</a>
-                        <a asp-action="CalisanSil" asp-route-id="@calisan.CalisanID" class="btn btn-danger" onclick="return confirm('Bu çalışanı silmek istediğinizden emin misiniz?')">Sil</a>
-                    </td>
+                    <td colspan="9" class="text-center text-muted">Henüz çalışan kaydı yok.</td>
                 </tr>
             }
-        }
-        else
-        {
-            <tr>
-                <td colspan="8" class="text-center">Henüz çalışan kaydı yok.</td>
-            </tr>
-        }
-    </tbody>
-</table>
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+}

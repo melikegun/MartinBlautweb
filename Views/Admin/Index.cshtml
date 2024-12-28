@@ -4,19 +4,19 @@
 
 <div class="container mt-5">
     <div class="text-center">
-        <h1 class="display-4">Admin Paneli</h1>
-        <p class="lead">Salon yönetim sisteminizin kontrol merkezi.</p>
-        <hr class="my-4">
+        <h1 class="display-4 text-primary fw-bold">Admin Paneli</h1>
+        <p class="lead text-secondary">Salon yönetim sisteminizin kontrol merkezi.</p>
+        <hr class="my-4" />
     </div>
 
     <div class="row text-center mt-4">
         <!-- Salon Yönetimi -->
         <div class="col-md-6 col-lg-3 mb-4">
-            <div class="card shadow-sm">
+            <div class="card shadow-lg border-primary rounded-lg">
                 <div class="card-body">
-                    <h5 class="card-title">Salon Yönetimi</h5>
-                    <p class="card-text">Salon bilgilerini görüntüleyin ve yönetin.</p>
-                    <a asp-controller="Salon" asp-action="Index" class="btn btn-primary">
+                    <h5 class="card-title text-primary">Salon Yönetimi</h5>
+                    <p class="card-text text-muted">Salon bilgilerini görüntüleyin ve yönetin.</p>
+                    <a asp-controller="Salon" asp-action="Index" class="btn btn-primary btn-lg rounded-pill">
                         <i class="fas fa-building"></i> Git
                     </a>
                 </div>
@@ -25,11 +25,11 @@
 
         <!-- İşlem Yönetimi -->
         <div class="col-md-6 col-lg-3 mb-4">
-            <div class="card shadow-sm">
+            <div class="card shadow-lg border-success rounded-lg">
                 <div class="card-body">
-                    <h5 class="card-title">İşlem Yönetimi</h5>
-                    <p class="card-text">Tüm işlemleri ekleyin, düzenleyin veya silin.</p>
-                    <a asp-controller="Islem" asp-action="Index" class="btn btn-success">
+                    <h5 class="card-title text-success">İşlem Yönetimi</h5>
+                    <p class="card-text text-muted">Tüm işlemleri ekleyin, düzenleyin veya silin.</p>
+                    <a asp-controller="Islem" asp-action="Index" class="btn btn-success btn-lg rounded-pill">
                         <i class="fas fa-tasks"></i> Git
                     </a>
                 </div>
@@ -38,11 +38,11 @@
 
         <!-- Çalışan Yönetimi -->
         <div class="col-md-6 col-lg-3 mb-4">
-            <div class="card shadow-sm">
+            <div class="card shadow-lg border-warning rounded-lg">
                 <div class="card-body">
-                    <h5 class="card-title">Çalışan Yönetimi</h5>
-                    <p class="card-text">Çalışanların bilgilerini yönetin.</p>
-                    <a asp-controller="Calisan" asp-action="Index" class="btn btn-warning text-white">
+                    <h5 class="card-title text-warning">Çalışan Yönetimi</h5>
+                    <p class="card-text text-muted">Çalışanların bilgilerini yönetin.</p>
+                    <a asp-controller="Calisan" asp-action="Index" class="btn btn-warning btn-lg rounded-pill text-white">
                         <i class="fas fa-user-friends"></i> Git
                     </a>
                 </div>
@@ -51,11 +51,11 @@
 
         <!-- Randevu Yönetimi -->
         <div class="col-md-6 col-lg-3 mb-4">
-            <div class="card shadow-sm">
+            <div class="card shadow-lg border-danger rounded-lg">
                 <div class="card-body">
-                    <h5 class="card-title">Randevu Yönetimi</h5>
-                    <p class="card-text">Tüm randevuları kontrol edin.</p>
-                    <a asp-controller="Randevu" asp-action="Index" class="btn btn-danger">
+                    <h5 class="card-title text-danger">Randevu Yönetimi</h5>
+                    <p class="card-text text-muted">Tüm randevuları kontrol edin.</p>
+                    <a asp-controller="Randevu" asp-action="Index" class="btn btn-danger btn-lg rounded-pill">
                         <i class="fas fa-calendar-alt"></i> Git
                     </a>
                 </div>
@@ -63,3 +63,7 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+}

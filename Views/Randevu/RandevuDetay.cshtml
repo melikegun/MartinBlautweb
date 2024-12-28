@@ -4,44 +4,105 @@
     ViewData["Title"] = "Randevu Detayı";
 }
 
-<h1>Randevu Detayı</h1>
+<h1 class="text-center mb-4 text-primary font-weight-bold">Randevu Detayı</h1>
 
 @if (TempData["hata"] != null)
 {
-    <div class="alert alert-danger">
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
         @TempData["hata"]
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
 }
 
-<div>
-    <h3>Randevu Bilgileri</h3>
-    <ul class="list-group">
-        <li class="list-group-item">
-            <strong>@Html.DisplayNameFor(model => model.RandevuTarihi)</strong>: @Model.RandevuTarihi.ToString("dd/MM/yyyy")
-        </li>
-        <li class="list-group-item">
-            <strong>@Html.DisplayNameFor(model => model.RandevuSaati)</strong>: @Model.RandevuSaati.ToString(@"hh\:mm")
-        </li>
-        <li class="list-group-item">
-            <strong>@Html.DisplayNameFor(model => model.OnayDurumu)</strong>: @(Model.OnayDurumu ? "Onaylı" : "Onaysız")
-        </li>
-        <li class="list-group-item">
-            <strong>İşlem</strong>: @((Model.Islem != null && !string.IsNullOrEmpty(Model.Islem.IslemAdi)) ? Model.Islem.IslemAdi : "Bilgi Yok")
-        </li>
-        <li class="list-group-item">
-            <strong>Çalışan</strong>: @((Model.Calisan != null) ? Model.Calisan.CalisanAd + " " + Model.Calisan.CalisanSoyad : "Bilgi Yok")
-        </li>
-        <li class="list-group-item">
-            <strong>Kullanıcı</strong>: @((Model.Kullanici != null && !string.IsNullOrEmpty(Model.Kullanici.KullaniciAd)) ? Model.Kullanici.KullaniciAd : "Bilgi Yok")
-        </li>
-        <li class="list-group-item">
-            <strong>Randevu Ücreti</strong>: @Model.RandevuUcreti.ToString("C2")
-        </li>
-    </ul>
-</div>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <!-- Randevu Bilgileri -->
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white text-center">
+                    <h3>Randevu Bilgileri</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <strong>Randevu Tarihi:</strong>
+                            <p class="font-weight-bold text-primary">@Model.RandevuTarihi.ToString("dd/MM/yyyy")</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <strong>Randevu Saati:</strong>
+                            <p class="font-weight-bold text-primary">@Model.RandevuSaati.ToString(@"hh\:mm")</p>
+                        </div>
+                    </div>
 
-<p>
-    <a asp-action="RandevuDuzenle" asp-route-id="@Model.RandevuID" class="btn btn-warning">Randevuyu Düzenle</a>
-    <a asp-action="RandevuSil" asp-route-id="@Model.RandevuID" class="btn btn-danger" onclick="return confirm('Bu randevuyu silmek istediğinizden emin misiniz?')">Randevuyu Sil</a>
-    <a asp-action="Index" class="btn btn-secondary">Geri</a>
-</p>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <strong>Onay Durumu:</strong>
+                            <p class="font-weight-bold text-@(Model.OnayDurumu ? "success" : "warning")">
+                                @(Model.OnayDurumu ? "Onaylı" : "Onaysız")
+                            </p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <strong>İşlem:</strong>
+                            <p class="font-weight-bold text-info">
+                                @((Model.Islem != null && !string.IsNullOrEmpty(Model.Islem.IslemAdi)) ? Model.Islem.IslemAdi : "Bilgi Yok")
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <strong>Çalışan:</strong>
+                            <p class="font-weight-bold text-info">
+                                @((Model.Calisan != null) ? Model.Calisan.CalisanAd + " " + Model.Calisan.CalisanSoyad : "Bilgi Yok")
+                            </p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <strong>Kullanıcı Adı:</strong>
+                            <p class="font-weight-bold text-info">
+                                @((Model.Kullanici != null && !string.IsNullOrEmpty(Model.Kullanici.KullaniciAd)) ? Model.Kullanici.KullaniciAd : "Bilgi Yok")
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <strong>Kullanıcı Soyadı:</strong>
+                            <p class="font-weight-bold text-info">
+                                @((Model.Kullanici != null && !string.IsNullOrEmpty(Model.Kullanici.KullaniciSoyad)) ? Model.Kullanici.KullaniciSoyad : "Bilgi Yok")
+                            </p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <strong>Telefon Numarası:</strong>
+                            <p class="font-weight-bold text-info">
+                                @((Model.Kullanici != null && !string.IsNullOrEmpty(Model.Kullanici.KullaniciTelefon)) ? Model.Kullanici.KullaniciTelefon : "Bilgi Yok")
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <strong>E-posta:</strong>
+                            <p class="font-weight-bold text-info">
+                                @((Model.Kullanici != null && !string.IsNullOrEmpty(Model.Kullanici.Email)) ? Model.Kullanici.Email : "Bilgi Yok")
+                            </p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <strong>Randevu Ücreti:</strong>
+                            <p class="font-weight-bold text-success">
+                                @Model.RandevuUcreti.ToString("C2")
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer text-center">
+                    <a asp-action="RandevuDuzenle" asp-route-id="@Model.RandevuID" class="btn btn-warning btn-lg mr-2">Randevuyu Düzenle</a>
+                    <a asp-action="RandevuSil" asp-route-id="@Model.RandevuID" class="btn btn-danger btn-lg mr-2" onclick="return confirm('Bu randevuyu silmek istediğinizden emin misiniz?')">Randevuyu Sil</a>
+                    <a asp-action="Index" class="btn btn-secondary btn-lg">Geri</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

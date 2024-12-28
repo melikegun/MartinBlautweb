@@ -4,19 +4,19 @@
 
 <div class="container mt-5">
     <div class="text-center">
-        <h1 class="display-4">Kullanıcı Paneli</h1>
-        <p class="lead">Kullanıcı yönetim sisteminizin kontrol merkezi.</p>
-        <hr class="my-4">
+        <h1 class="display-4 text-primary font-weight-bold">Kullanıcı Paneli</h1>
+        <p class="lead text-muted">Kullanıcı yönetim sisteminizin kontrol merkezi.</p>
+        <hr class="my-4" />
     </div>
 
-    <div class="row text-center mt-4">
+    <div class="row text-center mt-20">
         <!-- İşlem Yönetimi -->
         <div class="col-md-6 col-lg-3 mb-4">
-            <div class="card shadow-sm">
+            <div class="card shadow-lg border-0 rounded-lg hover-shadow">
                 <div class="card-body">
-                    <h5 class="card-title">İşlem Yönetimi</h5>
-                    <p class="card-text">Tüm işlemleri inceleyin.</p>
-                    <a asp-controller="Islem" asp-action="IslemBilgiler" class="btn btn-success">
+                    <h5 class="card-title text-primary fw-bold">İşlem Yönetimi</h5>
+                    <p class="card-text text-muted mb-3">Tüm işlemleri inceleyin ve yönetin.</p>
+                    <a asp-controller="Islem" asp-action="IslemBilgiler" class="btn btn-success btn-lg rounded-pill text-white">
                         <i class="fas fa-tasks"></i> Git
                     </a>
                 </div>
@@ -25,11 +25,11 @@
 
         <!-- Çalışan Yönetimi -->
         <div class="col-md-6 col-lg-3 mb-4">
-            <div class="card shadow-sm">
+            <div class="card shadow-lg border-0 rounded-lg hover-shadow">
                 <div class="card-body">
-                    <h5 class="card-title">Çalışan Yönetimi</h5>
-                    <p class="card-text">Çalışanları Görüntüleyin.</p>
-                    <a asp-controller="Calisan" asp-action="CalisanBilgiler" class="btn btn-warning text-white">
+                    <h5 class="card-title text-warning fw-bold">Çalışan Yönetimi</h5>
+                    <p class="card-text text-muted mb-3">Çalışanları görüntüleyin ve yönetin.</p>
+                    <a asp-controller="Calisan" asp-action="CalisanBilgiler" class="btn btn-warning btn-lg rounded-pill text-white">
                         <i class="fas fa-user-friends"></i> Git
                     </a>
                 </div>
@@ -38,11 +38,11 @@
 
         <!-- Randevu Yönetimi -->
         <div class="col-md-6 col-lg-3 mb-4">
-            <div class="card shadow-sm">
+            <div class="card shadow-lg border-0 rounded-lg hover-shadow">
                 <div class="card-body">
-                    <h5 class="card-title">Randevu Yönetimi</h5>
-                    <p class="card-text">Tüm randevuları kontrol edin.</p>
-                    <a asp-controller="Randevu" asp-action="KullaniciRandevulari" class="btn btn-danger">
+                    <h5 class="card-title text-danger fw-bold">Randevu Yönetimi</h5>
+                    <p class="card-text text-muted mb-3">Tüm randevuları kontrol edin ve yönetin.</p>
+                    <a asp-controller="Randevu" asp-action="KullaniciRandevulari" class="btn btn-danger btn-lg rounded-pill text-white">
                         <i class="fas fa-calendar-alt"></i> Git
                     </a>
                 </div>
@@ -50,3 +50,7 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+}

@@ -5,35 +5,35 @@
 }
 
 <!-- Kullanıcı Paneline Dön Butonu -->
-<a asp-action="Index" asp-controller="Kullanici" class="btn btn-primary mt-3">Kullanıcı Paneline Dön</a>
-<br />
-<br />
+<div class="container mt-3">
+    <a asp-action="Index" asp-controller="Kullanici" class="btn btn-outline-primary btn-lg shadow-sm">
+        <i class="fas fa-arrow-left"></i> Kullanıcı Paneline Dön
+    </a>
+</div>
 
 <div class="container mt-5">
-    <h1 class="text-center mb-4 text-primary">Çalışanlar</h1>
 
     @if (!Model.Any())
     {
         <div class="alert alert-warning text-center" role="alert">
-            Henüz çalışan bulunmamaktadır.
+            <i class="fas fa-exclamation-triangle"></i> Henüz çalışan bulunmamaktadır.
         </div>
     }
-
     else
     {
-        <div class="card shadow-lg">
+        <div class="card shadow-lg rounded-lg border-primary">
             <div class="card-header bg-primary text-white">
-                <h3 class="card-title mb-0">Tüm Çalışanlar</h3>
+                <h3 class="card-title mb-0"><i class="fas fa-users"></i> Tüm Çalışanlar</h3>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered table-striped">
-                        <thead>
+                    <table class="table table-bordered table-striped table-hover">
+                        <thead class="thead-dark">
                             <tr>
-                                <th>@Html.DisplayNameFor(model => model.First().CalisanAd)</th>
-                                <th>@Html.DisplayNameFor(model => model.First().CalisanSoyad)</th>
-                                <th>@Html.DisplayNameFor(model => model.First().CalisanMesaiBaslangic)</th>
-                                <th>@Html.DisplayNameFor(model => model.First().CalisanMesaiBitis)</th>
+                                <th>Ad</th>
+                                <th>Soyad</th>
+                                <th>Mesai Başlangıç</th>
+                                <th>Mesai Bitiş</th>
                                 <th>Uzmanlık Alanı</th>
                                 <th>Yetenekler</th>
                             </tr>
@@ -50,19 +50,18 @@
                                     <td>
                                         @if (calisan.Yetenekler != null && calisan.Yetenekler.Any())
                                         {
-                                            <ul>
+                                            <ul class="list-inline mb-0">
                                                 @foreach (var yetenek in calisan.Yetenekler)
                                                 {
-                                                    <li>@yetenek.IslemAdi</li>
+                                                    <li class="list-inline-item badge badge-pill badge-info">@yetenek.IslemAdi</li>
                                                 }
                                             </ul>
                                         }
                                         else
                                         {
-                                            <span>Yetenek bilgisi bulunmamaktadır.</span>
+                                            <span class="badge badge-warning">Yetenek bilgisi bulunmamaktadır.</span>
                                         }
                                     </td>
-                                   
                                 </tr>
                             }
                         </tbody>
@@ -72,3 +71,7 @@
         </div>
     }
 </div>
+
+@section Scripts {
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+}
